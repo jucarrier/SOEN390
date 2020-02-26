@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_campus_navigation"
+            android:icon="@drawable/ic_campus_navigation_24dp"
+            android:title="Campus navigation" />
+        <item
+            android:id="@+id/menu_class_schedule"
+            android:icon="@drawable/ic_class_schedule_24dp"
+            android:title="Class schedule" />
+        <item
+            android:id="@+id/menu_indoor_navigation"
+            android:icon="@drawable/ic_indoor_navigation_24dp"
+            android:title="Indoor navigation" />
+        <item
+            android:id="@+id/menu_langugage"
+            android:icon="@drawable/ic_language_24dp"
+            android:title="Language">
+            <menu>
+                <item android:id="@+id/menu_english"
+                    android:title="English"/>
+                <item android:id="@+id/menu_french"
+                    android:title="French"/>
+            </menu>
+        </item>
+    </group>
+</menu>
