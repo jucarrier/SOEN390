@@ -24,7 +24,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+
+import Models.Building;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static class FindAddressTaskParams {
@@ -65,13 +68,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         protected void onPostExecute(Address address) {
             LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
             this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
-            this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10));
+            this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
         }
     }
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
     SearchView searchView;
+
+    private Building hall;
 
     private DrawerLayout drawer;
 
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mapFragment.getMapAsync(this);
 
-        NavigationView navigation = (NavigationView) findViewById(R.id.nav_viewer);
+        NavigationView navigation = findViewById(R.id.nav_viewer);
 
         // Here is where the menu elements are handled, change as you need
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -162,7 +167,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        // Go to person's current location, highlight proper buildings, etc.
 
+        this.hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8",
+                new LatLng(45.497711, -73.579035),
+                new LatLng(45.497373, -73.578311),
+                new LatLng(45.496829, -73.578850),
+                new LatLng(45.497165, -73.579551));
     }
 }
