@@ -17,14 +17,29 @@
             android:icon="@drawable/ic_indoor_navigation_24dp"
             android:title="Indoor navigation" />
         <item
+            android:id="@+id/quick_campus_switch"
+            android:icon="@drawable/ic_swap_horiz_black_24dp"
+            android:title="Switch campuses">
+            <menu>
+                <item
+                    android:id="@+id/menu_to_sgw"
+                    android:title="SGW" />
+                <item
+                    android:id="@+id/menu_to_layola"
+                    android:title="Layola" />
+            </menu>
+        </item>
+        <item
             android:id="@+id/menu_langugage"
             android:icon="@drawable/ic_language_24dp"
             android:title="Language">
             <menu>
-                <item android:id="@+id/menu_english"
-                    android:title="English"/>
-                <item android:id="@+id/menu_french"
-                    android:title="French"/>
+                <item
+                    android:id="@+id/menu_english"
+                    android:title="English" />
+                <item
+                    android:id="@+id/menu_french"
+                    android:title="French" />
             </menu>
         </item>
     </group>

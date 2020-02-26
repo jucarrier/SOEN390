@@ -24,10 +24,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import Models.Building;
+import Models.Campus;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static class FindAddressTaskParams {
@@ -77,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SearchView searchView;
 
     private Building hall;
-
+    public Campus sgw;
+    public Campus layola;
     private DrawerLayout drawer;
 
     @Override
@@ -136,6 +139,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
                         break;
+                    case (R.id.menu_to_sgw):
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 19));
+                        break;
+                    case (R.id.menu_to_layola):
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 19));
+                        break;
+
                 }
                 if (intent != null) {
                     startActivity(intent);
@@ -173,5 +183,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 new LatLng(45.497373, -73.578311),
                 new LatLng(45.496829, -73.578850),
                 new LatLng(45.497165, -73.579551));
+
+        this.sgw = new Campus(
+                new ArrayList<Building>(Arrays.asList(hall)),
+                new LatLng(45.496680, -73.578761));
+
+        this.layola = new Campus(
+                new ArrayList<Building>(),
+                new LatLng(45.458239, -73.640462));
     }
 }
