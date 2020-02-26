@@ -1,15 +1,18 @@
 package com.example.concordiaguide;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.List;
@@ -97,20 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Geocoder geocoder = new Geocoder(MainActivity.this);
 
                 new FindAddressTask().execute(new FindAddressTaskParams(geocoder, addressList, mMap, location));
-
-//                if (!location.equals("")) {
-//
-//                    try {
-//                        addressList = geocoder.getFromLocationName(location, 1);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    Address address = addressList.get(0);
-//                    LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
-//                    mMap.addMarker(new MarkerOptions().position(latlng).title(location));
-//                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 10));
-//                }
                 return false;
             }
 
@@ -121,6 +111,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         mapFragment.getMapAsync(this);
+
+        NavigationView navigation = (NavigationView) findViewById(R.id.nav_viewer);
+
+        // Here is where the menu elements are handled, change as you need
+        navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                drawer.closeDrawers();
+                Intent intent = null;
+                switch (id) {
+                    case (R.id.menu_indoor_navigation):
+                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
+                        break;
+                    case (R.id.menu_campus_navigation):
+                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class);
+                        break;
+                    case (R.id.menu_class_schedule):
+                        intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
+                        break;
+                }
+                if (intent != null) {
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
