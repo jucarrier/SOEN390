@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
                         break;
                     case (R.id.menu_to_sgw):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 19));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_layola):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 19));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
                         break;
 
                 }
