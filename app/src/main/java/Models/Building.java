@@ -11,8 +11,8 @@ public class Building {
     final String name;
     final String address;
 
+    // First two hex digits are for opacity
     private final int fillColor = 0x4FAA0000;
-    private final double fillOpacity = 0.3;
 
     //Defines perimeter
     final Polygon polygon;
