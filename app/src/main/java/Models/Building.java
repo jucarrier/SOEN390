@@ -12,8 +12,8 @@ public class Building {
     final String address;
     final String description;
 
+    // First two hex digits are for opacity
     private final int fillColor = 0x4FAA0000;
-    private final double fillOpacity = 0.3;
 
     //Defines perimeter
     final Polygon polygon;
@@ -29,9 +29,6 @@ public class Building {
                 .add(lls)
                 .fillColor(fillColor));
         this.polygon.setTag(this);
-
-//        this.polygon.;
-//        this.polygon.fillO
     }
 
     public String getName() { return name; }

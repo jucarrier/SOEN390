@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Helpers.CampusBuilder;
 import Models.Building;
 import Models.Campus;
 
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SupportMapFragment mapFragment;
     SearchView searchView;
 
-    private Building hall;
     public Campus sgw;
     public Campus layola;
     private DrawerLayout drawer;
@@ -181,11 +181,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        this.hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "The building is named for Henry Foss Hall, president of Sir George Williams University from 1956 to 1962.",
-                new LatLng(45.497711, -73.579035),
-                new LatLng(45.497373, -73.578311),
-                new LatLng(45.496829, -73.578850),
-                new LatLng(45.497165, -73.579551));
+        CampusBuilder cb = new CampusBuilder(mMap);
+        sgw = cb.buildSGW();
+        layola = cb.buildLayola();
 
         //Add listener to polygons to show the building info popup
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
@@ -198,13 +196,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
             }
         });
-
-        this.sgw = new Campus(
-                new ArrayList<Building>(Arrays.asList(hall)),
-                new LatLng(45.496680, -73.578761));
-
-        this.layola = new Campus(
-                new ArrayList<Building>(),
-                new LatLng(45.458239, -73.640462));
     }
 }
