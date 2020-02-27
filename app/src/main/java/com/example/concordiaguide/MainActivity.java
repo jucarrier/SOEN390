@@ -13,10 +13,9 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.PopupWindow;
 import android.widget.SearchView;
 
-import com.example.concordiaguide.tools.ObjectWrapperForBinder;
+import Helpers.ObjectWrapperForBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,12 +26,9 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Helpers.CampusBuilder;
-import Models.Building;
 import Models.Campus;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {

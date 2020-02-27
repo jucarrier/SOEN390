@@ -1,4 +1,4 @@
-package com.example.concordiaguide.tools;
+package Helpers;
 
 import android.os.Binder;
 
