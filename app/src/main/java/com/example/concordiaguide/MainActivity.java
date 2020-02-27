@@ -13,14 +13,17 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.PopupWindow;
 import android.widget.SearchView;
 
+import com.example.concordiaguide.tools.ObjectWrapperForBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
@@ -178,11 +181,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        this.hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8",
+        this.hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "The building is named for Henry Foss Hall, president of Sir George Williams University from 1956 to 1962.",
                 new LatLng(45.497711, -73.579035),
                 new LatLng(45.497373, -73.578311),
                 new LatLng(45.496829, -73.578850),
                 new LatLng(45.497165, -73.579551));
+
+        //Add listener to polygons to show the building info popup
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                //used to send building object to popup activity
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
+                //go to popup activity
+                startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
+            }
+        });
 
         this.sgw = new Campus(
                 new ArrayList<Building>(Arrays.asList(hall)),
