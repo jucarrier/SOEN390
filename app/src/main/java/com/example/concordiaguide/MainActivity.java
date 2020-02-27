@@ -24,12 +24,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Helpers.CampusBuilder;
-import Models.Building;
 import Models.Campus;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -62,13 +59,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 this.mMap = params.mMap;
                 this.location = params.location;
-                return params.addressList.get(0);
+                if (params.addressList.size() != 0) {
+                    return params.addressList.get(0);
+                }
+                return null;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Address address) {
+            if (address == null) {
+                return;
+            }
             LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
             this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
             this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SearchView searchView;
 
     public Campus sgw;
-    public Campus layola;
+    public Campus loyola;
     private DrawerLayout drawer;
 
     @Override
@@ -143,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_layola):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
                 }
@@ -179,6 +182,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
-        layola = cb.buildLayola();
+        loyola = cb.buildLoyola();
     }
 }
