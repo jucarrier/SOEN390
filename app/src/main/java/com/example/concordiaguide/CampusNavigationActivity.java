@@ -23,8 +23,8 @@ public class CampusNavigationActivity extends AppCompatActivity {
         Loyola
     }
 
-    private Campus sgw, loyola;
-    private Campuses currentCampus;
+    private static Campus sgw, loyola;
+    private static Campuses currentCampus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +57,9 @@ public class CampusNavigationActivity extends AppCompatActivity {
             }
         });
 
-        //set title
-        TextView title = findViewById(R.id.building_list_campus);
-        title.setText("SGW");
-        currentCampus = Campuses.SGW;
-
         //get bundle sent
-        sgw = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("sgw")).getData();
-        loyola = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("loyola")).getData();
+        if(sgw == null) { sgw = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("sgw")).getData(); }
+        if(loyola == null) { loyola = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("loyola")).getData(); }
 
         //create list for sgw and loyola
         RecyclerView recyclerViewSgw = (RecyclerView) findViewById(R.id.building_list_sgw);
@@ -76,11 +71,28 @@ public class CampusNavigationActivity extends AppCompatActivity {
         recyclerViewLoyola.setLayoutManager(new LinearLayoutManager(this));
         RecyclerView.Adapter mAdapterLoyola = new BuildingListAdapter(this, loyola.getBuildings());
         recyclerViewLoyola.setAdapter(mAdapterLoyola);
-        recyclerViewLoyola.setVisibility(View.GONE);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        //recyclerView.setHasFixedSize(true);
+        //set title
+        TextView title = findViewById(R.id.building_list_campus);
+        if(currentCampus == null) {
+            title.setText("SGW");
+            currentCampus = Campuses.SGW;
+            recyclerViewSgw.setVisibility(View.VISIBLE);
+            recyclerViewLoyola.setVisibility(View.GONE);
+        } else {
+            if(currentCampus == Campuses.SGW) {
+                title.setText("SGW");
+                currentCampus = Campuses.SGW;
+                recyclerViewSgw.setVisibility(View.VISIBLE);
+                recyclerViewLoyola.setVisibility(View.GONE);
+            } else {
+                title.setText("Loyola");
+                currentCampus = Campuses.Loyola;
+                recyclerViewSgw.setVisibility(View.GONE);
+                recyclerViewLoyola.setVisibility(View.VISIBLE);
+                switchButton.setChecked(true);
+            }
+        }
 
     }
 

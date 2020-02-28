@@ -1,6 +1,8 @@
 package Helpers;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.concordiaguide.BuildingInfoActivity;
 import com.example.concordiaguide.R;
 
 import java.util.List;
@@ -57,7 +60,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(BuildingListViewHolder holder, int position) {
+    public void onBindViewHolder(BuildingListViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called");
 
         //get element from your dataset at this position
@@ -68,6 +71,11 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "onClickEvent: caught");
+
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(mBuildings.get(position)));
+                mContext.startActivity(new Intent(mContext, BuildingInfoActivity.class).putExtras(bundle));
             }
         });
 
