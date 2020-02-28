@@ -20,6 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -40,6 +41,7 @@ import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
@@ -49,13 +51,34 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private Button button;
     private TextView textView;
     private LocationManager locationManager;
-    LatLng currentLocation;
+    LatLng currentLocation; //to be filled in later by onLocationChanged
+
+    private String getAddress(double latitude, double longitude) {
+        StringBuilder result = new StringBuilder();
+        String out = "address not found";
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                out = addresses.get(0).getAddressLine(0);
+                result.append(address.getLocality()).append("\n");
+                result.append(address.getCountryName());
+            }
+        } catch (IOException e) {
+            Log.e("tag", e.getMessage());
+        }
+
+        //return result.toString();
+        return out;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
         double lat = location.getLatitude();
         double lng = location.getLongitude();
         currentLocation = new LatLng(lat, lng);
+
         System.out.println("lat " + lat + "\nlong " + lng);
         try {
 
@@ -73,17 +96,17 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-
+        //removing this will cause an error
     }
 
     @Override
     public void onProviderEnabled(String s) {
-
+        //removing this will cause an error
     }
 
     @Override
     public void onProviderDisabled(String s) {
-
+        //removing this will cause an error
     }
 
 
@@ -258,7 +281,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //test here
         try{
             textView = (TextView) findViewById(R.id.addressHere);
-            textView.setText("Zoomed to current location ");
+            textView.setText(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
+            System.out.println(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
+
+            System.out.println(this.currentLocation.latitude);
+            //System.out.println(currentAddress.get(0));
         }catch (Exception e){
             System.out.println(e.toString());
         }
