@@ -133,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
                         break;
                     case (R.id.menu_campus_navigation):
-                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class);
+                        final Bundle bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(layola));
+                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
