@@ -1,5 +1,6 @@
 package com.example.concordiaguide;
 
+import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -281,11 +282,21 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //test here
         try{
             textView = (TextView) findViewById(R.id.addressHere);
-            textView.setText(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
-            System.out.println(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
+            String currentAddress = getAddress(this.currentLocation.latitude, this.currentLocation.longitude);
+            currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
 
-            System.out.println(this.currentLocation.latitude);
+            //uncomment this to test if you are not currently near one of the campuses
+            currentAddress = "1450 Guy St";
+
+            textView.setText(currentAddress);
+            //System.out.println(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
+
+            //System.out.println(this.currentLocation.latitude);
             //System.out.println(currentAddress.get(0));
+
+            for(Building b: sgw.getBuildings()){
+                System.out.println(b.getAddress().split(",")[0]);
+            }
         }catch (Exception e){
             System.out.println(e.toString());
         }
