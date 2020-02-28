@@ -46,6 +46,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.concordiaguide.MainActivity" />
         </activity>
+        <activity
+            android:name=".BuildingInfoActivity"
+            android:label="BuildingInfoActivity"
+            android:parentActivityName=".CampusNavigationActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+        </activity>
+        <activity
+            android:name=".BuildingInfoPopup"
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

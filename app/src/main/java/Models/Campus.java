@@ -14,4 +14,6 @@ public class Campus {
         this.buildings = buildings;
         this.center = center;
     }
+
+    public List<Building> getBuildings() { return buildings; }
 }
