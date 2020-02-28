@@ -15,12 +15,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import Helpers.ObjectWrapperForBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
@@ -137,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
                         break;
                     case (R.id.menu_campus_navigation):
-                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class);
+                        final Bundle bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
@@ -180,8 +185,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
+
+        //Add listener to polygons to show the building info popup
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                //used to send building object to popup activity
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
+                //go to popup activity
+                startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
+            }
+        });
     }
 }
