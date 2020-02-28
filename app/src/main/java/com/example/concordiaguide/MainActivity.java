@@ -4,16 +4,27 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +33,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +45,50 @@ import Helpers.CampusBuilder;
 import Models.Building;
 import Models.Campus;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    //for finding address
+    private Button button;
+    private TextView textView;
+    private LocationManager locationManager;
+    LatLng currentLocation;
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        currentLocation = new LatLng(lat, lng);
+        System.out.println("lat " + lat + "\nlong " + lng);
+        try {
+
+            setContentView(R.layout.activity_maps);
+            textView = (TextView) findViewById(R.id.addressHere);
+            if((Object)textView == null){
+                System.out.println("latitude not found");
+            }
+            textView.setText("lat " + lat);
+            System.out.println("lat " + lat);
+        } catch (Exception e){
+            System.out.println("begin \n" +e+ "\n end");
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+
+
     private static class FindAddressTaskParams {
         Geocoder geocoder;
         List<Address> addressList;
@@ -85,8 +141,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //locate current location
+        textView = (TextView) findViewById(R.id.addressHere);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        onLocationChanged(location);
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+
 
         searchView = findViewById(R.id.sv_location);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -153,6 +230,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
+
+
     }
 
     @Override
@@ -163,6 +243,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onBackPressed();
         }
     }
+
+    //@Override
+    public void onLocateButtonPressed(View view) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
+        //test here
+        try{
+            textView = (TextView) findViewById(R.id.addressHere);
+            textView.setText("Zoomed to current location ");
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
+
+
+
 
 
     /**
@@ -181,4 +277,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         sgw = cb.buildSGW();
         layola = cb.buildLayola();
     }
+
+
 }

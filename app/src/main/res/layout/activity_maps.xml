@@ -17,6 +17,15 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="128dp"
+            android:layout_height="64dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:onClick="onLocateButtonPressed"
+            android:text="Find me" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -61,5 +70,18 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/main_menu" />
+
+    <TextView
+        android:id="@+id/addressHere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:gravity="bottom"
+        android:paddingLeft="180dp"
+        android:paddingBottom="24dp"
+        android:text="addressHere"
+        android:textAlignment="viewStart"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
