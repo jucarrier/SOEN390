@@ -1,6 +1,7 @@
 package com.example.concordiaguide;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -29,11 +30,20 @@ public class BuildingInfoPopup extends Activity {
 
         getWindow().setLayout((int)(width * 0.8), (int)(height * 0.6));
 
-        //set listener for close button
-        Button button = (Button)findViewById(R.id.popup_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        //set listener for buttons
+        Button buttonClose = (Button)findViewById(R.id.popup_button_close);
+        buttonClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 BuildingInfoPopup.super.onBackPressed();
+            }
+        });
+
+        Button buttonInfo = (Button)findViewById(R.id.popup_button_info);
+        buttonInfo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View pw) {
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(building));
+                BuildingInfoPopup.this.startActivity(new Intent(BuildingInfoPopup.this, BuildingInfoActivity.class).putExtras(bundle));
             }
         });
 
