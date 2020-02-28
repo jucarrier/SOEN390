@@ -8,4 +8,16 @@
     tools:context=".CampusNavigationActivity"
     tools:showIn="@layout/activity_campus_navigation">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/building_list_sgw"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/building_list_loyola"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

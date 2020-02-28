@@ -26,23 +26,22 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import Helpers.ObjectWrapperForBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
 import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Helpers.CampusBuilder;
-import Models.Building;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
@@ -118,13 +117,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
                 this.mMap = params.mMap;
                 this.location = params.location;
-                return params.addressList.get(0);
+                if (params.addressList.size() != 0) {
+                    return params.addressList.get(0);
+                }
+                return null;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Address address) {
+            if (address == null) {
+                return;
+            }
             LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
             this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
             this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
@@ -136,7 +141,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     SearchView searchView;
 
     public Campus sgw;
-    public Campus layola;
+    public Campus loyola;
     private DrawerLayout drawer;
 
     @Override
@@ -211,7 +216,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
                         break;
                     case (R.id.menu_campus_navigation):
-                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class);
+                        final Bundle bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
@@ -220,7 +228,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_layola):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
                 }
@@ -273,9 +281,22 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
-        layola = cb.buildLayola();
+        loyola = cb.buildLoyola();
+
+        //Add listener to polygons to show the building info popup
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                //used to send building object to popup activity
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
+                //go to popup activity
+                startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
+            }
+        });
     }
 
 
