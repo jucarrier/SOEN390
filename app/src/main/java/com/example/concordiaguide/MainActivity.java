@@ -24,11 +24,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import Models.Building;
+import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -61,13 +59,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 this.mMap = params.mMap;
                 this.location = params.location;
-                return params.addressList.get(0);
+                if (params.addressList.size() != 0) {
+                    return params.addressList.get(0);
+                }
+                return null;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Address address) {
+            if (address == null) {
+                return;
+            }
             LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
             this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
             this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
@@ -78,9 +82,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SupportMapFragment mapFragment;
     SearchView searchView;
 
-    private Building hall;
     public Campus sgw;
-    public Campus layola;
+    public Campus loyola;
     private DrawerLayout drawer;
 
     @Override
@@ -143,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_layola):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
                 }
@@ -177,19 +180,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        this.hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8",
-                new LatLng(45.497711, -73.579035),
-                new LatLng(45.497373, -73.578311),
-                new LatLng(45.496829, -73.578850),
-                new LatLng(45.497165, -73.579551));
-
-        this.sgw = new Campus(
-                new ArrayList<Building>(Arrays.asList(hall)),
-                new LatLng(45.496680, -73.578761));
-
-        this.layola = new Campus(
-                new ArrayList<Building>(),
-                new LatLng(45.458239, -73.640462));
+        CampusBuilder cb = new CampusBuilder(mMap);
+        sgw = cb.buildSGW();
+        loyola = cb.buildLoyola();
     }
 }
