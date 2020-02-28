@@ -61,13 +61,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 this.mMap = params.mMap;
                 this.location = params.location;
-                return params.addressList.get(0);
+                if (params.addressList.size() != 0) {
+                    return params.addressList.get(0);
+                }
+                return null;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Address address) {
+            if (address == null) {
+                return;
+            }
             LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
             this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
             this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     SearchView searchView;
 
     public Campus sgw;
-    public Campus layola;
+    public Campus loyola;
     private DrawerLayout drawer;
 
     @Override
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case (R.id.menu_campus_navigation):
                         final Bundle bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
-                        bundle.putBinder("loyola", new ObjectWrapperForBinder(layola));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_class_schedule):
@@ -145,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_layola):
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
                 }
@@ -182,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
-        layola = cb.buildLayola();
+        loyola = cb.buildLoyola();
 
         //Add listener to polygons to show the building info popup
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
