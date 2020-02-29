@@ -295,7 +295,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             //System.out.println(currentAddress.get(0));
 
             for(Building b: sgw.getBuildings()){
-                System.out.println(b.getAddress().split(",")[0]);
+                if(b.getAddress().split(",")[0].equals(currentAddress)){
+                    textView.setText(b.getName());
+                    break;
+                } else {
+                    textView.setText("Not on campus");
+                }
             }
         }catch (Exception e){
             System.out.println(e.toString());
