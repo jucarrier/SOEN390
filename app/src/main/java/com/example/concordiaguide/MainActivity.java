@@ -48,12 +48,14 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+
     //for finding address
-    private Button button;
-    private TextView textView;
+    private TextView textView;  //this is the textView that will display the current building name
     private LocationManager locationManager;
     LatLng currentLocation; //to be filled in later by onLocationChanged
 
+    //this method uses the geocoder to get the user's current address using the gps coordinates
+    //requires internet access and gps location permission enabled
     private String getAddress(double latitude, double longitude) {
         StringBuilder result = new StringBuilder();
         String out = "address not found";
@@ -70,10 +72,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             Log.e("tag", e.getMessage());
         }
 
-        //return result.toString();
         return out;
     }
 
+    //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
     public void onLocationChanged(Location location) {
         double lat = location.getLatitude();
@@ -286,13 +288,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
 
             //uncomment this to test if you are not currently near one of the campuses
-            currentAddress = "1450 Guy St";
+            //currentAddress = "1450 Guy St";
 
             textView.setText(currentAddress);
-            //System.out.println(getAddress(this.currentLocation.latitude, this.currentLocation.longitude));
 
-            //System.out.println(this.currentLocation.latitude);
-            //System.out.println(currentAddress.get(0));
 
             for(Building b: sgw.getBuildings()){
                 if(b.getAddress().split(",")[0].equals(currentAddress)){

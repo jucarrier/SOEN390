@@ -14,6 +14,8 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
@@ -26,26 +28,10 @@
             android:onClick="onLocateButtonPressed"
             android:text="Find me" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <fragment
-            android:id="@+id/google_map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/activity_maps" />
 
         <SearchView
             android:id="@+id/sv_location"
@@ -61,6 +47,46 @@
             android:elevation="5dp"
             android:iconifiedByDefault="true"
             android:queryHint="Search" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="228dp"
+            android:layout_height="52dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="6dp"
+            android:visibility="visible"
+            app:contentPaddingBottom="8dp"
+            app:contentPaddingLeft="8dp">
+
+            <TextView
+                android:id="@+id/addressHere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:gravity="bottom|right"
+                android:text="addressHere"
+                android:textAlignment="gravity"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:visibility="visible" />
+        </androidx.cardview.widget.CardView>
+
+        <fragment
+            android:id="@+id/google_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/activity_maps" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -70,17 +96,5 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/main_menu" />
-
-    <TextView
-        android:id="@+id/addressHere"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="bottom|right"
-        android:paddingRight="144dp"
-        android:paddingBottom="16dp"
-        android:text="addressHere"
-        android:textAlignment="gravity"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
