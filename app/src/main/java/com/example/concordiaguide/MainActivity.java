@@ -1,19 +1,32 @@
 package com.example.concordiaguide;
 
+import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import Helpers.ObjectWrapperForBinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,13 +38,58 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
+import org.w3c.dom.Text;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+
+    //for finding current location
+    private TextView textView;  //this is the textView that will display the current building name
+    private LocationManager locationManager;
+    LatLng currentLocation; //to be filled in later by onLocationChanged
+
+    //this is the listener method that constantly updates the user's location for usage in other methods
+    @Override
+    public void onLocationChanged(Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        currentLocation = new LatLng(lat, lng);
+
+        try {
+
+            setContentView(R.layout.activity_maps);
+            textView = (TextView) findViewById(R.id.addressHere);
+            if((Object)textView == null){
+                System.out.println("latitude not found");
+            }
+            textView.setText("lat " + lat);
+            System.out.println("lat " + lat);
+        } catch (Exception e){
+            System.out.println("begin \n" +e+ "\n end");
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        //removing this will cause an error
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        //removing this will cause an error
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        //removing this will cause an error
+    }
+
     private static class FindAddressTaskParams {
         Geocoder geocoder;
         List<Address> addressList;
@@ -90,6 +148,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //locate current location
+        textView = (TextView) findViewById(R.id.addressHere);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        onLocationChanged(location);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -161,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
     }
 
     @Override
@@ -172,6 +248,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //@Override
+    public void onLocateButtonPressed(View view) {
+        AddressDecoder ad = new AddressDecoder();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
+        //test here
+        try{
+            textView = (TextView) findViewById(R.id.addressHere);
+            String currentAddress = ad.getAddressFromLatLng(this.currentLocation.latitude, this.currentLocation.longitude);
+            currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
+
+            //uncomment this to test building detection if you are not currently near one of the campuses
+            //this will set your current address to 1450 Guy and the card view should say 'John Molson'
+            //currentAddress = "1450 Guy St";
+
+            textView.setText(currentAddress);
+            System.out.println(currentAddress); //show address in console for debugging
+
+
+            for(Building b: sgw.getBuildings()){
+                if(b.getAddress().split(",")[0].equals(currentAddress)){
+                    textView.setText(b.getName());
+                    break;
+                } else {
+                    textView.setText("Not on campus");
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -202,4 +308,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
 }
