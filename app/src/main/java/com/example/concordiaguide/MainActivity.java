@@ -49,31 +49,10 @@ import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
-    //for finding address
+    //for finding current location
     private TextView textView;  //this is the textView that will display the current building name
     private LocationManager locationManager;
     LatLng currentLocation; //to be filled in later by onLocationChanged
-
-    //this method uses the geocoder to get the user's current address using the gps coordinates
-    //requires internet access and gps location permission enabled
-    private String getAddress(double latitude, double longitude) {
-        StringBuilder result = new StringBuilder();
-        String out = "address not found";
-        try {
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-                out = addresses.get(0).getAddressLine(0);
-                result.append(address.getLocality()).append("\n");
-                result.append(address.getCountryName());
-            }
-        } catch (IOException e) {
-            Log.e("tag", e.getMessage());
-        }
-
-        return out;
-    }
 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
@@ -82,7 +61,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         double lng = location.getLongitude();
         currentLocation = new LatLng(lat, lng);
 
-        System.out.println("lat " + lat + "\nlong " + lng);
         try {
 
             setContentView(R.layout.activity_maps);
@@ -111,8 +89,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onProviderDisabled(String s) {
         //removing this will cause an error
     }
-
-
 
     private static class FindAddressTaskParams {
         Geocoder geocoder;
@@ -189,12 +165,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         onLocationChanged(location);
 
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-
 
         searchView = findViewById(R.id.sv_location);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -265,8 +237,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-
-
     }
 
     @Override
@@ -280,17 +250,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
     //@Override
     public void onLocateButtonPressed(View view) {
+        AddressDecoder ad = new AddressDecoder();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try{
             textView = (TextView) findViewById(R.id.addressHere);
-            String currentAddress = getAddress(this.currentLocation.latitude, this.currentLocation.longitude);
+            String currentAddress = ad.getAddressFromLatLng(this.currentLocation.latitude, this.currentLocation.longitude);
             currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
 
-            //uncomment this to test if you are not currently near one of the campuses
+            //uncomment this to test building detection if you are not currently near one of the campuses
+            //this will set your current address to 1450 Guy and the card view should say 'John Molson'
             //currentAddress = "1450 Guy St";
 
             textView.setText(currentAddress);
+            System.out.println(currentAddress); //show address in console for debugging
 
 
             for(Building b: sgw.getBuildings()){
@@ -305,11 +278,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             System.out.println(e.toString());
         }
     }
-
-
-
-
-
 
     /**
      * Manipulates the map once available.
@@ -340,6 +308,5 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
     }
-
 
 }
