@@ -29,6 +29,15 @@
                 android:value="com.example.concordiaguide.MainActivity" />
         </activity>
         <activity
+            android:name=".PointOfInterest"
+            android:label="@string/title_activity_poi"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.concordiaguide.MainActivity" />
+        </activity>
+        <activity
             android:name=".CampusNavigationActivity"
             android:label="@string/title_activity_campus_navigation"
             android:parentActivityName=".MainActivity"
