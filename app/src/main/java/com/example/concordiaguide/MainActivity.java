@@ -146,6 +146,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public Campus loyola;
     private DrawerLayout drawer;
 
+    public GoogleMap getmMap() {
+        return mMap;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
