@@ -31,6 +31,7 @@ import java.util.List;
 import Models.Building;
 import Models.Campus;
 
+<<<<<<< Updated upstream
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static class FindAddressTaskParams {
         Geocoder geocoder;
@@ -85,6 +86,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+=======
+public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+
+    //for finding current location
+    private TextView textView;  //this is the textView that will display the current building name
+    private LocationManager locationManager;
+    Location location = null;
+    LatLng currentLocation; //to be filled in later by onLocationChanged
+    double lat;
+    double lng;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        //locate current location
+        textView = (TextView) findViewById(R.id.addressHere);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location != null) {
+            onLocationChanged(location);
+        }
+>>>>>>> Stashed changes
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -155,6 +188,97 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    //this is the listener method that constantly updates the user's location for usage in other methods
+    @Override
+    public void onLocationChanged(Location location) {
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+        currentLocation = new LatLng(lat, lng);
+        try {
+
+            setContentView(R.layout.activity_maps);
+            textView = (TextView) findViewById(R.id.addressHere);
+            if((Object)textView == null){
+                System.out.println("latitude not found");
+            }
+            textView.setText("lat " + lat);
+            System.out.println("lat " + lat);
+        } catch (Exception e){
+            System.out.println("begin \n" +e+ "\n end");
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        //removing this will cause an error
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        //removing this will cause an error
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        //removing this will cause an error
+    }
+
+    private static class FindAddressTaskParams {
+        Geocoder geocoder;
+        List<Address> addressList;
+        GoogleMap mMap;
+        String location;
+
+        FindAddressTaskParams(Geocoder geocoder, List<Address> addressList, GoogleMap mMap, String location) {
+            this.geocoder = geocoder;
+            this.addressList = addressList;
+            this.mMap = mMap;
+            this.location = location;
+        }
+    }
+
+    private static class FindAddressTask extends AsyncTask<FindAddressTaskParams, Void, Address> {
+        GoogleMap mMap;
+        String location;
+
+        protected Address doInBackground(FindAddressTaskParams... findAddressTaskParams) {
+            FindAddressTaskParams params = findAddressTaskParams[0];
+            if (!params.location.equals("")) {
+                try {
+                    params.addressList = params.geocoder.getFromLocationName(params.location, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                this.mMap = params.mMap;
+                this.location = params.location;
+                if (params.addressList.size() != 0) {
+                    return params.addressList.get(0);
+                }
+                return null;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Address address) {
+            if (address == null) {
+                return;
+            }
+            LatLng latlng = new LatLng(address.getLatitude(), address.getLongitude());
+            this.mMap.addMarker(new MarkerOptions().position(latlng).title(this.location));
+            this.mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 19));
+        }
+    }
+
+    private GoogleMap mMap;
+    SupportMapFragment mapFragment;
+    SearchView searchView;
+
+    public Campus sgw;
+    public Campus loyola;
+    private DrawerLayout drawer;
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -164,6 +288,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    //@Override
+    public void onLocateButtonPressed(View view) {
+        AddressDecoder ad = new AddressDecoder();
+        currentLocation = new LatLng(lat, lng);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
+        //test here
+        try{
+            textView = (TextView) findViewById(R.id.addressHere);
+            String currentAddress = ad.getAddressFromLatLng(this.currentLocation.latitude, this.currentLocation.longitude);
+            currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
+
+            //uncomment this to test building detection if you are not currently near one of the campuses
+            //this will set your current address to 1450 Guy and the card view should say 'John Molson'
+            //currentAddress = "1450 Guy St";
+
+            textView.setText(currentAddress);
+            System.out.println(currentAddress); //show address in console for debugging
+
+
+            for(Building b: sgw.getBuildings()){
+                if(b.getAddress().split(",")[0].equals(currentAddress)){
+                    textView.setText(b.getName());
+                    break;
+                } else {
+                    textView.setText("Not on campus");
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+>>>>>>> Stashed changes
 
     /**
      * Manipulates the map once available.
