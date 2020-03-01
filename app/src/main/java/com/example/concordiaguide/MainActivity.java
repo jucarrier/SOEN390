@@ -1,12 +1,5 @@
 package com.example.concordiaguide;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,6 +8,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import com.example.concordiaguide.Models.Building;
+import com.example.concordiaguide.Models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,8 +23,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import Models.Building;
-import Models.Campus;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static class FindAddressTaskParams {
@@ -144,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         break;
                     case (R.id.menu_to_layola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(layola.center, 17));
+                        break;
+                    case (R.id.nearby_places):
+                        intent = new Intent(getApplicationContext(), NearByPlacesActivity.class);
                         break;
 
                 }

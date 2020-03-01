@@ -1,4 +1,4 @@
-package Models;
+package com.example.concordiaguide.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
