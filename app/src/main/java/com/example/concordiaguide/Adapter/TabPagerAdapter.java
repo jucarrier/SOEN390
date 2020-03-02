@@ -10,8 +10,7 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     private static final int total_pages = 2;
 
     public TabPagerAdapter(FragmentManager fm) {
-        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        //Indicates that only the current fragment will be in the Lifecycle.State.RESUMED state
+        super(fm);
     }
 
     @Override
@@ -20,7 +19,8 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new NearByFragment();
             case 1:
-                return new LocationFragment();
+                return new MyLocationFragment();
+
         }
         return null;
     }

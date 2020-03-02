@@ -1,9 +1,11 @@
 package com.example.concordiaguide.Models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
-public class Results implements Serializable{
-
+public class Results implements Serializable {
     private Photos[] photos;
 
     private String id;
@@ -26,6 +28,16 @@ public class Results implements Serializable{
 
     private Geometry geometry;
 
+    @SerializedName("opening_hours")
+    private OpeningHours openingHours;
+
+    public OpeningHours getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(OpeningHours openingHours) {
+        this.openingHours = openingHours;
+    }
 
     public Photos[] getPhotos() {
         return photos;

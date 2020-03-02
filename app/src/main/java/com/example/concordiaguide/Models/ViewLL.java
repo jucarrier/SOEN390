@@ -1,6 +1,8 @@
 package com.example.concordiaguide.Models;
 
-public class ViewLL {
+import java.io.Serializable;
+
+public class ViewLL implements Serializable {
 
 
     private LatLongNE northeast;

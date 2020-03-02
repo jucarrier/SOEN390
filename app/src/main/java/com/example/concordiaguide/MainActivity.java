@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent = new Intent(getApplicationContext(), NearByPlacesActivity.class);
                         break;
 
+
                 }
                 if (intent != null) {
                     startActivity(intent);

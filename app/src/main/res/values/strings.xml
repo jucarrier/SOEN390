@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">ConcordiaGuide</string>
+    <string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>
     <string name="title_activity_maps">Map</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_indoor_navigation">IndoorNavigationActivity</string>
     <string name="title_activity_campus_navigation">CampusNavigationActivity</string>
     <string name="title_activity_class_schedule">ClassScheduleActivity</string>
+
+    <string-array name="nearby_option">
+        <item>Select a Type</item>
+        <item>Bank</item>
+        <item>Coffee Shop</item>
+        <item>Restaurant</item>
+    </string-array>
+
 </resources>
