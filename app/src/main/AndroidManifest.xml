@@ -80,13 +80,13 @@
         </activity>
 
         //test userCommuteOptions activity
-        <activity android:name=".UserCommuteOptionsActivity">
+       <!-- <activity android:name=".UserCommuteOptionsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-        </activity>
+        </activity>-->
 
 
 

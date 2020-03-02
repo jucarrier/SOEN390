@@ -36,7 +36,7 @@ public class UserCommuteOptionsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
-                    
+
                     public void run() {
                         Uri googlemapsIntentUri = Uri.parse("geo:0,0?q=");
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
