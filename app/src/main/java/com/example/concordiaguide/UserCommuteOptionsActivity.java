@@ -39,9 +39,9 @@ public class UserCommuteOptionsActivity extends AppCompatActivity {
 
                     public void run() {
                         Uri googlemapsIntentUri = Uri.parse("geo:0,0?q=");
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
+                        Intent mapInt = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
+                        mapInt.setPackage("com.google.android.apps.maps");
+                        startActivity(mapInt);
                     }
                 }, 1000);
             }
@@ -54,9 +54,9 @@ public class UserCommuteOptionsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Uri googlemapsIntentUri = Uri.parse("geo:0,0?q=");
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
+                        Intent mapInt = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
+                        mapInt.setPackage("com.google.android.apps.maps");
+                        startActivity(mapInt);
                     }
                 }, 1000);
             }
@@ -69,9 +69,9 @@ public class UserCommuteOptionsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Uri googlemapsIntentUri = Uri.parse("geo:0,0?q=");
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        startActivity(mapIntent);
+                        Intent mapInt = new Intent(Intent.ACTION_VIEW, googlemapsIntentUri);
+                        mapInt.setPackage("com.google.android.apps.maps");
+                        startActivity(mapInt);
                     }
                 }, 1000);
             }
