@@ -66,7 +66,8 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU" />
+            android:value="AIzaSyAIV-aIIZ7hKySaVwyb12jIJ6F_5uQa3J0" />
+
 
         <activity
             android:name=".MainActivity"
@@ -77,6 +78,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        //test userCommuteOptions activity
+        <activity android:name=".UserCommuteOptionsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+
+
+
     </application>
 
 </manifest>

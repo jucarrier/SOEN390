@@ -6,4 +6,5 @@
     <string name="title_activity_indoor_navigation">IndoorNavigationActivity</string>
     <string name="title_activity_campus_navigation">CampusNavigationActivity</string>
     <string name="title_activity_class_schedule">ClassScheduleActivity</string>
+
 </resources>
