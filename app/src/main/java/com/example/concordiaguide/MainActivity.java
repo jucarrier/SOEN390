@@ -310,9 +310,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
-    private String getRequestUrl(LatLng origin, LatLng dest) {
+    private String getRequestUrl(LatLng dest) {
         //Value of origin
-        String str_org = "origin=" + origin.latitude +","+origin.longitude;
+        String str_org = "origin=" + this.currentLocation.latitude +","+this.currentLocation.longitude;
         //Value of destination
         String str_dest = "destination=" + dest.latitude+","+dest.longitude;
         //Set value enable the sensor
@@ -414,7 +414,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             @Override
             public void onMapLongClick(LatLng latLng) {
                 //Reset marker when already 2
-                if (listPoints.size() == 2) {
+                if (listPoints.size() == 1) {
                     listPoints.clear();
                     mMap.clear();
                 }
@@ -424,18 +424,18 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
-                if (listPoints.size() == 1) {
+               // if (listPoints.size() == 1) {
                     //Add first marker to the map
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else {
+               //     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+               // } else {
                     //Add second marker to the map
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
+               // }
                 mMap.addMarker(markerOptions);
 
-                if (listPoints.size() == 2) {
+                if (listPoints.size() == 1) {
                     //Create the URL to get request from first marker to second marker
-                    String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
+                    String url = getRequestUrl(listPoints.get(0));
                     TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                     taskRequestDirections.execute(url);
                 }
