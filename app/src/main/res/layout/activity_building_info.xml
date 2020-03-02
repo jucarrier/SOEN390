@@ -65,6 +65,7 @@
         android:layout_below="@id/building_info_description"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
+        android:onClick="goToMainActivity"
         android:text="Direction"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
