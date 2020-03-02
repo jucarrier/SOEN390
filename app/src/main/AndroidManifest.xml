@@ -80,13 +80,23 @@
         </activity>
 
         //test userCommuteOptions activity
-       <!-- <activity android:name=".UserCommuteOptionsActivity">
+        <!--<activity android:name=".UserCommuteOptionsActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.PA" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
         </activity>-->
+
+        <activity
+            android:name=".UserCommuteOptionsActivity"
+            android:label="UserCommuteOptionsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.concordiaguide.MainActivity" />
+        </activity>
 
 
 
