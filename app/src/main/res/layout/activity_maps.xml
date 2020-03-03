@@ -16,17 +16,19 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="128dp"
+            android:layout_height="64dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:onClick="onLocateButtonPressed"
+            android:text="Find me" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
@@ -59,6 +61,39 @@
             android:iconifiedByDefault="true"
             android:queryHint="Search" />
 
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="228dp"
+            android:layout_height="52dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="6dp"
+            android:visibility="visible"
+            app:contentPaddingBottom="8dp"
+            app:contentPaddingLeft="8dp">
+
+            <TextView
+                android:id="@+id/addressHere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|left"
+                android:gravity="bottom|right"
+                android:text="addressHere"
+                android:textAlignment="gravity"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:visibility="visible" />
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 
