@@ -1,5 +1,6 @@
 package com.example.concordiaguide;
 
+import com.example.concordiaguide.Models.Campus;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import Helpers.BuildingListAdapter;
 import Helpers.ObjectWrapperForBinder;
-import Models.Campus;
+
 
 public class CampusNavigationActivity extends AppCompatActivity {
 

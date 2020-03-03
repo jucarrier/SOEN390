@@ -17,7 +17,7 @@ import com.example.concordiaguide.R;
 
 import java.util.List;
 
-import Models.Building;
+import com.example.concordiaguide.Models.Building;
 
 public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapter.BuildingListViewHolder> {
     private static final String TAG = "BuildingListAdapter";

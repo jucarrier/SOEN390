@@ -1,5 +1,6 @@
 package com.example.concordiaguide.Models;
 
+import com.example.concordiaguide.Models.Building;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
