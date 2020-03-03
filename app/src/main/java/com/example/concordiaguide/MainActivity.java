@@ -248,6 +248,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
+
     //@Override
     public void onLocateButtonPressed(View view) {
         AddressDecoder ad = new AddressDecoder();

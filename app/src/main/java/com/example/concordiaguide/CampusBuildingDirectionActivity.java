@@ -19,10 +19,14 @@ public class CampusBuildingDirectionActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Starting.");
     }
 
+
+
     public void goToMainActivity(View view){
         Log.d(TAG, "onClick: Clicked directionBtn.");
         Intent intent = new Intent (getApplicationContext(), MainActivity.class);
         startActivity(intent);
 
     }
+
+
 }
