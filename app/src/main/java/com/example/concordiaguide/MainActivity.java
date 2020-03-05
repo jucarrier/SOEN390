@@ -172,7 +172,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        searchView = findViewById(R.id.sv_location);
+        searchView = findViewById(R.id.sv_location2);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
