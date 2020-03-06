@@ -88,7 +88,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/addressCardView"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="64dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
             android:visibility="visible"
@@ -99,12 +99,14 @@
             <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:tabTextAppearance="@style/tabTextStyle"
                 >
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="walk"
-                    app:tabTextAppearance="@style/tabTextStyle"
+                    android:icon="@drawable/ic_indoor_navigation_24dp"
+
                     />
 
                 <com.google.android.material.tabs.TabItem
