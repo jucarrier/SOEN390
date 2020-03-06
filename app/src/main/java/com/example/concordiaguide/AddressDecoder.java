@@ -28,6 +28,8 @@ import android.os.UserHandle;
 import android.util.Log;
 import android.view.Display;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,4 +66,28 @@ public class AddressDecoder extends AppCompatActivity {
         return out;
     }
 
+    public LatLng getLocationFromAddress(String strAddress){
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        Address location;
+        LatLng position = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
+                return null;
+            }
+            location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+            position = new LatLng((double) location.getLatitude(), (double) location.getLongitude());
+
+        }
+        catch(IOException e){
+
+        }
+
+        return position;
+    }
 }

@@ -268,7 +268,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
         listPoints = new ArrayList<>();
+
+        Building building;
+
+        try{
+            Bundle bundle = getIntent().getExtras();
+            building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+
+        }
+        catch(Exception e){
+
+        }
+
     }
+
 
     @Override
     public void onBackPressed() {
