@@ -1,6 +1,6 @@
 package com.example.concordiaguide;
 
-import Models.Building;
+import com.example.concordiaguide.Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +30,10 @@ import android.widget.TextView;
 
 import com.example.concordiaguide.Models.Campus;
 import Helpers.ObjectWrapperForBinder;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,7 +47,7 @@ import java.util.List;
 import java.util.Locale;
 
 import Helpers.CampusBuilder;
-import Models.Campus;
+import com.example.concordiaguide.Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     //for finding current location
@@ -147,7 +150,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
         textView = (TextView) findViewById(R.id.addressHere);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import Helpers.ObjectWrapperForBinder;
-import Models.Building;
+import com.example.concordiaguide.Models.Building;
 
 public class BuildingInfoActivity extends AppCompatActivity {
     private static final String TAG = "BuildingInfoActivity";
