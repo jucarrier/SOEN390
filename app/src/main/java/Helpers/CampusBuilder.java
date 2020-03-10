@@ -23,7 +23,7 @@ public class CampusBuilder {
                 new LatLng(45.496829, -73.578850),
                 new LatLng(45.497165, -73.579551));
 
-        Building jm = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "Description", "JM",
+        Building jm = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "Description", "MB",
                 new LatLng(45.495166, -73.579171),
                 new LatLng(45.495222, -73.579113),
                 new LatLng(45.495361, -73.579370),
@@ -35,7 +35,7 @@ public class CampusBuilder {
                 new LatLng(45.495002, -73.578818),
                 new LatLng(45.495166, -73.579171));
 
-        Building gm = new Building(mMap, "GM", "1550 De Maisonneuve West, 1550 Boulevard de Maisonneuve O, Montreal, Quebec H3G 1N1", "Description", "GM",
+        Building gm = new Building(mMap, "Guy-De Maisonneuve", "1550 De Maisonneuve West, 1550 Boulevard de Maisonneuve O, Montreal, Quebec H3G 1N1", "Description", "GM",
                 new LatLng(45.495780, -73.579145),
                 new LatLng(45.496132, -73.578807),
                 new LatLng(45.495947, -73.578429),
@@ -52,7 +52,7 @@ public class CampusBuilder {
                 new LatLng(45.495592, -73.578765),
                 new LatLng(45.495863, -73.578497));
 
-        Building lb = new Building(mMap, "Library Building", "Pavillion J.W. McConnell Bldg, 1400 Maisonneuve Blvd W, Montreal, Quebec H3G 1M8", "Description", "L",
+        Building lb = new Building(mMap, "Library", "Pavillion J.W. McConnell Bldg, 1400 Maisonneuve Blvd W, Montreal, Quebec H3G 1M8", "Description", "LB",
                 new LatLng(45.496729, -73.578579),
                 new LatLng(45.497259, -73.578058),
                 new LatLng(45.496893, -73.577294),
@@ -65,7 +65,7 @@ public class CampusBuilder {
                 new LatLng(45.496706, -73.578531),
                 new LatLng(45.496729, -73.578579));
 
-        Building td = new Building(mMap, "TD Building", "1410 Guy St, Montreal, Quebec H3H 2L7", "Description", "TD",
+        Building td = new Building(mMap, "Toronto-Dominion", "1410 Guy St, Montreal, Quebec H3H 2L7", "Description", "TD",
                 new LatLng(45.495128, -73.578501),
                 new LatLng(45.495189, -73.578428),
                 new LatLng(45.495037, -73.578074),
@@ -76,7 +76,7 @@ public class CampusBuilder {
                 new LatLng(45.495048, -73.578365),
                 new LatLng(45.495128, -73.578501));
 
-        Building fg = new Building(mMap, "FG Building", "1616 Saint-Catherine St W, Montreal, Quebec H3H 1L7", "Description", "FG",
+        Building fg = new Building(mMap, "Faubourg", "1616 Saint-Catherine St W, Montreal, Quebec H3H 1L7", "Description", "FG",
                 new LatLng(45.494911, -73.577786),
                 new LatLng(45.494655, -73.577222),
                 new LatLng(45.494399, -73.577521),
@@ -121,7 +121,7 @@ public class CampusBuilder {
                 new LatLng(45.493747, -73.577157),
                 new LatLng(45.493869, -73.577340));
 
-        Building va = new Building(mMap, "VA Building", "1395 René-Lévesque Blvd W, Montreal, Quebec H3G 2M5", "Description", "VA",
+        Building va = new Building(mMap, "Visual Arts", "1395 René-Lévesque Blvd W, Montreal, Quebec H3G 2M5", "Description", "VA",
                 new LatLng(45.495672, -73.574309),
                 new LatLng(45.496185, -73.573799),
                 new LatLng(45.496070, -73.573563),
