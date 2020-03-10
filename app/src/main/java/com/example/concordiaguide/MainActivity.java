@@ -1,6 +1,6 @@
 package com.example.concordiaguide;
 
-import com.example.concordiaguide.Models.Building;
+import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,8 +44,7 @@ import java.util.List;
 import java.util.Locale;
 
 import Helpers.CampusBuilder;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     //for finding current location
@@ -148,7 +147,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
         textView = (TextView) findViewById(R.id.addressHere);
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -290,6 +289,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 

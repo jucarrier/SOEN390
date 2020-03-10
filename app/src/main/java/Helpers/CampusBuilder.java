@@ -6,8 +6,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.example.concordiaguide.Models.Building;
-import com.example.concordiaguide.Models.Campus;
+import Models.Building;
+import Models.Campus;
 
 public class CampusBuilder {
     GoogleMap mMap;

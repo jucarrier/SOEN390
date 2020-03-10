@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import Helpers.ObjectWrapperForBinder;
-import com.example.concordiaguide.Models.Building;
+
+import Models.Building;
 
 public class BuildingInfoPopup extends Activity {
 
