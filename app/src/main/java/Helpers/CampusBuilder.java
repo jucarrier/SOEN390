@@ -17,13 +17,13 @@ public class CampusBuilder {
     }
 
     public Campus buildSGW() {
-        Building hall = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "Description", "H",
+        Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "Description", "H",
                 new LatLng(45.497711, -73.579035),
                 new LatLng(45.497373, -73.578311),
                 new LatLng(45.496829, -73.578850),
                 new LatLng(45.497165, -73.579551));
 
-        Building jm = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "Description", "MB",
+        Building mb = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "Description", "MB",
                 new LatLng(45.495166, -73.579171),
                 new LatLng(45.495222, -73.579113),
                 new LatLng(45.495361, -73.579370),
@@ -131,13 +131,13 @@ public class CampusBuilder {
                 new LatLng(45.495672, -73.574309));
 
         return new Campus(
-                new ArrayList<>(Arrays.asList(hall, jm, gm, ev, lb, td, fg, gn, va)),
+                new ArrayList<>(Arrays.asList(h, mb, gm, ev, lb, td, fg, gn, va)),
                 new LatLng(45.496680, -73.578761));
 
     }
 
     public Campus buildLoyola() {
-        Building ad = new Building(mMap, "Administration building", "Refectory, Montreal, QC H4B", "Description", "A",
+        Building ad = new Building(mMap, "Administration building", "Refectory, Montreal, QC H4B", "Description", "AD",
                 new LatLng(45.457912, -73.640122),
                 new LatLng(45.457985, -73.640068),
                 new LatLng(45.457962, -73.640005),
@@ -156,14 +156,14 @@ public class CampusBuilder {
                 new LatLng(45.457800, -73.639828),
                 new LatLng(45.457912, -73.640122));
 
-        Building cc = new Building(mMap, "Central Building", "7141 Rue Sherbrooke O, Montréal, QC H4B 2B5 Sherbrooke St W, Montreal, Quebec H4B 2B5", "Description", "C",
+        Building cc = new Building(mMap, "Central Building", "7141 Rue Sherbrooke O, Montréal, QC H4B 2B5 Sherbrooke St W, Montreal, Quebec H4B 2B5", "Description", "CC",
                 new LatLng(45.458379, -73.640792),
                 new LatLng(45.458524, -73.640678),
                 new LatLng(45.458221, -73.639902),
                 new LatLng(45.458082, -73.640014),
                 new LatLng(45.458379, -73.640792));
 
-        Building rf = new Building(mMap, "Jesuit hall and conference centre", "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "Description", "JH",
+        Building rf = new Building(mMap, "Jesuit hall and conference centre", "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6", "Description", "RF",
                 new LatLng(45.458508, -73.641373),
                 new LatLng(45.458805, -73.641159),
                 new LatLng(45.458683, -73.640806),
@@ -180,7 +180,7 @@ public class CampusBuilder {
                 new LatLng(45.458486, -73.641319),
                 new LatLng(45.458508, -73.641373));
 
-        Building py = new Building(mMap, "Psychology Building", "Refectory, Montreal, Quebec H4B 2Z3", "Description", "P",
+        Building py = new Building(mMap, "Psychology Building", "Refectory, Montreal, Quebec H4B 2Z3", "Description", "PY",
                 new LatLng(45.458853, -73.640830),
                 new LatLng(45.459181, -73.640575),
                 new LatLng(45.459199, -73.640624),
@@ -198,7 +198,7 @@ public class CampusBuilder {
                 new LatLng(45.458591, -73.639595),
                 new LatLng(45.458737, -73.639486));
 
-        Building sp = new Building(mMap, "Richard J. Renaud Science Complex", "3475 Rue West Broadway Montreal, QC H4B 2A7", "Description", "RJ",
+        Building sp = new Building(mMap, "Richard J. Renaud Science Complex", "3475 Rue West Broadway Montreal, QC H4B 2A7", "Description", "SP",
                 new LatLng(45.456985, -73.640827),
                 new LatLng(45.457439, -73.642003),
                 new LatLng(45.457641, -73.641846),
@@ -270,7 +270,7 @@ public class CampusBuilder {
                 new LatLng(45.458992, -73.639126),
                 new LatLng(45.459107, -73.639410));
 
-        Building ra = new Building(mMap, "Sports Complex", "7200 Sherbrooke St W, Montreal, Quebec H4B 1R2", "Description", "SC",
+        Building ra = new Building(mMap, "Sports Complex", "7200 Sherbrooke St W, Montreal, Quebec H4B 1R2", "Description", "RA",
                 new LatLng(45.456889, -73.638556),
                 new LatLng(45.457157, -73.638339),
                 new LatLng(45.457038, -73.638036),
@@ -293,7 +293,7 @@ public class CampusBuilder {
                 new LatLng(45.456833, -73.638416),
                 new LatLng(45.456889, -73.638556));
 
-        Building ge = new Building(mMap, "Centre for structural and functional Genomics", "7079 Rue de Terrebonne, Montréal, QC H4B 2B4 Rue de Terrebonne, Montréal, QC H4B 2B4, Canada", "Description", "CG",
+        Building ge = new Building(mMap, "Centre for structural and functional Genomics", "7079 Rue de Terrebonne, Montréal, QC H4B 2B4 Rue de Terrebonne, Montréal, QC H4B 2B4, Canada", "Description", "GE",
                 new LatLng(45.456946, -73.640740),
                 new LatLng(45.457174, -73.640571),
                 new LatLng(45.457041, -73.640166),
@@ -311,7 +311,7 @@ public class CampusBuilder {
                 new LatLng(45.457393, -73.637585),
                 new LatLng(45.457832, -73.638341));
 
-        Building sd = new Building(mMap, "Stinger Dome", "7200 Sherbrooke St W, Montreal, Quebec H4B 1R2", "Description", "SD",
+        Building sd = new Building(mMap, "Stinger Dome", "7200 Sherbrooke St W, Montreal, Quebec H4B 1R2", "Description", "DO",
                 new LatLng(45.457372, -73.637088),
                 new LatLng(45.458335, -73.635960),
                 new LatLng(45.457930, -73.635241),

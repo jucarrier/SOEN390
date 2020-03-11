@@ -162,8 +162,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        onLocationChanged(location);
+
+        //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        //onLocationChanged(location);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -236,6 +237,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
+
+        long LOCATION_REFRESH_TIME = 20000;
+        float LOCATION_REFRESH_DISTANCE = 5;
+        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME,
+                LOCATION_REFRESH_DISTANCE, this);
 
     }
 

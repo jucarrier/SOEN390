@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="description_temp">template</string>
     <string name="description_h">It was designed by architecture firm Ross, Fish, Duschenes and Barrett, which hired James A. M. K. O\'Beirne, to draw up the plans. It was inaugurated on 14 October 1966, the very same day as the Montreal Metro.</string>
     <string name="description_mb">In 2009 the John Molson Building officially opened on the corner of Guy and de Maisonneuve. It includes digitally equipped teaching amphitheatres and classrooms, faculty and graduate student offices, the Office of the Dean, student and faculty social space, as well as space for privatized programs. Special features also include case study rooms designed for group work, and laboratories for consumer behaviour research.</string>
     <string name="description_gm">Concordia has gradually reclaimed rented spaces in the Guy-De Maisonneuve Building to accommodate Concordia administrative offices, departments and service units, leaving very few external tenants with long-term leases.</string>
     <string name="description_ev">The Engineering, Computer Science and Visual Arts Integrated Complex (EV Building) opened in September 2005, a striking addition to Montreal’s downtown landscape. The two towers of the high-tech complex are completely integrated with links at every floor and a common corridor.</string>
-    <string name="description_lb">template</string>
+    <string name="description_lb">The J. W. McConnell Building opened in 1992 to house the R. Howard Webster Library, teaching and research facilities, the Leonard and Bina Ellen Art Gallery, the J.A. DeSève Cinema and academic and administrative offices.</string>
     <string name="description_td">The classic bank building at Guy and Ste-Catherine opened in 1903 as a branch of the Bank of Toronto. (The Bank became the Toronto-Dominion Bank in 1954 and TD Canada Trust in 2000). The building was one of the first commercial projects of the Montreal architectural firm Ross and MacFarlane. Inspiration for the design came from the Knickerbocker Trust Company Building in New York, which had been conceived four years earlier by architects McKim, Mead and Whyte, and was modeled on the Temple of Zeus in Agrigento (ca 480 BCE).</string>
     <string name="description_fg">The Faubourg complex sits on land that was leased from the Grey Nuns in 1925. In 1927 Laurol‘s Motor Sales built on the site and opened Autorow, a McLaughlin-Buick showroom.</string>
     <string name="description_gn">Nearly 150 years ago the Sisters of Charity began construction of the Motherhouse of the Grey Nuns of Montreal. Acquired by Concordia University, this landmark has a new purpose, all the while preserving its outstanding heritage.</string>
     <string name="description_va">Concordia has occupied the Visual Arts Building since August 1979. The original building was built in 1923 to house the Labelle Garage, and it later became Mid-Town Motors, a car dealership.</string>
-    <string name="description_temp1">template</string>
-    <string name="description_temp2">template</string>
-    <string name="description_temp3">template</string>
-    <string name="description_temp4">template</string>
-    <string name="description_temp5">template</string>
-    <string name="description_temp6">template</string>
-    <string name="description_temp7">template</string>
-    <string name="description_temp8">template</string>
-    <string name="description_temp9">template</string>
-    <string name="description_temp10">template</string>
+
+    <string name="description_ad">Description</string>
+    <string name="description_cc">Description</string>
+    <string name="description_rf">Description</string>
+    <string name="description_py">Description</string>
+    <string name="description_fc">Description</string>
+    <string name="description_sp">Description</string>
+    <string name="description_cj">Description</string>
+    <string name="description_vl">Description</string>
+    <string name="description_ra">Description</string>
+    <string name="description_ge">Description</string>
+    <string name="description_cs">Description</string>
+    <string name="description_do">Description</string>
 </resources>
