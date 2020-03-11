@@ -270,24 +270,26 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         listPoints = new ArrayList<>();
 
         Building building;
-        AddressDecoder ad = new AddressDecoder();
-        TaskRequestDirections trd = new TaskRequestDirections();
-        LatLng dest = null;
-        String reqUrl;
-        String background;
 
         try{
             building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
-            dest = ad.getLocationFromAddress(building.getAddress());
-            listPoints.add(dest);
-            reqUrl = getRequestUrl(listPoints.get(0));
-            trd.execute(reqUrl);
+            directionsToBuilding(building);
         }
-        catch(Exception e){
-        }
+        catch(Exception e){}
 
     }
 
+    public void directionsToBuilding(Building building){
+        AddressDecoder ad = new AddressDecoder();
+        TaskRequestDirections trd = new TaskRequestDirections();
+        LatLng dest;
+        String reqUrl;
+
+        dest = ad.getLocationFromAddress(building.getAddress());
+        listPoints.add(dest);
+        reqUrl = getRequestUrl(listPoints.get(0));
+        trd.execute(reqUrl);
+    }
 
     @Override
     public void onBackPressed() {
