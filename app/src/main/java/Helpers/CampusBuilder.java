@@ -17,13 +17,13 @@ public class CampusBuilder {
     }
 
     public Campus buildSGW() {
-        Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "Description", "H",
+        Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "It was designed by architecture firm Ross, Fish, Duschenes and Barrett, which hired James A. M. K. O'Beirne, to draw up the plans. It was inaugurated on 14 October 1966, the very same day as the Montreal Metro.", "H",
                 new LatLng(45.497711, -73.579035),
                 new LatLng(45.497373, -73.578311),
                 new LatLng(45.496829, -73.578850),
                 new LatLng(45.497165, -73.579551));
 
-        Building mb = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "Description", "MB",
+        Building mb = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", "In 2009 the John Molson Building officially opened on the corner of Guy and de Maisonneuve. It includes digitally equipped teaching amphitheatres and classrooms, faculty and graduate student offices, the Office of the Dean, student and faculty social space, as well as space for privatized programs. Special features also include case study rooms designed for group work, and laboratories for consumer behaviour research.", "MB",
                 new LatLng(45.495166, -73.579171),
                 new LatLng(45.495222, -73.579113),
                 new LatLng(45.495361, -73.579370),
@@ -35,7 +35,7 @@ public class CampusBuilder {
                 new LatLng(45.495002, -73.578818),
                 new LatLng(45.495166, -73.579171));
 
-        Building gm = new Building(mMap, "Guy-De Maisonneuve", "1550 De Maisonneuve West, 1550 Boulevard de Maisonneuve O, Montreal, Quebec H3G 1N1", "Description", "GM",
+        Building gm = new Building(mMap, "Guy-De Maisonneuve", "1550 De Maisonneuve West, 1550 Boulevard de Maisonneuve O, Montreal, Quebec H3G 1N1", "Concordia has gradually reclaimed rented spaces in the Guy-De Maisonneuve Building to accommodate Concordia administrative offices, departments and service units, leaving very few external tenants with long-term leases.", "GM",
                 new LatLng(45.495780, -73.579145),
                 new LatLng(45.496132, -73.578807),
                 new LatLng(45.495947, -73.578429),
@@ -44,7 +44,7 @@ public class CampusBuilder {
                 new LatLng(45.495764, -73.579110),
                 new LatLng(45.495780, -73.579145));
 
-        Building ev = new Building(mMap, "EV", "1493-1515 Saint-Catherine St W, Montreal, Quebec H3G 2W1", "Description", "EV",
+        Building ev = new Building(mMap, "EV", "1493-1515 Saint-Catherine St W, Montreal, Quebec H3G 2W1", "The Engineering, Computer Science and Visual Arts Integrated Complex (EV Building) opened in September 2005, a striking addition to Montreal’s downtown landscape. The two towers of the high-tech complex are completely integrated with links at every floor and a common corridor.", "EV",
                 new LatLng(45.495863, -73.578497),
                 new LatLng(45.495440, -73.577609),
                 new LatLng(45.495188, -73.577876),
@@ -52,7 +52,7 @@ public class CampusBuilder {
                 new LatLng(45.495592, -73.578765),
                 new LatLng(45.495863, -73.578497));
 
-        Building lb = new Building(mMap, "Library", "Pavillion J.W. McConnell Bldg, 1400 Maisonneuve Blvd W, Montreal, Quebec H3G 1M8", "Description", "LB",
+        Building lb = new Building(mMap, "Library", "Pavillion J.W. McConnell Bldg, 1400 Maisonneuve Blvd W, Montreal, Quebec H3G 1M8", "The J. W. McConnell Building opened in 1992 to house the R. Howard Webster Library, teaching and research facilities, the Leonard and Bina Ellen Art Gallery, the J.A. DeSève Cinema and academic and administrative offices.", "LB",
                 new LatLng(45.496729, -73.578579),
                 new LatLng(45.497259, -73.578058),
                 new LatLng(45.496893, -73.577294),
@@ -65,7 +65,7 @@ public class CampusBuilder {
                 new LatLng(45.496706, -73.578531),
                 new LatLng(45.496729, -73.578579));
 
-        Building td = new Building(mMap, "Toronto-Dominion", "1410 Guy St, Montreal, Quebec H3H 2L7", "Description", "TD",
+        Building td = new Building(mMap, "Toronto-Dominion", "1410 Guy St, Montreal, Quebec H3H 2L7", "The classic bank building at Guy and Ste-Catherine opened in 1903 as a branch of the Bank of Toronto. (The Bank became the Toronto-Dominion Bank in 1954 and TD Canada Trust in 2000). The building was one of the first commercial projects of the Montreal architectural firm Ross and MacFarlane. Inspiration for the design came from the Knickerbocker Trust Company Building in New York, which had been conceived four years earlier by architects McKim, Mead and Whyte, and was modeled on the Temple of Zeus in Agrigento (ca 480 BCE).", "TD",
                 new LatLng(45.495128, -73.578501),
                 new LatLng(45.495189, -73.578428),
                 new LatLng(45.495037, -73.578074),
@@ -76,7 +76,7 @@ public class CampusBuilder {
                 new LatLng(45.495048, -73.578365),
                 new LatLng(45.495128, -73.578501));
 
-        Building fg = new Building(mMap, "Faubourg", "1616 Saint-Catherine St W, Montreal, Quebec H3H 1L7", "Description", "FG",
+        Building fg = new Building(mMap, "Faubourg", "1616 Saint-Catherine St W, Montreal, Quebec H3H 1L7", "The Faubourg complex sits on land that was leased from the Grey Nuns in 1925. In 1927 Laurol‘s Motor Sales built on the site and opened Autorow, a McLaughlin-Buick showroom.", "FG",
                 new LatLng(45.494911, -73.577786),
                 new LatLng(45.494655, -73.577222),
                 new LatLng(45.494399, -73.577521),
@@ -85,7 +85,7 @@ public class CampusBuilder {
                 new LatLng(45.493823, -73.579067),
                 new LatLng(45.494911, -73.577786));
 
-        Building gn = new Building(mMap, "Grey Nun's Building", "1190 Guy St, Montreal, Quebec H3H 2L4", "Description", "GN",
+        Building gn = new Building(mMap, "Grey Nun's Building", "1190 Guy St, Montreal, Quebec H3H 2L4", "Nearly 150 years ago the Sisters of Charity began construction of the Motherhouse of the Grey Nuns of Montreal. Acquired by Concordia University, this landmark has a new purpose, all the while preserving its outstanding heritage.", "GN",
                 new LatLng(45.493974, -73.577561),
                 new LatLng(45.494125, -73.577414),
                 new LatLng(45.494095, -73.577349),
@@ -121,7 +121,7 @@ public class CampusBuilder {
                 new LatLng(45.493747, -73.577157),
                 new LatLng(45.493869, -73.577340));
 
-        Building va = new Building(mMap, "Visual Arts", "1395 René-Lévesque Blvd W, Montreal, Quebec H3G 2M5", "Description", "VA",
+        Building va = new Building(mMap, "Visual Arts", "1395 René-Lévesque Blvd W, Montreal, Quebec H3G 2M5", "Concordia has occupied the Visual Arts Building since August 1979. The original building was built in 1923 to house the Labelle Garage, and it later became Mid-Town Motors, a car dealership.", "VA",
                 new LatLng(45.495672, -73.574309),
                 new LatLng(45.496185, -73.573799),
                 new LatLng(45.496070, -73.573563),
