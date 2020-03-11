@@ -69,16 +69,16 @@ public class AddressDecoder extends AppCompatActivity {
     public LatLng getLocationFromAddress(String strAddress){
 
         Geocoder coder = new Geocoder(this);
-        List<Address> address;
+        List<Address> addresses;
         Address location;
         LatLng position = null;
 
         try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
+            addresses = coder.getFromLocationName(strAddress,5);
+            if (addresses ==null) {
                 return null;
             }
-            location = address.get(0);
+            location = addresses.get(0);
             location.getLatitude();
             location.getLongitude();
             position = new LatLng((double) location.getLatitude(), (double) location.getLongitude());

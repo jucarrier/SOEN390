@@ -270,14 +270,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         listPoints = new ArrayList<>();
 
         Building building;
+        AddressDecoder ad = new AddressDecoder();
+        TaskRequestDirections trd = new TaskRequestDirections();
+        LatLng dest = null;
+        String reqUrl;
+        String background;
 
         try{
-            Bundle bundle = getIntent().getExtras();
             building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
-
+            dest = ad.getLocationFromAddress(building.getAddress());
+            listPoints.add(dest);
+            reqUrl = getRequestUrl(listPoints.get(0));
+            trd.execute(reqUrl);
         }
         catch(Exception e){
-
         }
 
     }
@@ -388,7 +394,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return  responseString;
+            return responseString;
         }
 
         @Override
