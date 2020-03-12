@@ -113,17 +113,20 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="shuttle"/>
+                    android:text="shuttle"
+                    android:icon="@drawable/ic_directions_bus_black_24dp"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="car"/>
+                    android:text="car"
+                    android:icon="@drawable/ic_directions_car_black_24dp"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="metro"/>
+                    android:text="metro"
+                    android:icon="@drawable/ic_directions_subway_black_24dp"/>
 
             </com.google.android.material.tabs.TabLayout>
 
