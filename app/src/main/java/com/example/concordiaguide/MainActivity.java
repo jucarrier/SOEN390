@@ -6,11 +6,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,12 +51,15 @@ import java.util.Locale;
 import Helpers.CampusBuilder;
 import Models.Campus;
 
+import static com.example.concordiaguide.App.CHANNEL_1_ID;
+
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     //for finding current location
     private TextView textView;  //this is the textView that will display the current building name
     private LocationManager locationManager;
     LatLng currentLocation; //to be filled in later by onLocationChanged
+    private NotificationManagerCompat notificationManagerCompat;
 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
@@ -241,7 +248,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+        notificationManagerCompat = NotificationManagerCompat.from(this);
     }
+
+    public void sendNotification(View v){
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_directions_walk_black_24dp)
+                .setContentTitle(Notifications.DEFAULT_TITLE)
+                .setContentText(Notifications.DEFAULT_MESSAGE)
+                .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+                .build();
+
+        notificationManagerCompat.notify(1, notification);
+    }
+
 
     @Override
     public void onBackPressed() {
