@@ -10,7 +10,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,10 +20,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -38,11 +35,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
@@ -50,8 +44,8 @@ import Models.Campus;
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     //for finding current location
-    private TextView textView;  //this is the textView that will display the current building name
-    private LocationManager locationManager;
+    private TextView textViewAddressHere;  //this is the textView that will display the current building name
+    private LocationManager locationManager;    //this is needed to find the user's current location
     LatLng currentLocation; //to be filled in later by onLocationChanged
 
     //this is the listener method that constantly updates the user's location for usage in other methods
@@ -64,11 +58,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         try {
 
             setContentView(R.layout.activity_maps);
-            textView = (TextView) findViewById(R.id.addressHere);
-            if((Object)textView == null){
+            textViewAddressHere = (TextView) findViewById(R.id.addressHere);
+            if((Object) textViewAddressHere == null){
                 System.out.println("latitude not found");
             }
-            textView.setText("lat " + lat);
+            textViewAddressHere.setText("lat " + lat);
             System.out.println("lat " + lat);
         } catch (Exception e){
             System.out.println("begin \n" +e+ "\n end");
@@ -153,7 +147,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
-        textView = (TextView) findViewById(R.id.addressHere);
+        textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -222,7 +216,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
-                    case (R.id.menu_to_layola):
+                    case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
@@ -251,7 +245,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try{
-            textView = (TextView) findViewById(R.id.addressHere);
+            textViewAddressHere = (TextView) findViewById(R.id.addressHere);
             String currentAddress = ad.getAddressFromLatLng(this.currentLocation.latitude, this.currentLocation.longitude);
             currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
 
@@ -259,16 +253,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             //this will set your current address to 1450 Guy and the card view should say 'John Molson'
             //currentAddress = "1450 Guy St";
 
-            textView.setText(currentAddress);
+            textViewAddressHere.setText(currentAddress);
             System.out.println(currentAddress); //show address in console for debugging
 
 
             for(Building b: sgw.getBuildings()){
                 if(b.getAddress().split(",")[0].equals(currentAddress)){
-                    textView.setText(b.getName());
+                    textViewAddressHere.setText(b.getName());
                     break;
                 } else {
-                    textView.setText("Not on campus");
+                    textViewAddressHere.setText("Not on campus");
                 }
             }
         }catch (Exception e){
