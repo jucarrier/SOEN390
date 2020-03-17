@@ -18,7 +18,7 @@
             android:title="Indoor navigation" />
         <item
             android:id="@+id/menu_Point_of_interest"
-            android:icon="@drawable/poi_icon"
+            android:icon="@drawable/ic_poi_icon"
             android:title="Point of interest" />
         <item
             android:id="@+id/quick_campus_switch"
@@ -29,8 +29,8 @@
                     android:id="@+id/menu_to_sgw"
                     android:title="SGW" />
                 <item
-                    android:id="@+id/menu_to_layola"
-                    android:title="Layola" />
+                    android:id="@+id/menu_to_loyola"
+                    android:title="Loyola" />
             </menu>
         </item>
         <item

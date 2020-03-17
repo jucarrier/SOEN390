@@ -1,5 +1,4 @@
 package com.example.concordiaguide;
-
 import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -64,8 +63,8 @@ import Models.Campus;
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     //for finding current location
-    private TextView textView;  //this is the textView that will display the current building name
-    private LocationManager locationManager;
+    private TextView textViewAddressHere;  //this is the textView that will display the current building name
+    private LocationManager locationManager;    //this is needed to find the user's current location
     LatLng currentLocation; //to be filled in later by onLocationChanged
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
@@ -81,11 +80,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         try {
 
             setContentView(R.layout.activity_maps);
-            textView = (TextView) findViewById(R.id.addressHere);
-            if((Object)textView == null){
+            textViewAddressHere = (TextView) findViewById(R.id.addressHere);
+            if((Object) textViewAddressHere == null){
                 System.out.println("latitude not found");
             }
-            textView.setText("lat " + lat);
+            textViewAddressHere.setText("lat " + lat);
             System.out.println("lat " + lat);
         } catch (Exception e){
             System.out.println("begin \n" +e+ "\n end");
@@ -174,19 +173,17 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
+
+    public GoogleMap getmMap() {
+        return mMap;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
-        textView = (TextView) findViewById(R.id.addressHere);
+        textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
@@ -196,7 +193,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        searchView = findViewById(R.id.sv_location);
+        searchView = findViewById(R.id.sv_location2);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -256,7 +253,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
-                    case (R.id.menu_to_layola):
+                    case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
 
@@ -267,7 +264,29 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
+
         listPoints = new ArrayList<>();
+
+        Building building;
+
+        try{
+            building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+            directionsToBuilding(building);
+        }
+        catch(Exception e){}
+
+    }
+
+    public void directionsToBuilding(Building building){
+        AddressDecoder ad = new AddressDecoder();
+        TaskRequestDirections trd = new TaskRequestDirections();
+        LatLng dest;
+        String reqUrl;
+
+        dest = ad.getLocationFromAddress(building.getAddress());
+        listPoints.add(dest);
+        reqUrl = getRequestUrl(listPoints.get(0));
+        trd.execute(reqUrl);
     }
 
     @Override
@@ -285,7 +304,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try{
-            textView = (TextView) findViewById(R.id.addressHere);
+            textViewAddressHere = (TextView) findViewById(R.id.addressHere);
             String currentAddress = ad.getAddressFromLatLng(this.currentLocation.latitude, this.currentLocation.longitude);
             currentAddress = currentAddress.split(",")[0];  //processing to get a format that is easily matched with the list of buildings
 
@@ -293,16 +312,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             //this will set your current address to 1450 Guy and the card view should say 'John Molson'
             //currentAddress = "1450 Guy St";
 
-            textView.setText(currentAddress);
+            textViewAddressHere.setText(currentAddress);
             System.out.println(currentAddress); //show address in console for debugging
 
 
             for(Building b: sgw.getBuildings()){
                 if(b.getAddress().split(",")[0].equals(currentAddress)){
-                    textView.setText(b.getName());
+                    textViewAddressHere.setText(b.getName());
                     break;
                 } else {
-                    textView.setText("Not on campus");
+                    textViewAddressHere.setText("Not on campus");
                 }
             }
         }catch (Exception e){
@@ -375,7 +394,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return  responseString;
+            return responseString;
         }
 
         @Override
@@ -399,12 +418,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         mMap.getUiSettings().setZoomControlsEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
         }
         mMap.setMyLocationEnabled(true);
+
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
@@ -412,6 +433,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
+            /*public void onPolygonClick(Polygon polygon) {
+                //used to send building object to popup activity
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
+                //go to popup activity
+                startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
+*/
             public void onMapLongClick(LatLng latLng) {
                 //Reset marker when already 2
                 if (listPoints.size() == 1) {
@@ -424,13 +452,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
-               // if (listPoints.size() == 1) {
-                    //Add first marker to the map
-               //     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-               // } else {
-                    //Add second marker to the map
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-               // }
+                // if (listPoints.size() == 1) {
+                //Add first marker to the map
+                //     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                // } else {
+                //Add second marker to the map
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                // }
                 mMap.addMarker(markerOptions);
 
                 if (listPoints.size() == 1) {
@@ -439,10 +467,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                     taskRequestDirections.execute(url);
                 }
+
             }
         });
     }
-
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
 
         @Override
