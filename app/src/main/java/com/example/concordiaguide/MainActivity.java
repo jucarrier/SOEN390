@@ -161,6 +161,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public Campus loyola;
     private DrawerLayout drawer;
 
+
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -172,6 +173,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 break;
         }
     }
+
 
 
     public GoogleMap getmMap() {
