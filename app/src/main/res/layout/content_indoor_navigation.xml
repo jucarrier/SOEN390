@@ -7,5 +7,26 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".IndoorNavigationActivity"
     tools:showIn="@layout/activity_indoor_navigation">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/floor_view"
+            android:layout_width="wrap_content"
+            android:layout_height="386dp"
+            android:contentDescription="@string/floor_view"
+            android:src="@drawable/ic_hall_8" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/campus_spinner"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_marginBottom="-25dp"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
