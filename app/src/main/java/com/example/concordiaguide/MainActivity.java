@@ -53,14 +53,15 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private TextView textView;  //this is the textView that will display the current building name
     private LocationManager locationManager;
     LatLng currentLocation; //to be filled in later by onLocationChanged
-
+    double lat, lng;
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
     public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        currentLocation = new LatLng(lat, lng);
-
+        if(location!=null) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            currentLocation = new LatLng(lat, lng);
+        }
         try {
 
             setContentView(R.layout.activity_maps);
@@ -225,6 +226,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         break;
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
+                        break;
+                    case (R.id.find_POI):
+                        intent = new Intent(getApplicationContext(), PoiTypesActivity.class);
                         break;
                     case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
