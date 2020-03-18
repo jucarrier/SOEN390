@@ -2,7 +2,6 @@ package Helpers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.example.concordiaguide.R;
 
 import java.util.List;
 
-import Helpers.ObjectWrapperForBinder;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -54,7 +52,7 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
     public PoiTypeAdapter.PoiTypeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.place_type_single_item, parent, false);
+                .inflate(R.layout.poi_single_category, parent, false);
 
         PoiTypeAdapter.PoiTypeHolder vh = new PoiTypeAdapter.PoiTypeHolder(v);
         return vh;

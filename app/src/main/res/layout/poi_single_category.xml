@@ -22,8 +22,9 @@
             android:id="@+id/type_name"
             android:layout_width="259dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="70dp"
-            android:layout_toRightOf="@+id/type_icon" />
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/type_icon"
+            android:layout_gravity="center"/>
 
     </androidx.cardview.widget.CardView>
 
