@@ -301,7 +301,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
     //@Override
-    public void onLocateButtonPressed(View view) {
+    public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
@@ -472,6 +472,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             }
         });
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+
     }
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
 
