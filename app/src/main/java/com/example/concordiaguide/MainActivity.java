@@ -214,6 +214,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         toggle.syncState();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
 
@@ -230,6 +231,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
+
+
 
         mapFragment.getMapAsync(this);
 
@@ -326,6 +329,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
+
+
 
     }
 
@@ -483,6 +488,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                searchView.clearFocus();
+            }
+        });
 
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
