@@ -109,7 +109,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/search_rect"
             android:elevation="5dp"
-            android:iconifiedByDefault="true"
+            android:iconifiedByDefault="false"
             android:queryHint="Search" />
 
 <!--        this is the slide out toolbar-->
