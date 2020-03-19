@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -298,8 +299,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case("driving"): MainActivity.preferredNavigationMethod = "driving"; break;
                     case("publicTransportation"):MainActivity.preferredNavigationMethod = "transit"; break;
                     default:MainActivity.preferredNavigationMethod="walking"; break;
-
-
                 }
             }
 
@@ -311,6 +310,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 //removing this will cause an error
+            }
+        });
+
+        CardView cardViewNavigationPrompt = (CardView) findViewById(R.id.cardViewNavigationPrompt);
+        cardViewNavigationPrompt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -512,6 +525,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
     }
+
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
 
         @Override
@@ -561,5 +575,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
+
 
 }
