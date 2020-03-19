@@ -105,6 +105,7 @@
             android:elevation="4dp">
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/transportationSelectionTab"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:tabTextAppearance="@style/tabTextStyle"
@@ -115,7 +116,7 @@
                     android:text="walk"
                     android:icon="@drawable/ic_indoor_navigation_24dp"
 
-
+                    android:contentDescription="walk"
                     />
 
                 <com.google.android.material.tabs.TabItem
@@ -123,7 +124,8 @@
                     android:layout_height="match_parent"
 
                     android:text="shuttle"
-                    android:icon="@drawable/ic_directions_bus_black_24dp"/>
+                    android:icon="@drawable/ic_directions_bus_black_24dp"
+                    android:contentDescription="shuttle"/>
 
 
                 <com.google.android.material.tabs.TabItem
@@ -131,14 +133,16 @@
                     android:layout_height="match_parent"
 
                     android:text="car"
-                    android:icon="@drawable/ic_directions_car_black_24dp"/>
+                    android:icon="@drawable/ic_directions_car_black_24dp"
+                    android:contentDescription="driving"/>
 
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="metro"
-                    android:icon="@drawable/ic_directions_subway_black_24dp"/>
+                    android:icon="@drawable/ic_directions_subway_black_24dp"
+                    android:contentDescription="publicTransportation"/>
 
 
             </com.google.android.material.tabs.TabLayout>

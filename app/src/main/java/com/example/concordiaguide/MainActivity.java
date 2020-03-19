@@ -41,12 +41,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,6 +63,9 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    protected static String preferredNavigationMethod = "driving";
+
+    protected TabLayout transportationSelectionTab;
 
     //for finding current location
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
@@ -277,6 +282,38 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
         catch(Exception e){}
 
+        transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
+
+
+        //this adds a listener to change the preferred navigation mode based on tab selection
+        transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String selectedTab = tab.getContentDescription().toString();
+                System.out.println(selectedTab);
+
+                switch (selectedTab){
+                    case ("walk"): MainActivity.preferredNavigationMethod = "walking"; break;
+                    case ("shuttle"): MainActivity.preferredNavigationMethod = "transit"; break;    //fix this when shuttle is added
+                    case("driving"): MainActivity.preferredNavigationMethod = "driving"; break;
+                    case("publicTransportation"):MainActivity.preferredNavigationMethod = "transit"; break;
+                    default:MainActivity.preferredNavigationMethod="walking"; break;
+
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+        });
+
     }
 
     public void directionsToBuilding(Building building){
@@ -339,7 +376,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //Set value enable the sensor
         String sensor = "sensor=false";
         //Mode for find direction
-        String mode = "mode=driving";
+        String insert = "mode=" + MainActivity.preferredNavigationMethod;
+        System.out.println(insert);
+        String mode = insert;
 
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
