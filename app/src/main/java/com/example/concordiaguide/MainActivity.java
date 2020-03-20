@@ -1,4 +1,5 @@
 package com.example.concordiaguide;
+
 import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,14 +16,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Helpers.ObjectWrapperForBinder;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -65,6 +71,7 @@ import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     protected static String preferredNavigationMethod = "driving";
+    protected Cursor cursor;
 
     protected TabLayout transportationSelectionTab;
 
@@ -87,13 +94,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             setContentView(R.layout.activity_maps);
             textViewAddressHere = (TextView) findViewById(R.id.addressHere);
-            if((Object) textViewAddressHere == null){
+            if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
             }
             textViewAddressHere.setText("lat " + lat);
             System.out.println("lat " + lat);
-        } catch (Exception e){
-            System.out.println("begin \n" +e+ "\n end");
+        } catch (Exception e) {
+            System.out.println("begin \n" + e + "\n end");
         }
     }
 
@@ -171,7 +178,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case LOCATION_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(true);
@@ -179,7 +186,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 break;
         }
     }
-
 
 
     public GoogleMap getmMap() {
@@ -233,7 +239,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         });
 
 
-
         mapFragment.getMapAsync(this);
 
         NavigationView navigation = findViewById(R.id.nav_viewer);
@@ -267,7 +272,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
-
                 }
                 if (intent != null) {
                     startActivity(intent);
@@ -280,11 +284,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         Building building;
 
-        try{
-            building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
@@ -296,12 +300,22 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 String selectedTab = tab.getContentDescription().toString();
                 System.out.println(selectedTab);
 
-                switch (selectedTab){
-                    case ("walk"): MainActivity.preferredNavigationMethod = "walking"; break;
-                    case ("shuttle"): MainActivity.preferredNavigationMethod = "transit"; break;    //fix this when shuttle is added
-                    case("driving"): MainActivity.preferredNavigationMethod = "driving"; break;
-                    case("publicTransportation"):MainActivity.preferredNavigationMethod = "transit"; break;
-                    default:MainActivity.preferredNavigationMethod="walking"; break;
+                switch (selectedTab) {
+                    case ("walk"):
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
+                    case ("shuttle"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;    //fix this when shuttle is added
+                    case ("driving"):
+                        MainActivity.preferredNavigationMethod = "driving";
+                        break;
+                    case ("publicTransportation"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;
+                    default:
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
                 }
             }
 
@@ -489,6 +503,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
 
+        //map onclick listener - this will cause events to happen whenever you tap the main map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
