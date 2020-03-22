@@ -25,6 +25,8 @@
 <!--    This is the main relative layout for the schedule activity page -->
     <RelativeLayout
         android:layout_marginTop="64dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:id="@+id/relativeLayoutScheduleActivity"
         android:layout_width="wrap_content"
@@ -33,30 +35,33 @@
         >
 
         <Button
+            android:id="@+id/buttonFindCalendarEvents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get events from calendar"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+
+            />
+
+        <Button
             android:id="@+id/buttonShowCalendarEvents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Show calendar events"
-
+            android:layout_above="@id/buttonFindCalendarEvents"
+            android:layout_alignParentRight="true"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewShowCalendarEvents"
-            android:text="test text here"
-            android:layout_below="@+id/buttonShowCalendarEvents"
+            android:text="Your schedule is empty - get events from your calendar"
+            android:layout_alignParentTop="true"
             />
 
 
     </RelativeLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
