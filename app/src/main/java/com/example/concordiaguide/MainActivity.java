@@ -299,6 +299,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             public void onTabSelected(TabLayout.Tab tab) {
                 String selectedTab = tab.getContentDescription().toString();
                 System.out.println(selectedTab);
+                TaskRequestDirections tsk = new TaskRequestDirections();
+                final CampusBuilder cb = new CampusBuilder(mMap);
 
                 switch (selectedTab) {
                     case ("walk"):
@@ -316,7 +318,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     default:
                         MainActivity.preferredNavigationMethod = "walking";
                         break;
+
                 }
+
+                mMap.clear();
+                sgw = cb.buildSGW();
+                loyola = cb.buildLoyola();
+                tsk.execute(getRequestUrl(listPoints.get(0)));
             }
 
             @Override
