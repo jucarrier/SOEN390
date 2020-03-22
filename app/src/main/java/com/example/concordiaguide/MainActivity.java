@@ -1,31 +1,42 @@
 package com.example.concordiaguide;
 
+import Models.Building;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import Helpers.ObjectWrapperForBinder;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,14 +45,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,13 +64,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import Helpers.CampusBuilder;
-import Helpers.ObjectWrapperForBinder;
-import Models.Building;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    protected static String preferredNavigationMethod = "driving";
+    protected Cursor cursor;
+
+    protected TabLayout transportationSelectionTab;
 
     //for finding current location
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
@@ -65,7 +82,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
-    private String destination;
 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
@@ -78,13 +94,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             setContentView(R.layout.activity_maps);
             textViewAddressHere = (TextView) findViewById(R.id.addressHere);
-            if((Object) textViewAddressHere == null){
+            if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
             }
             textViewAddressHere.setText("lat " + lat);
             System.out.println("lat " + lat);
-        } catch (Exception e){
-            System.out.println("begin \n" +e+ "\n end");
+        } catch (Exception e) {
+            System.out.println("begin \n" + e + "\n end");
         }
     }
 
@@ -158,10 +174,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public Campus loyola;
     private DrawerLayout drawer;
 
+
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case LOCATION_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(true);
@@ -203,6 +220,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         toggle.syncState();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
 
@@ -219,6 +237,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
+
 
         mapFragment.getMapAsync(this);
 
@@ -253,7 +272,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
-
                 }
                 if (intent != null) {
                     startActivity(intent);
@@ -266,11 +284,67 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         Building building;
 
-        try{
-            building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
+
+        transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
+
+
+        //this adds a listener to change the preferred navigation mode based on tab selection
+        transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String selectedTab = tab.getContentDescription().toString();
+                System.out.println(selectedTab);
+
+                switch (selectedTab) {
+                    case ("walk"):
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
+                    case ("shuttle"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;    //fix this when shuttle is added
+                    case ("driving"):
+                        MainActivity.preferredNavigationMethod = "driving";
+                        break;
+                    case ("publicTransportation"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;
+                    default:
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+        });
+
+        CardView cardViewNavigationPrompt = (CardView) findViewById(R.id.cardViewNavigationPrompt);
+        cardViewNavigationPrompt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+
 
     }
 
@@ -278,10 +352,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         AddressDecoder ad = new AddressDecoder();
         TaskRequestDirections trd = new TaskRequestDirections();
         LatLng dest;
+        String reqUrl;
+
         dest = ad.getLocationFromAddress(building.getAddress());
         listPoints.add(dest);
-        destination = getRequestUrl(listPoints.get(0));
-        trd.execute(destination);
+        reqUrl = getRequestUrl(listPoints.get(0));
+        trd.execute(reqUrl);
     }
 
     @Override
@@ -324,78 +400,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
-    public static String mode = "";
-
-
-    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-/*
-    tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-        @Override
-        public void onTabSelected(TabLayout.Tab tabs) {
-            switch (tab.getPosition()) {
-                case 0:
-//                        codes related to the first tab
-                    break;
-                case 1:
-//                        codes related to the second tab
-                    break;
-                case 2:
-//                        codes related to the third tab
-                    break;
-                case 3:
-//                        codes related to the fourth tab
-                    break;
-            }
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    });
-*/
-    public void driving(View view) {
-        mode = "mode=driving";
-        TaskRequestDirections tsk = new TaskRequestDirections();
-        destination = getRequestUrl(listPoints.get(0));
-        tsk.execute(destination);
-    }
-
-    public void walking(View view) {
-        mode = "mode=walking";
-        TaskRequestDirections tsk = new TaskRequestDirections();
-        destination = getRequestUrl(listPoints.get(0));
-        tsk.execute(destination);
-    }
-    public void transit(View view) {
-        mode = "mode=transit";
-        TaskRequestDirections tsk = new TaskRequestDirections();
-        destination = getRequestUrl(listPoints.get(0));
-        tsk.execute(destination);
-    }/*
-    public void driving(View view) {
-        driving = true;
-        walking = false;
-        transit = false;
-    }
-    public void walking(View view) {
-        driving = false;
-        walking = true;
-        transit = false;
-    }
-    public void transit(View view) {
-        driving = false;
-        walking = false;
-        transit = true;
-    }*/
-
     private String getRequestUrl(LatLng dest) {
-
         //Value of origin
         String str_org = "origin=" + this.currentLocation.latitude +","+this.currentLocation.longitude;
         //Value of destination
@@ -403,12 +408,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //Set value enable the sensor
         String sensor = "sensor=false";
         //Mode for find direction
-
+        String insert = "mode=" + MainActivity.preferredNavigationMethod;
+        System.out.println(insert);
+        String mode = insert;
 
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
-        if (mode == ""){
-            mode = "mode=walking";}
         String param = str_org +"&" + str_dest + "&" +sensor+"&" +mode+"&" +key;
         //Output format
         String output = "json";
@@ -487,7 +492,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
@@ -497,6 +502,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         final CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
+
+        //map onclick listener - this will cause events to happen whenever you tap the main map
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                searchView.clearFocus();
+            }
+        });
 
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -518,18 +531,21 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 }
                 //Save first point select
                 listPoints.add(latLng);
-                //add the direction red marker
+                //Create marker
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                // }
                 mMap.addMarker(markerOptions);
+
                 if (listPoints.size() == 1) {
                     //Create the URL to get request from first marker to second marker
+                    String url = getRequestUrl(listPoints.get(0));
                     TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-                    destination = getRequestUrl(listPoints.get(0));
-                    taskRequestDirections.execute(destination);
+                    taskRequestDirections.execute(url);
                 }
+
             }
         });
     }
@@ -583,4 +599,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
+
+
 }
