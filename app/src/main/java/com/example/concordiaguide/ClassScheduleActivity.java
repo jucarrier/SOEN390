@@ -123,7 +123,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(event.getTitle());
 
                         //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
-                        if(threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle() + "\n";
+                        boolean hasClassName = false;
+                        for(String s : ClassSchedule.getValidClasses()){
+                            if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
+                        }
+                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle() + "\n";
                     }
 
 

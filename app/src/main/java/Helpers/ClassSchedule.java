@@ -9,6 +9,7 @@ public class ClassSchedule {
     //TODO: add a load from file method
     //TODO: add a read from calendar method
     protected ArrayList<CalendarEvent> events;
+    protected static String[] validClasses = new String[] {"soen", "engr", "comp", "math"};
 
     public ClassSchedule(ArrayList<CalendarEvent> events) {
         this.events = events;
@@ -22,5 +23,9 @@ public class ClassSchedule {
 
     public ArrayList<CalendarEvent> getEvents(){
         return this.events;
+    }
+
+    public static String[] getValidClasses() {
+        return validClasses;
     }
 }
