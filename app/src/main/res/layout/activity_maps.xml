@@ -24,25 +24,20 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
-
             app:icon="@drawable/ic_my_location_black_128dp"
-
 
             app:iconSize="24dp"
             app:iconPadding="0dp"
             app:iconGravity="end"
             android:textAlignment="center"
-
             android:insetLeft="8dp"
             android:insetTop="8dp"
             android:insetRight="8dp"
             android:insetBottom="8dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
             android:elevation="10dp"
-
             app:iconTint="@color/colorPrimary"
             android:backgroundTint="@color/white"
-
             android:onClick="onLocateButtonPressed"
             android:layout_above="@id/addressCardView"
             android:layout_alignParentRight="true"
@@ -108,37 +103,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:tabTextAppearance="@style/tabTextStyle"
+                android:id="@+id/tabs"
                 >
-                <com.google.android.material.tabs.TabItem
+                <button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="walk"
                     android:icon="@drawable/ic_indoor_navigation_24dp"
-
-
+                    android:onClick="walking"
                     />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:text="shuttle"
                     android:icon="@drawable/ic_directions_bus_black_24dp"/>
-
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:text="car"
-                    android:icon="@drawable/ic_directions_car_black_24dp"/>
-
+                    android:icon="@drawable/ic_directions_car_black_24dp"
+                    android:onClick="driving"
+                    />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="metro"
-                    android:icon="@drawable/ic_directions_subway_black_24dp"/>
+                    android:icon="@drawable/ic_directions_subway_black_24dp"
+                    android:onClick="transit"
+                    />
 
 
             </com.google.android.material.tabs.TabLayout>
