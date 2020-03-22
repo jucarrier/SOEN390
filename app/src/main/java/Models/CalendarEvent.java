@@ -3,26 +3,36 @@ package Models;
 
 
 public class CalendarEvent {
-    protected String _id;
+    protected int id;
+    protected String stringId;   //id is reserved? check this later
     protected String title;
     protected String location;
     protected int dtStart;
     protected int dtEnd;
 
-    public CalendarEvent(String _id, String title, String location, int dtStart, int dtEnd){
-        this._id = _id;
+    public CalendarEvent(int id, String stringId, String title, String location, int dtStart, int dtEnd){
+        this.id = id;
+        this.stringId = stringId;
         this.title = title;
         this.location = location;
         this.dtStart = dtStart;
         this.dtEnd = dtEnd;
     }
 
-    public String get_id() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getStringId() {
+        return stringId;
+    }
+
+    public void setStringId(String stringId) {
+        this.stringId = stringId;
     }
 
     public String getTitle() {
