@@ -3,11 +3,7 @@ package com.example.concordiaguide;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import Helpers.ClassSchedule;
 import Models.CalendarEvent;
@@ -21,9 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -40,18 +33,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button buttonShowEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
-        final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);   //this needs to be final because it is accessed by an inner class
+        Button buttonFindCalendarEvents = (Button) findViewById(R.id.buttonFindCalendarEvents);
+        Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
+        final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);
         //showCalendarEvents.setText("default text here");
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
@@ -67,12 +53,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         cursor = getContentResolver().query(CalendarContract.Events.CONTENT_URI, null, null, null, null);
 
-        buttonShowEvents.setOnClickListener(new View.OnClickListener() {
+        buttonFindCalendarEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(cursor.equals(null)) Toast.makeText(getApplicationContext(), "cursor is null", Toast.LENGTH_LONG).show();
-                else Toast.makeText(getApplicationContext(), "cursor exists", Toast.LENGTH_LONG).show();
+                //uncomment this to have a message that shows whether the cursor is null or not
+//                if(cursor.equals(null)) Toast.makeText(getApplicationContext(), "cursor is null", Toast.LENGTH_LONG).show();
+//                else Toast.makeText(getApplicationContext(), "cursor exists", Toast.LENGTH_LONG).show();
 
                 while(cursor.moveToNext()){
                     if(cursor!=null){
@@ -84,13 +71,14 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
 
                         String idValue = cursor.getString(id1);
+                        int idInt = cursor.getInt(id1);
                         String titleValue = cursor.getString(id2);
                         String descriptionValue = cursor.getString(id3);
                         String locationValue = cursor.getString(id4);
                         int startTime = cursor.getInt(id5); //start time in ms since 1970
                         int endTime = cursor.getInt(id6);   //this time is in milliseconds since 1970
 
-                        schedule.addEvent(new CalendarEvent(idValue, titleValue, locationValue, startTime, endTime));
+                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime));
 
                         Date startAsDate = new java.util.Date((startTime*1000));
 
@@ -109,13 +97,44 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
                     }else{
 
-                        showCalendarEvents.setText("no events found");
+                        System.out.println("no events found");
 
                     }
                 }
 
             }
         });
+
+        //method to show the saved events that were retrieved from the calendar
+        buttonShowCalendarEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String textToDisplay = "";
+                for(CalendarEvent event : schedule.getEvents()){
+
+                    System.out.println(event.getId() + " - " + event.getTitle());
+
+
+                    if (event.getTitle() != null){
+                        Pattern threeDigitPattern = Pattern.compile("\\d{3}");
+                        Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
+
+                        Matcher threeDigitMatcher = threeDigitPattern.matcher(event.getTitle());
+                        Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(event.getTitle());
+
+                        //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                        if(threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle() + "\n";
+                    }
+
+
+
+                }
+
+                showCalendarEvents.setText(textToDisplay);
+            }
+        });
+
+
 
     }
 
