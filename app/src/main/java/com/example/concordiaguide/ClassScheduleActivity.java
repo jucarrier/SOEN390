@@ -72,6 +72,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
                         int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
                         int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
+                        int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
+                        int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
 
                         long offset = 1577846300000L;
 
@@ -80,9 +82,14 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         String titleValue = cursor.getString(id2);
                         String descriptionValue = cursor.getString(id3);
                         String locationValue = cursor.getString(id4);
-                        long startTime = (long) cursor.getInt(id5) + 1577846300000L; //start time in ms since 1970
-                        long endTime = (long) cursor.getInt(id6) + 1577846300000L;   //this time is in milliseconds since 1970
+                        long startTime = (long) cursor.getInt(id5)+1577846300000L; //start time in ms since 1970
+                        long endTime = (long) cursor.getInt(id6)+1577846300000L;   //this time is in milliseconds since 1970
                         String repetitionRule = cursor.getString(id7);
+                        String duration = cursor.getString(id8);
+                        String rDate = cursor.getString(id9);
+
+                        java.util.Date time = new java.util.Date(startTime);
+                        System.out.println(time + " <- time");
 
                         schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
 
@@ -97,7 +104,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                             Matcher m = p.matcher(titleValue);
 
                             //uncomment this to see which events are being found
-                            //if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
+                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
                         }
 
 
@@ -118,12 +125,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String textToDisplay = "";
                 for(CalendarEvent event : schedule.getEvents()){
-
-                    //uncomment this to see which events are being shown
-                    //System.out.println(event.getId() + " - " + event.getTitle());
-
-
                     if (event.getTitle() != null){
+
+                        //uncomment this to see which events are being shown
+                        System.out.println(event.getId() + " - " + event.getTitle());
 
                         //regex for matching event title patterns - looking for no more than 3 digits
                         Pattern threeDigitPattern = Pattern.compile("\\d{3}");
@@ -138,8 +143,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         for(String s : ClassSchedule.getValidClasses()){
                             if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
                         }
-                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
-                            textToDisplay = textToDisplay + event.getTitle();
+                        if( event.getId() > 150 && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                            System.out.println(event.getId() + " - " + event.getTitle() + " <- approved for display");
+                            textToDisplay = textToDisplay + event.getId() + " - " + event.getTitle();
                             try {
                                 if(event.getDays().get("Sunday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
                                 if(event.getDays().get("Monday") == Boolean.TRUE) textToDisplay = textToDisplay + " Monday ";
@@ -151,15 +157,17 @@ public class ClassScheduleActivity extends AppCompatActivity {
                             } catch (Exception e){
                                 System.out.println(e.toString());
                             }
+
+                            textToDisplay = textToDisplay + "\n";
                         }
 
 
 
-                        if(event.getDays() == null) System.out.println("days is null");
-                        else System.out.println(event.getDays().keySet() + " <- monday");
+//                        if(event.getDays() == null) System.out.println("days is null");
+//                        else System.out.println(event.getDays().keySet() + " <- monday");
 
 
-                        textToDisplay = textToDisplay + "\n";
+
 
                     }
 
@@ -167,7 +175,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
                 }
 
-                showCalendarEvents.setText(textToDisplay);
+                showCalendarEvents.setText(textToDisplay + "\n another line for testing");
             }
         });
 
