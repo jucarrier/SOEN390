@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class CalendarEvent {
 
     protected String semester;
     protected int year;
-    protected Map<String, Boolean> days;
+    protected HashMap<String, Boolean> days;
 
 
     public CalendarEvent(int id, String stringId, String title, String location, long dtStart, long dtEnd, String repRule){
@@ -35,81 +36,25 @@ public class CalendarEvent {
         if (repRule!=null){
             System.out.println(repRule + " <- this is the rule");
 
-            String third = repRule.split(";")[2];
+            String third = "";
+
+            String[] test = repRule.split(";");
+            for(String s : test) {
+                if(s.contains("BYDAY")) {
+                    System.out.println(s + " <- byday check");
+                    third = s;
+                }
+            }
+
+
             System.out.println(third + " <- third");
 
 
-            days = new Map<String, Boolean>() {
-                @Override
-                public int size() {
-                    return 0;
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    return false;
-                }
-
-                @Override
-                public boolean containsKey(@Nullable Object o) {
-                    return false;
-                }
-
-                @Override
-                public boolean containsValue(@Nullable Object o) {
-                    return false;
-                }
-
-                @Nullable
-                @Override
-                public Boolean get(@Nullable Object o) {
-                    return null;
-                }
-
-                @Nullable
-                @Override
-                public Boolean put(String s, Boolean aBoolean) {
-                    return null;
-                }
-
-                @Nullable
-                @Override
-                public Boolean remove(@Nullable Object o) {
-                    return null;
-                }
-
-                @Override
-                public void putAll(@NonNull Map<? extends String, ? extends Boolean> map) {
-
-                }
-
-                @Override
-                public void clear() {
-
-                }
-
-                @NonNull
-                @Override
-                public Set<String> keySet() {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public Collection<Boolean> values() {
-                    return null;
-                }
-
-                @NonNull
-                @Override
-                public Set<Entry<String, Boolean>> entrySet() {
-                    return null;
-                }
-            };
+            days = new HashMap<String, Boolean>();
 
 
             if(third.contains("SU")) days.put("Sunday", true); else days.put("Sunday", false);
-            if(third.contains("MO")) days.put("Monday", true); else days.put("Monday", false);
+            if(third.contains("MO")) days.put("Monday", true); days.put("Monday", false);
             if(third.contains("TU")) days.put("Tuesday", true); else days.put("Tuesday", false);
             if(third.contains("WE")) days.put("Wednesday", true); else days.put("Wednesday", false);
             if(third.contains("TH")) days.put("Thursday", true); else days.put("Thursday", false);

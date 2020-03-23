@@ -138,19 +138,26 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         for(String s : ClassSchedule.getValidClasses()){
                             if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
                         }
-                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle();
+                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                            textToDisplay = textToDisplay + event.getTitle();
+                            try {
+                                if(event.getDays().get("Sunday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
+                                if(event.getDays().get("Monday") == Boolean.TRUE) textToDisplay = textToDisplay + " Monday ";
+                                if(event.getDays().get("Tuesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Tuesday ";
+                                if(event.getDays().get("Wednesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
+                                if(event.getDays().get("Thursday") == Boolean.TRUE) textToDisplay = textToDisplay + " Thursday ";
+                                if(event.getDays().get("Friday") == Boolean.TRUE) textToDisplay = textToDisplay + " Friday ";
+                                if(event.getDays().get("Saturday") == Boolean.TRUE) textToDisplay = textToDisplay + " Saturday ";
+                            } catch (Exception e){
+                                System.out.println(e.toString());
+                            }
+                        }
 
-//                        try {
-//                            if(event.getDays().get("Sunday")) textToDisplay = textToDisplay + " Sunday ";
-//                            if(event.getDays().get("Monday")) textToDisplay = textToDisplay + " Monday ";
-//                            if(event.getDays().get("Tuesday")) textToDisplay = textToDisplay + " Tuesday ";
-//                            if(event.getDays().get("Wednesday")) textToDisplay = textToDisplay + " Sunday ";
-//                            if(event.getDays().get("Thursday")) textToDisplay = textToDisplay + " Thursday ";
-//                            if(event.getDays().get("Friday")) textToDisplay = textToDisplay + " Friday ";
-//                            if(event.getDays().get("Saturday")) textToDisplay = textToDisplay + " Saturday ";
-//                        } catch (Exception e){
-//                            System.out.println(e.toString());
-//                        }
+
+
+                        if(event.getDays() == null) System.out.println("days is null");
+                        else System.out.println(event.getDays().keySet() + " <- monday");
+
 
                         textToDisplay = textToDisplay + "\n";
 
