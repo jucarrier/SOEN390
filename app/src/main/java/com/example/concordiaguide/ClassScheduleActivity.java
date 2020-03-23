@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClassScheduleActivity extends AppCompatActivity {
+    //TODO: make this a recyclerView so we can scroll and see the events
+
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
 
@@ -69,16 +71,20 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
                         int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
                         int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
+                        int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
+
+                        long offset = 1577846300000L;
 
                         String idValue = cursor.getString(id1);
                         int idInt = cursor.getInt(id1);
                         String titleValue = cursor.getString(id2);
                         String descriptionValue = cursor.getString(id3);
                         String locationValue = cursor.getString(id4);
-                        int startTime = cursor.getInt(id5); //start time in ms since 1970
-                        int endTime = cursor.getInt(id6);   //this time is in milliseconds since 1970
+                        long startTime = (long) cursor.getInt(id5) + 1577846300000L; //start time in ms since 1970
+                        long endTime = (long) cursor.getInt(id6) + 1577846300000L;   //this time is in milliseconds since 1970
+                        String repetitionRule = cursor.getString(id7);
 
-                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime));
+                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
 
                         Date startAsDate = new java.util.Date((startTime*1000));
 
@@ -90,7 +96,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                             Pattern p = Pattern.compile("\\d{3}\\D");
                             Matcher m = p.matcher(titleValue);
 
-                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString());
+                            //uncomment this to see which events are being found
+                            //if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
                         }
 
 
@@ -112,10 +119,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 String textToDisplay = "";
                 for(CalendarEvent event : schedule.getEvents()){
 
-                    System.out.println(event.getId() + " - " + event.getTitle());
+                    //uncomment this to see which events are being shown
+                    //System.out.println(event.getId() + " - " + event.getTitle());
 
 
                     if (event.getTitle() != null){
+
+                        //regex for matching event title patterns - looking for no more than 3 digits
                         Pattern threeDigitPattern = Pattern.compile("\\d{3}");
                         Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
 
@@ -123,11 +133,27 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(event.getTitle());
 
                         //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                        //if it contains a valid class name
                         boolean hasClassName = false;
                         for(String s : ClassSchedule.getValidClasses()){
                             if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
                         }
-                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle() + "\n";
+                        if(hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()) textToDisplay = textToDisplay + event.getTitle();
+
+//                        try {
+//                            if(event.getDays().get("Sunday")) textToDisplay = textToDisplay + " Sunday ";
+//                            if(event.getDays().get("Monday")) textToDisplay = textToDisplay + " Monday ";
+//                            if(event.getDays().get("Tuesday")) textToDisplay = textToDisplay + " Tuesday ";
+//                            if(event.getDays().get("Wednesday")) textToDisplay = textToDisplay + " Sunday ";
+//                            if(event.getDays().get("Thursday")) textToDisplay = textToDisplay + " Thursday ";
+//                            if(event.getDays().get("Friday")) textToDisplay = textToDisplay + " Friday ";
+//                            if(event.getDays().get("Saturday")) textToDisplay = textToDisplay + " Saturday ";
+//                        } catch (Exception e){
+//                            System.out.println(e.toString());
+//                        }
+
+                        textToDisplay = textToDisplay + "\n";
+
                     }
 
 
