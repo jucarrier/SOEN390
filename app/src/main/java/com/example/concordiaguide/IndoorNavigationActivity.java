@@ -42,11 +42,15 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private String[] campusLabels = {"SGW - Downtown", "Layola"};
 
 
-    private void highlightRoom(String roomName) {
-        VectorChildFinder vector = new VectorChildFinder(this, sgw.getBuilding("hall").getFloor(8).floorMap, imageView);
-        VectorDrawableCompat.VFullPath path1 = vector.findPathByName(roomName);
-        if (path1 != null) {
-            path1.setFillColor(Color.BLUE);
+    private void highlightRoom(String roomName, int floorMap, Building building) {
+        if (!roomName.matches("[a-zA-Z]+")) {
+            roomName = building.getInitials() + roomName;
+        }
+        roomName = roomName.toUpperCase();
+        VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
+        VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
+        if (room != null) {
+            room.setFillColor(Color.BLUE);
         }
     }
 
@@ -94,15 +98,16 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                Floor selectedFloor = selectedBuilding.getFloors()[position];
+                                final Floor selectedFloor = selectedBuilding.getFloors()[position];
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
                                 final AutoCompleteTextView roomInput = (AutoCompleteTextView) findViewById(R.id.search_room_name);
                                 roomInput.setAdapter(roomNameAdapter);
+                                imageView.setImageResource(selectedFloor.getFloorMap());
 
                                 roomInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                                     @Override
                                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        highlightRoom(roomInput.getEditableText().toString());
+                                        highlightRoom(roomInput.getEditableText().toString(), selectedFloor.getFloorMap(), selectedBuilding);
                                         return true;
                                     }
                                 });

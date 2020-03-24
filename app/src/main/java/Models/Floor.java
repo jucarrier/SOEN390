@@ -6,7 +6,7 @@ import com.example.concordiaguide.R;
 
 public class Floor {
     private String floorName;
-    public int floorMap;
+    private int floorMap;
     public int floorLevel;
     private String[] roomNames;
 
@@ -22,5 +22,8 @@ public class Floor {
     }
     public String[] getRoomNames() {
         return roomNames;
+    }
+    public int getFloorMap() {
+        return floorMap;
     }
 }
