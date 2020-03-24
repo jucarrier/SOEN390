@@ -19,6 +19,24 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+<!--        this is the locate button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/locateButton"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@android:drawable/ic_menu_mylocation"
+
+            app:iconSize="32dp"
+            app:iconPadding="2dp"
+            android:insetLeft="8dp"
+            android:insetTop="8dp"
+            android:insetRight="8dp"
+            android:insetBottom="8dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
+            android:elevation="10dp"
+            app:iconTint="@color/white"
+            android:onClick="onLocateButtonPressed"
 <!-- relative layout with the locate button and card button to indoor navigation and navigate to campus-->
         <RelativeLayout
             android:id="@+id/relativeLayoutLocateButtonAndCard"
@@ -39,44 +57,6 @@
                 app:iconPadding="0dp"
                 app:iconGravity="end"
                 android:textAlignment="center"
-
-                android:insetLeft="8dp"
-                android:insetTop="8dp"
-                android:insetRight="8dp"
-                android:insetBottom="8dp"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
-                android:elevation="10dp"
-
-                app:iconTint="@color/colorPrimary"
-                android:backgroundTint="@color/white"
-
-                android:onClick="onLocateButtonPressed"
-
-                android:layout_alignParentRight="true"
-                />
-
-<!--            This is the address card that will be clickable to navigate to campus -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewNavigationPrompt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/locateButton"
-                android:layout_centerVertical="true"
-                app:contentPadding="8dp"
-                >
-
-                <TextView
-                    android:id="@+id/textViewNavigationPrompt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Navigate to Campus"
-                    android:textSize="18sp"
-                    android:drawableRight="@drawable/ic_arrow_forward_black_24dp"
-                    />
-
-            </androidx.cardview.widget.CardView>
-
-        </RelativeLayout>
 
 <!--        the text view that the address is printed to -->
         <TextView
