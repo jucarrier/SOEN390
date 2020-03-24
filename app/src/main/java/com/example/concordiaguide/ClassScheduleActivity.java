@@ -75,37 +75,54 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
                         int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
 
-                        long offset = 1577846300000L;
-
                         String idValue = cursor.getString(id1);
                         int idInt = cursor.getInt(id1);
                         String titleValue = cursor.getString(id2);
                         String descriptionValue = cursor.getString(id3);
                         String locationValue = cursor.getString(id4);
-                        long startTime = (long) cursor.getInt(id5)+1577846300000L + 2592000000L; //start time in ms since 1970 and add 1 more month
-                        long endTime = (long) cursor.getInt(id6)+1577846300000L + 2592000000L;   //this time is in milliseconds since 1970 and add 1 more month
+                        long startTime = (long) cursor.getLong(id5); //start time in ms since 1970 and add 1 more month
+                        long endTime = (long) cursor.getLong(id6);   //this time is in milliseconds since 1970 and add 1 more month
                         String repetitionRule = cursor.getString(id7);
                         String duration = cursor.getString(id8);
                         String rDate = cursor.getString(id9);
 
+
                         java.util.Date time = new java.util.Date(startTime);
                         System.out.println(time + " <- time");
 
-                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
+                        if(titleValue!=null){
+                            System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
 
-                        Date startAsDate = new java.util.Date((startTime*1000));
+                            //regex for matching event title patterns - looking for no more than 3 digits
+                            Pattern threeDigitPattern = Pattern.compile("\\d{3}");
+                            Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
 
+                            Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
+                            Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
 
-                        if (titleValue!=null){
+                            //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                            //if it contains a valid class name
+                            boolean hasClassName = false;
+                            for(String s : ClassSchedule.getValidClasses()){
+                                if(titleValue.toLowerCase().contains(s)) hasClassName = true;
+                            }
 
-                            //System.out.println(titleValue);
-
-                            Pattern p = Pattern.compile("\\d{3}\\D");
-                            Matcher m = p.matcher(titleValue);
-
-                            //uncomment this to see which events are being found
-                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
+                            if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                                schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
+                                //System.out.println("new event added, id: " + idValue + ", title: " + titleValue + ", oStart: " + new Date(originalStart).toString());
+                            }
                         }
+
+//                        if (titleValue!=null){
+//
+//                            //System.out.println(titleValue);
+//
+//                            Pattern p = Pattern.compile("\\d{3}\\D");
+//                            Matcher m = p.matcher(titleValue);
+//
+//                            //uncomment this to see which events are being found
+//                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
+//                        }
 
 
 
