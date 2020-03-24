@@ -2,14 +2,11 @@ package com.example.concordiaguide;
 
 import Models.Building;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -19,10 +16,6 @@ import android.app.Activity;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.app.job.JobWorkItem;
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,7 +29,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -58,7 +50,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -69,7 +60,6 @@ import org.w3c.dom.Text;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
-import java.util.Calendar;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -81,8 +71,6 @@ import java.util.Locale;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
-
-import static com.example.concordiaguide.App.CHANNEL_1_ID;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     protected static String preferredNavigationMethod = "driving";
@@ -97,7 +85,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
-    private NotificationManagerCompat notificationManagerCompat;
 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
@@ -204,24 +191,17 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
 
-    private NotificationHelper notificationHelper;
-
     public GoogleMap getmMap() {
         return mMap;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        notificationHelper = new NotificationHelper(this);
+        
 
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-
-
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
@@ -231,7 +211,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
 
         searchView = findViewById(R.id.sv_location2);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -372,35 +351,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
 
 
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-
-        FloatingActionButton fabTest = (FloatingActionButton) findViewById(R.id.testNotificationButton);
-        fabTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar c = Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY, 4);
-                c.set(Calendar.MINUTE, 9);
-                c.set(Calendar.SECOND, 0);
-                startAlarm(c);
-                System.out.println("alarm has been set");
-            }
-        });
     }
 
-    public void sendOnChannel1(String title, String message){
-        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
-        notificationHelper.getManager().notify(1, nb.build());
+    public void directionsToBuilding(Building building){
+        AddressDecoder ad = new AddressDecoder();
+        TaskRequestDirections trd = new TaskRequestDirections();
+        LatLng dest;
+        String reqUrl;
+
+        dest = ad.getLocationFromAddress(building.getAddress());
+        listPoints.add(dest);
+        reqUrl = getRequestUrl(listPoints.get(0));
+        trd.execute(reqUrl);
     }
-
-    public void startAlarm(Calendar c){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-    }
-
 
     @Override
     public void onBackPressed() {

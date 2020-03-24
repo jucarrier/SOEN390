@@ -13,7 +13,6 @@
 
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -90,8 +89,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".AlertReceiver"/>
     </application>
 
 </manifest>
