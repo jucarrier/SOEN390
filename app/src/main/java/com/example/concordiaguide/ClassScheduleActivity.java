@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -27,6 +29,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+    boolean notificationsActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button buttonFindCalendarEvents = (Button) findViewById(R.id.buttonFindCalendarEvents);
-        Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
+        final Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
+        final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
         final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);
+
+        if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
 
         //permission check to read calendar events
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
@@ -50,13 +55,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
         //cursor that reads the calendar events
         cursor = getContentResolver().query(CalendarContract.Events.CONTENT_URI, null, null, null, null);
 
-
-        buttonFindCalendarEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                readEvents();
-            }
-        });
+        //read the events in the calendar as soon as the page opens
+        readEvents();
 
         //method to show the saved events that were retrieved from the calendar
         buttonShowCalendarEvents.setOnClickListener(new View.OnClickListener() {
@@ -65,26 +65,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 String textToDisplay = "";
                 for(CalendarEvent event : schedule.getEvents()){
                     if (event.getTitle() != null){
-
-                        //uncomment this to see which events are being shown
-                        System.out.println(event.getId() + " - " + event.getTitle() + ", dtStart: " + event.getDtStart() + ", rRule: " + event.getrRule());
-
-                        //regex for matching event title patterns - looking for no more than 3 digits
-                        Pattern threeDigitPattern = Pattern.compile("\\d{3}");
-                        Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
-
-                        Matcher threeDigitMatcher = threeDigitPattern.matcher(event.getTitle());
-                        Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(event.getTitle());
-
-                        //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
-                        //if it contains a valid class name
-                        boolean hasClassName = false;
-                        for(String s : ClassSchedule.getValidClasses()){
-                            if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
-                        }
-
-                        if(new Date(event.getDtStart()).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
-                            System.out.println(event.getId() + " - " + event.getTitle() + " <- approved for display");
+                        if(event.getTitle()!=null){
+                            //System.out.println(event.getId() + " - " + event.getTitle() + " <- approved for display");
                             textToDisplay = textToDisplay + event.getId() + " - " + event.getTitle();
                             try {
                                 if(event.getDays().get("Sunday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
@@ -100,24 +82,25 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
                             textToDisplay = textToDisplay + "\n";
                         }
-
-
-
-//                        if(event.getDays() == null) System.out.println("days is null");
-//                        else System.out.println(event.getDays().keySet() + " <- monday");
-
-
-
-
                     } else{
                         textToDisplay = "There are no events in the calendar - add some\n";
                     }
+                }
+                showCalendarEvents.setText(textToDisplay);
+            }
+        });
 
-
-
+        buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(notificationsActive){
+                    notificationsActive=false;
+                    buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                } else{
+                    notificationsActive=true;
+                    buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
                 }
 
-                showCalendarEvents.setText(textToDisplay);
             }
         });
 
@@ -128,6 +111,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public void readEvents(){
         while(cursor.moveToNext()){
             if(cursor!=null){
+                //get the column ids of the calendar attributes
                 int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
                 int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
                 int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
@@ -138,21 +122,19 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
                 int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
 
+                //get values associated with those column ids
                 String idValue = cursor.getString(id1);
                 int idInt = cursor.getInt(id1);
                 String titleValue = cursor.getString(id2);
                 String descriptionValue = cursor.getString(id3);
                 String locationValue = cursor.getString(id4);
-                long startTime = (long) cursor.getLong(id5); //start time in ms since 1970 and add 1 more month
-                long endTime = (long) cursor.getLong(id6);   //this time is in milliseconds since 1970 and add 1 more month
+                long startTime = (long) cursor.getLong(id5);
+                long endTime = (long) cursor.getLong(id6);
                 String repetitionRule = cursor.getString(id7);
                 String duration = cursor.getString(id8);
                 String rDate = cursor.getString(id9);
 
-
-                java.util.Date time = new java.util.Date(startTime);
-                System.out.println(time + " <- time");
-
+                //if the event has a title, check to make sure it is a valid lecture or tutorial
                 if(titleValue!=null){
                     System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
 

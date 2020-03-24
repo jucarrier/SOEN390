@@ -12,6 +12,7 @@ public class ClassSchedule {
 
     protected ArrayList<CalendarEvent> events;
 
+    //TODO: add all concordia class codes here
     protected static String[] validClasses = new String[] {"soen", "engr", "comp", "math", "lecture", "tutorial"};
     protected static HashMap<String, Long> importantDates = new HashMap<String, Long>();
     static {
