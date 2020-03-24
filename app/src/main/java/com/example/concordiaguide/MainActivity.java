@@ -14,8 +14,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,6 +50,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -267,7 +270,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         fabTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendOnChannel1("Title here", "message here");
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, 4);
+                c.set(Calendar.MINUTE, 9);
+                c.set(Calendar.SECOND, 0);
+                startAlarm(c);
+                System.out.println("alarm has been set");
             }
         });
     }
@@ -275,6 +283,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void sendOnChannel1(String title, String message){
         NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
         notificationHelper.getManager().notify(1, nb.build());
+    }
+
+    public void startAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
 
