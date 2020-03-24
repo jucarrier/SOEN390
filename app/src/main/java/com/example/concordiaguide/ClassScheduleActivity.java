@@ -40,99 +40,21 @@ public class ClassScheduleActivity extends AppCompatActivity {
         Button buttonFindCalendarEvents = (Button) findViewById(R.id.buttonFindCalendarEvents);
         Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
         final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);
-        //showCalendarEvents.setText("default text here");
 
+        //permission check to read calendar events
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALENDAR}, 1);
             return;
         }
 
+        //cursor that reads the calendar events
         cursor = getContentResolver().query(CalendarContract.Events.CONTENT_URI, null, null, null, null);
+
 
         buttonFindCalendarEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //uncomment this to have a message that shows whether the cursor is null or not
-//                if(cursor.equals(null)) Toast.makeText(getApplicationContext(), "cursor is null", Toast.LENGTH_LONG).show();
-//                else Toast.makeText(getApplicationContext(), "cursor exists", Toast.LENGTH_LONG).show();
-
-                while(cursor.moveToNext()){
-                    if(cursor!=null){
-                        int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
-                        int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
-                        int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
-                        int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
-                        int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
-                        int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
-                        int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
-                        int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
-                        int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
-
-                        String idValue = cursor.getString(id1);
-                        int idInt = cursor.getInt(id1);
-                        String titleValue = cursor.getString(id2);
-                        String descriptionValue = cursor.getString(id3);
-                        String locationValue = cursor.getString(id4);
-                        long startTime = (long) cursor.getLong(id5); //start time in ms since 1970 and add 1 more month
-                        long endTime = (long) cursor.getLong(id6);   //this time is in milliseconds since 1970 and add 1 more month
-                        String repetitionRule = cursor.getString(id7);
-                        String duration = cursor.getString(id8);
-                        String rDate = cursor.getString(id9);
-
-
-                        java.util.Date time = new java.util.Date(startTime);
-                        System.out.println(time + " <- time");
-
-                        if(titleValue!=null){
-                            System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
-
-                            //regex for matching event title patterns - looking for no more than 3 digits
-                            Pattern threeDigitPattern = Pattern.compile("\\d{3}");
-                            Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
-
-                            Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
-                            Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
-
-                            //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
-                            //if it contains a valid class name
-                            boolean hasClassName = false;
-                            for(String s : ClassSchedule.getValidClasses()){
-                                if(titleValue.toLowerCase().contains(s)) hasClassName = true;
-                            }
-
-                            if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
-                                schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
-                                //System.out.println("new event added, id: " + idValue + ", title: " + titleValue + ", oStart: " + new Date(originalStart).toString());
-                            }
-                        }
-
-//                        if (titleValue!=null){
-//
-//                            //System.out.println(titleValue);
-//
-//                            Pattern p = Pattern.compile("\\d{3}\\D");
-//                            Matcher m = p.matcher(titleValue);
-//
-//                            //uncomment this to see which events are being found
-//                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString() + ", repRule " + repetitionRule);
-//                        }
-
-
-
-                    }else{
-
-                        System.out.println("no events found");
-
-                    }
-                }
-
+                readEvents();
             }
         });
 
@@ -203,4 +125,61 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     }
 
+    public void readEvents(){
+        while(cursor.moveToNext()){
+            if(cursor!=null){
+                int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
+                int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
+                int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
+                int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
+                int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
+                int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
+                int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
+                int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
+                int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
+
+                String idValue = cursor.getString(id1);
+                int idInt = cursor.getInt(id1);
+                String titleValue = cursor.getString(id2);
+                String descriptionValue = cursor.getString(id3);
+                String locationValue = cursor.getString(id4);
+                long startTime = (long) cursor.getLong(id5); //start time in ms since 1970 and add 1 more month
+                long endTime = (long) cursor.getLong(id6);   //this time is in milliseconds since 1970 and add 1 more month
+                String repetitionRule = cursor.getString(id7);
+                String duration = cursor.getString(id8);
+                String rDate = cursor.getString(id9);
+
+
+                java.util.Date time = new java.util.Date(startTime);
+                System.out.println(time + " <- time");
+
+                if(titleValue!=null){
+                    System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
+
+                    //regex for matching event title patterns - looking for no more than 3 digits
+                    Pattern threeDigitPattern = Pattern.compile("\\d{3}");
+                    Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
+
+                    Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
+                    Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
+
+                    //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                    //if it contains a valid class name
+                    boolean hasClassName = false;
+                    for(String s : ClassSchedule.getValidClasses()){
+                        if(titleValue.toLowerCase().contains(s)) hasClassName = true;
+                    }
+
+                    if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
+                    }
+                }
+
+            }else{
+                System.out.println("no events found");
+            }
+        }
+    }
+
 }
+
