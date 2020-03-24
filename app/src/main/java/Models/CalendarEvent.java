@@ -21,6 +21,7 @@ public class CalendarEvent {
     protected long dtStart;
     protected long dtEnd;
     protected Date startDate;
+    protected Date endDate;
     protected String rRule;
 
     protected String semester;
@@ -36,6 +37,7 @@ public class CalendarEvent {
         this.dtStart = dtStart;
         this.dtEnd = dtEnd;
         this.startDate = new Date(dtStart);
+        this.endDate = new Date(dtEnd);
         this.rRule = repRule;
 
         if (repRule!=null){

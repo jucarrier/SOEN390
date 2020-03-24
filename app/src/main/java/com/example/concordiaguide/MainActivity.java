@@ -13,6 +13,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.app.job.JobWorkItem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -194,6 +197,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        
+
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

@@ -1,6 +1,8 @@
 package com.example.concordiaguide;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +44,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
+        FloatingActionButton buttonTestNotification = (FloatingActionButton) findViewById(R.id.buttonTestNotificationSchedule);
         final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
         final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);
 
@@ -57,6 +61,16 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         //read the events in the calendar as soon as the page opens
         readEvents();
+
+        buttonTestNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, 12);
+                c.set(Calendar.MINUTE, 50);
+                c.set(Calendar.SECOND, 0);
+            }
+        });
 
         //method to show the saved events that were retrieved from the calendar
         buttonShowCalendarEvents.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +104,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
+        //toggle notifications listener
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -161,6 +176,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 System.out.println("no events found");
             }
         }
+    }
+
+    private void startAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
     }
 
 }
