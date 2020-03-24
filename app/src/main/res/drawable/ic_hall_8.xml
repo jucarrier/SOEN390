@@ -52,7 +52,7 @@
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
   <path
-      android:name="H805.02"
+      android:name="H805.01"
       android:pathData="M357,148.29l62.49,0l0,40.7l-62.49,0z"
       android:strokeAlpha="1"
       android:strokeWidth="1.36025514"
@@ -400,7 +400,7 @@
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
   <path
-      android:name="H838.01"
+      android:name="H838"
       android:pathData="M459.14,670.52l55.66,0l0,44.11l-55.66,0z"
       android:strokeAlpha="1"
       android:strokeWidth="1.36025514"

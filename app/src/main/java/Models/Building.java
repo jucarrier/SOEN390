@@ -39,6 +39,7 @@ public class Building {
     public String getAddress() { return address; }
     public String getDescription() { return description; }
     public String getInitials() { return initials; }
+    public Floor[] getFloors() { return floors; }
 
     public Floor getFloor(int level) {
         for (Floor f : floors) {
