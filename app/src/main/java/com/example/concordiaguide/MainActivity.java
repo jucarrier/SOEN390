@@ -2,6 +2,7 @@ package com.example.concordiaguide;
 
 import Models.Building;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.w3c.dom.Text;
@@ -153,15 +156,24 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public Campus loyola;
     private DrawerLayout drawer;
 
+    private NotificationHelper notificationHelper;
+
     public GoogleMap getmMap() {
         return mMap;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        notificationHelper = new NotificationHelper(this);
+
         //locate current location
         textView = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -178,6 +190,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
 
         searchView = findViewById(R.id.sv_location2);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
@@ -249,17 +262,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         });
 
         notificationManagerCompat = NotificationManagerCompat.from(this);
+
+        FloatingActionButton fabTest = (FloatingActionButton) findViewById(R.id.testNotificationButton);
+        fabTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendOnChannel1("Title here", "message here");
+            }
+        });
     }
 
-    public void sendNotification(View v){
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_directions_walk_black_24dp)
-                .setContentTitle(Notifications.DEFAULT_TITLE)
-                .setContentText(Notifications.DEFAULT_MESSAGE)
-                .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
-                .build();
-
-        notificationManagerCompat.notify(1, notification);
+    public void sendOnChannel1(String title, String message){
+        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
+        notificationHelper.getManager().notify(1, nb.build());
     }
 
 

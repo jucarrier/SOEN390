@@ -21,6 +21,7 @@
 
 <!--        this is the locate button -->
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/locateButton"
             android:layout_width="72dp"
             android:layout_height="72dp"
             style="@style/Widget.MaterialComponents.Button.Icon"
@@ -39,6 +40,16 @@
             android:layout_above="@id/addressCardView"
             android:layout_alignParentRight="true"
 
+            />
+
+<!--        this is a test button for the notifications -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/testNotificationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/locateButton"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
             />
 
 <!--        the text view that the address is printed to -->
