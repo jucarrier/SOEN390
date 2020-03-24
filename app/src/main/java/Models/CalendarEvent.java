@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +20,8 @@ public class CalendarEvent {
     protected String location;
     protected long dtStart;
     protected long dtEnd;
+    protected Date startDate;
+    protected String rRule;
 
     protected String semester;
     protected int year;
@@ -32,6 +35,8 @@ public class CalendarEvent {
         this.location = location;
         this.dtStart = dtStart;
         this.dtEnd = dtEnd;
+        this.startDate = new Date(dtStart);
+        this.rRule = repRule;
 
         if (repRule!=null){
             System.out.println(repRule + " <- this is the rule");
@@ -54,7 +59,7 @@ public class CalendarEvent {
 
 
             if(third.contains("SU")) days.put("Sunday", true); else days.put("Sunday", false);
-            if(third.contains("MO")) days.put("Monday", true); days.put("Monday", false);
+            if(third.contains("MO")) days.put("Monday", true); else days.put("Monday", false);
             if(third.contains("TU")) days.put("Tuesday", true); else days.put("Tuesday", false);
             if(third.contains("WE")) days.put("Wednesday", true); else days.put("Wednesday", false);
             if(third.contains("TH")) days.put("Thursday", true); else days.put("Thursday", false);
@@ -66,6 +71,10 @@ public class CalendarEvent {
 
 
         } else System.out.println("repRule null");
+    }
+
+    public Date getStartDate() {
+        return startDate;
     }
 
     public Map<String, Boolean> getDays() {
@@ -120,4 +129,7 @@ public class CalendarEvent {
         this.dtEnd = dtEnd;
     }
 
+    public String getrRule() {
+        return rRule;
+    }
 }

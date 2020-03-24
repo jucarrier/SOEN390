@@ -82,8 +82,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         String titleValue = cursor.getString(id2);
                         String descriptionValue = cursor.getString(id3);
                         String locationValue = cursor.getString(id4);
-                        long startTime = (long) cursor.getInt(id5)+1577846300000L; //start time in ms since 1970
-                        long endTime = (long) cursor.getInt(id6)+1577846300000L;   //this time is in milliseconds since 1970
+                        long startTime = (long) cursor.getInt(id5)+1577846300000L + 2592000000L; //start time in ms since 1970 and add 1 more month
+                        long endTime = (long) cursor.getInt(id6)+1577846300000L + 2592000000L;   //this time is in milliseconds since 1970 and add 1 more month
                         String repetitionRule = cursor.getString(id7);
                         String duration = cursor.getString(id8);
                         String rDate = cursor.getString(id9);
@@ -128,7 +128,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     if (event.getTitle() != null){
 
                         //uncomment this to see which events are being shown
-                        System.out.println(event.getId() + " - " + event.getTitle());
+                        System.out.println(event.getId() + " - " + event.getTitle() + ", dtStart: " + event.getDtStart() + ", rRule: " + event.getrRule());
 
                         //regex for matching event title patterns - looking for no more than 3 digits
                         Pattern threeDigitPattern = Pattern.compile("\\d{3}");
@@ -143,14 +143,15 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         for(String s : ClassSchedule.getValidClasses()){
                             if(event.getTitle().toLowerCase().contains(s)) hasClassName = true;
                         }
-                        if( event.getId() > 150 && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+
+                        if(new Date(event.getDtStart()).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
                             System.out.println(event.getId() + " - " + event.getTitle() + " <- approved for display");
                             textToDisplay = textToDisplay + event.getId() + " - " + event.getTitle();
                             try {
                                 if(event.getDays().get("Sunday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
                                 if(event.getDays().get("Monday") == Boolean.TRUE) textToDisplay = textToDisplay + " Monday ";
                                 if(event.getDays().get("Tuesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Tuesday ";
-                                if(event.getDays().get("Wednesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
+                                if(event.getDays().get("Wednesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Wednesday ";
                                 if(event.getDays().get("Thursday") == Boolean.TRUE) textToDisplay = textToDisplay + " Thursday ";
                                 if(event.getDays().get("Friday") == Boolean.TRUE) textToDisplay = textToDisplay + " Friday ";
                                 if(event.getDays().get("Saturday") == Boolean.TRUE) textToDisplay = textToDisplay + " Saturday ";
@@ -169,13 +170,15 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
 
 
+                    } else{
+                        textToDisplay = "There are no events in the calendar - add some\n";
                     }
 
 
 
                 }
 
-                showCalendarEvents.setText(textToDisplay + "\n another line for testing");
+                showCalendarEvents.setText(textToDisplay);
             }
         });
 
