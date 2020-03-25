@@ -2,17 +2,22 @@ package com.example.concordiaguide;
 
 import Models.Building;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.app.job.JobWorkItem;
@@ -29,6 +34,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
@@ -50,6 +56,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -73,6 +80,10 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    //for notifications
+    private NotificationManagerCompat notificationManagerCompat;
+    private NotificationHelper notificationHelper;
+
     protected static String preferredNavigationMethod = "driving";
     protected Cursor cursor;
 
@@ -195,9 +206,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         return mMap;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
+        notificationHelper = new NotificationHelper(this);
 
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
@@ -349,8 +361,37 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+
+        FloatingActionButton fabTest = (FloatingActionButton) findViewById(R.id.testNotificationButton);
+        fabTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY, 7);
+                c.set(Calendar.MINUTE, 28);
+                c.set(Calendar.SECOND, 0);
+                startAlarm(c);
+                System.out.println("alarm has been set");
+            }
+        });
 
 
+
+    }
+
+    public void sendOnChannel1(String title, String message){
+        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
+        notificationHelper.getManager().notify(1, nb.build());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void startAlarm(Calendar c){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
     public void directionsToBuilding(Building building){
