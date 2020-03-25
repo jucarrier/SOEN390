@@ -12,26 +12,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.icu.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -52,10 +48,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,7 +58,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
@@ -308,6 +301,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         break;
                     case ("shuttle"):
                         MainActivity.preferredNavigationMethod = "transit";
+                        onClick2();
                         break;    //fix this when shuttle is added
                     case ("driving"):
                         MainActivity.preferredNavigationMethod = "driving";
@@ -353,8 +347,25 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+    }
 
+    private Marker mMarker;
+    private PlaceInfo mPlace;
 
+    public void onClick2() {
+        Log.d("MainActivity", "onClick: clicked place info");
+        try{
+            mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
+
+            if(mMarker.isInfoWindowShown()){
+                mMarker.hideInfoWindow();
+            }else{
+                Log.d("MainActivity", "onClick: place info: " + mPlace.toString());
+                mMarker.showInfoWindow();
+            }
+        }catch (NullPointerException e){
+            Log.e("MainActivity", "onClick: NullPointerException: " + e.getMessage() );
+        }
     }
 
     public void directionsToBuilding(Building building){
@@ -520,16 +531,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        //Add listener to polygons to show the building info popup
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
-            /*public void onPolygonClick(Polygon polygon) {
+            public void onPolygonClick(Polygon polygon) {
                 //used to send building object to popup activity
                 final Bundle bundle = new Bundle();
                 bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
                 //go to popup activity
                 startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
-*/
+            }
+        });
+        //Add listener to polygons to show the building info popup
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
             public void onMapLongClick(LatLng latLng) {
 
                 if (listPoints.size() == 1) {
