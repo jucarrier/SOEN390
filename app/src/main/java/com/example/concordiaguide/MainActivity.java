@@ -367,11 +367,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         fabTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar c = Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY, 8);
-                c.set(Calendar.MINUTE, 9);
-                c.set(Calendar.SECOND, 0);
-                startAlarm(c);
+                startAlarm(8,13);
                 System.out.println("alarm has been set");
             }
         });
@@ -386,7 +382,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void startAlarm(Calendar c){
+    public void startAlarm(int hours, int minutes){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);

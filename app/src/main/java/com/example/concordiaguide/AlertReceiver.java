@@ -13,7 +13,7 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationHelper notificationHelper = new NotificationHelper(context);
-        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification("title", "message");
+        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification("Concordia Maps", "Time to leave for class");
         notificationHelper.getManager().notify(1, nb.build());
     }
 }
