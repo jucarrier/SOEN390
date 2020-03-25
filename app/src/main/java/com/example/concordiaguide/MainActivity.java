@@ -320,11 +320,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         break;
 
                 }
-
-                mMap.clear();
-                sgw = cb.buildSGW();
-                loyola = cb.buildLoyola();
-                tsk.execute(getRequestUrl(listPoints.get(0)));
+                if (listPoints.size() != 0) {
+                    mMap.clear();
+                    sgw = cb.buildSGW();
+                    loyola = cb.buildLoyola();
+                    tsk.execute(getRequestUrl(listPoints.get(0)));
+                }
             }
 
             @Override
