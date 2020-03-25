@@ -29,13 +29,6 @@ import Models.Campus;
 import Models.Floor;
 
 public class IndoorNavigationActivity extends AppCompatActivity {
-    private Campus selectedCampus;
-
-    private Floor floor;
-    private String[] floorLabels;
-
-    private String room;
-    private String building;
     private ImageView imageView;
     private Campus sgw;
     private Campus layola;
@@ -43,12 +36,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
 
     private void highlightRoom(String roomName, int floorMap, Building building) {
-        if (!roomName.matches("[a-zA-Z]+")) {
-            roomName = building.getInitials() + roomName;
-        }
-        roomName = roomName.toUpperCase();
         VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
         VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
+        if (room != null) {
+            room.setFillColor(Color.BLUE);
+            return;
+        }
+        roomName = building.getInitials().toUpperCase() + roomName.replaceAll("\\D+","");
+        room = vector.findPathByName(roomName);
         if (room != null) {
             room.setFillColor(Color.BLUE);
         }
