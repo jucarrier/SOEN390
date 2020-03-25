@@ -7,11 +7,15 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import Helpers.CalendarEventDisplayAdapter;
 import Helpers.ClassSchedule;
 import Models.CalendarEvent;
+import Models.CalendarEventDisplayCard;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.CalendarContract;
 import android.view.View;
@@ -24,6 +28,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +37,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
-    boolean notificationsActive = false;
+    public boolean notificationsActive = false;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +129,19 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
+        ArrayList<CalendarEventDisplayCard> eventsToDisplay = new ArrayList<>();
+        for(CalendarEvent ce : schedule.getEvents()){
+            eventsToDisplay.add(new CalendarEventDisplayCard(R.drawable.ic_event_black_24dp, ce.getTitle(), ce.getLocation(), (HashMap<String, Boolean>) ce.getDays()));
+        }
 
+        recyclerView = findViewById(R.id.classScheduleRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerViewLayoutManager = new LinearLayoutManager(this);
+        recyclerViewAdapter = new CalendarEventDisplayAdapter(eventsToDisplay);
 
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
     }
 
     public void readEvents(){
