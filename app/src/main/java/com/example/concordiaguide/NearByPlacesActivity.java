@@ -7,14 +7,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.concordiaguide.Models.PoiType;
 import com.google.android.material.tabs.TabLayout;
 
 import com.example.concordiaguide.Adapter.*;
 
 import java.util.Objects;
 
+import Helpers.ObjectWrapperForBinder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -35,7 +35,10 @@ public class NearByPlacesActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        checkPermission();
+        //get type clicked
+       // PoiType type = (PoiType)((ObjectWrapperForBinder)getIntent().getExtras().getBinder("type")).getData();
+
+        //checkPermission();
         tabLayout = findViewById(R.id.tabs);//both tab and viewpager are reference from xml file
         viewPager = findViewById(R.id.viewpager);
 
@@ -56,14 +59,7 @@ public class NearByPlacesActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        //toolbar.setTitle("Recipes");
-                        break;
-                    case 1:
-                        //toolbar.setTitle("Categories");
-                        break;
-                }
+
             }
 
             @Override

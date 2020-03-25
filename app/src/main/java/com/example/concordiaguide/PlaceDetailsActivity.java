@@ -35,6 +35,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
+        //generates the xml where we can choose to view the designated place on the map or choose to get direction towards
 
         // init UI
         init();

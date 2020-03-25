@@ -131,11 +131,7 @@ public class NearByFragment extends Fragment {
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 
-           /* progressDialog = new ProgressBar(getContext());
-            progressDialog.setMessage("Please wait while fetching data from GPS .......");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-*/
+
             Log.d(TAG, "locationService: Fetching data from gps");
 
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);

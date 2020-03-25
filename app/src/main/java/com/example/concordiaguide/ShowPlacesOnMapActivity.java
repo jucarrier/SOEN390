@@ -11,8 +11,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.concordiaguide.R;
-import com.example.concordiaguide.PlacesResult;
 import com.example.concordiaguide.Models.Results;
 
 import java.util.ArrayList;
@@ -25,9 +23,9 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_places_on_map);
+        setContentView(R.layout.activity_maps);//instead of activity_show_places_on_map
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
 
         results = PlacesResult.results;

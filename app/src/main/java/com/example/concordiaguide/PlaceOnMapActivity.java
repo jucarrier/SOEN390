@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
-
+//this class is for displaying options of showing the geolocation of the picked POI and get direction to that POI
     // variable
     private Results results;
     private LatLng pos;
@@ -48,9 +48,9 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_on_map);
+        setContentView(R.layout.activity_maps);//instead of activity_place_on_map
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();

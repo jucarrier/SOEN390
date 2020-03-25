@@ -89,6 +89,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PoiTypesActivity"
+            android:label="PoiTypesActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.concordiaguide.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

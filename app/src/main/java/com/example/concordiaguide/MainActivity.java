@@ -10,7 +10,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,7 +20,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +38,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.material.navigation.NavigationView;
 
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
@@ -57,6 +54,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
     public void onLocationChanged(Location location) {
+        if(location == null) { return; }
         double lat = location.getLatitude();
         double lng = location.getLongitude();
         currentLocation = new LatLng(lat, lng);
@@ -229,7 +227,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
                     case (R.id.nearby_places):
-                        intent = new Intent(getApplicationContext(), NearByPlacesActivity.class);
+                        intent = new Intent(getApplicationContext(), PoiTypesActivity.class);
                         break;
 
 
