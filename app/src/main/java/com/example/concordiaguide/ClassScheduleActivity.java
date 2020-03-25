@@ -53,10 +53,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Button buttonShowCalendarEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
         FloatingActionButton buttonTestNotification = (FloatingActionButton) findViewById(R.id.buttonTestNotificationSchedule);
         final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
-        final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);
 
         if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
 
@@ -79,38 +77,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 c.set(Calendar.HOUR_OF_DAY, 12);
                 c.set(Calendar.MINUTE, 50);
                 c.set(Calendar.SECOND, 0);
-            }
-        });
-
-        //method to show the saved events that were retrieved from the calendar
-        buttonShowCalendarEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String textToDisplay = "";
-                for(CalendarEvent event : schedule.getEvents()){
-                    if (event.getTitle() != null){
-                        if(event.getTitle()!=null){
-                            //System.out.println(event.getId() + " - " + event.getTitle() + " <- approved for display");
-                            textToDisplay = textToDisplay + event.getId() + " - " + event.getTitle();
-                            try {
-                                if(event.getDays().get("Sunday") == Boolean.TRUE) textToDisplay = textToDisplay + " Sunday ";
-                                if(event.getDays().get("Monday") == Boolean.TRUE) textToDisplay = textToDisplay + " Monday ";
-                                if(event.getDays().get("Tuesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Tuesday ";
-                                if(event.getDays().get("Wednesday") == Boolean.TRUE) textToDisplay = textToDisplay + " Wednesday ";
-                                if(event.getDays().get("Thursday") == Boolean.TRUE) textToDisplay = textToDisplay + " Thursday ";
-                                if(event.getDays().get("Friday") == Boolean.TRUE) textToDisplay = textToDisplay + " Friday ";
-                                if(event.getDays().get("Saturday") == Boolean.TRUE) textToDisplay = textToDisplay + " Saturday ";
-                            } catch (Exception e){
-                                System.out.println(e.toString());
-                            }
-
-                            textToDisplay = textToDisplay + "\n";
-                        }
-                    } else{
-                        textToDisplay = "There are no events in the calendar - add some\n";
-                    }
-                }
-                showCalendarEvents.setText(textToDisplay);
             }
         });
 
