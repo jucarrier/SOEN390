@@ -368,8 +368,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             @Override
             public void onClick(View view) {
                 Calendar c = Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY, 7);
-                c.set(Calendar.MINUTE, 28);
+                c.set(Calendar.HOUR_OF_DAY, 8);
+                c.set(Calendar.MINUTE, 9);
                 c.set(Calendar.SECOND, 0);
                 startAlarm(c);
                 System.out.println("alarm has been set");
