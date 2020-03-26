@@ -1,6 +1,7 @@
 package Helpers;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,24 +72,24 @@ public class CalendarEventDisplayAdapter extends RecyclerView.Adapter<CalendarEv
 
             if(currentItem.getDays().get("Monday")){
                 holder.monday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.monday.setTextColor(R.color.colorAccent);
+                holder.monday.setTextColor(Color.parseColor("#FFFFFF"));    //using color.white turns the text blue, need to use parseColor instead
             }
 
             if(currentItem.getDays().get("Tuesday")){
                 holder.tuesday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.tuesday.setTextColor(R.color.white);
+                holder.tuesday.setTextColor(Color.parseColor("#FFFFFF"));
             }
             if(currentItem.getDays().get("Wednesday")){
                 holder.wednesday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.wednesday.setTextColor(R.color.white);
+                holder.wednesday.setTextColor(Color.parseColor("#FFFFFF"));
             }
             if(currentItem.getDays().get("Thursday")){
                 holder.thursday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.thursday.setTextColor(R.color.white);
+                holder.thursday.setTextColor(Color.parseColor("#FFFFFF"));
             }
             if(currentItem.getDays().get("Friday")){
                 holder.friday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.friday.setTextColor(R.color.white);
+                holder.friday.setTextColor(Color.parseColor("#FFFFFF"));
             }
 
         } catch (Exception e){

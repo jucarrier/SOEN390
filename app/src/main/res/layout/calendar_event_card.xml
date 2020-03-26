@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="MO"
                 android:padding="2dp"
+                android:layout_marginEnd="4dp"
                 />
 
 
@@ -71,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/classCardMonday"
                 android:text="TU"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:padding="2dp"
                 />
 
@@ -81,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/classCardTuesday"
                 android:text="WE"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:padding="2dp"
                 />
 
@@ -93,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/classCardWednesday"
                 android:text="TH"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:padding="2dp"
                 />
 
@@ -103,7 +107,8 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/classCardThursday"
                 android:text="FR"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:padding="2dp"
                 />
 

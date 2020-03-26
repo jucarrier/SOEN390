@@ -223,6 +223,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
             alarmManager.cancel(pendingIntent);
         }
 
+        System.out.println("All alarms cancelled");
     }
 
 }
