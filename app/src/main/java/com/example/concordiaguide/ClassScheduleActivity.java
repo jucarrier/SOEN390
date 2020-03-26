@@ -89,14 +89,47 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 } else{
                     notificationsActive=true;
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
-                    Date now = new Date(System.currentTimeMillis());
-                    int hour = now.getHours();
-                    int minute = now.getMinutes();
-                    int day = now.getDay();
 
-                    startAlarm(day, hour, minute + 1);
-                    startAlarm(day, hour, minute + 2);
-                    startAlarm(day, hour, minute + 3);
+                    for(CalendarEvent c : schedule.getEvents()){
+                        Date date = c.getStartDate();
+                        int hour = date.getHours();
+                        int minute = date.getMinutes();
+                        int day;
+
+                        if(c.getDays()!=null){
+                            if(c.getDays().get("Sunday")) {
+                                day = Calendar.SUNDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Monday")) {
+                                day = Calendar.MONDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Tuesday")) {
+                                day = Calendar.TUESDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Wednesday")) {
+                                day = Calendar.WEDNESDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Thursday")) {
+                                day = Calendar.THURSDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Friday")) {
+                                day = Calendar.FRIDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Saturday")) {
+                                day = Calendar.SATURDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                        } else{
+                            System.out.println("CalendarEvent is null");
+                        }
+
+                    }
 
                     notificationsOnOrOff.setText("Notifications are ON");
                 }
@@ -191,9 +224,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
         activeAlarmIds.add(alarmId);
-        System.out.println("Alarm has been set for "+day+" at " +hours + ":" + minutes);
+        System.out.println("Alarm has been set for day "+day+" at " +hours + ":" + minutes);
     }
 
     private void cancelSpecificAlarm(int alarmId){
@@ -221,6 +254,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
             alarmManager.cancel(pendingIntent);
         }
 
