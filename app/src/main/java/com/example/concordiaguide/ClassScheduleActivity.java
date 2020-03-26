@@ -92,10 +92,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     Date now = new Date(System.currentTimeMillis());
                     int hour = now.getHours();
                     int minute = now.getMinutes();
+                    int day = now.getDay();
 
-                    startAlarm(hour, minute + 1, 1);
-                    startAlarm(hour, minute + 2, 2);
-                    startAlarm(hour, minute + 3, 3);
+                    startAlarm(day, hour, minute + 1);
+                    startAlarm(day, hour, minute + 2);
+                    startAlarm(day, hour, minute + 3);
 
                     notificationsOnOrOff.setText("Notifications are ON");
                 }
@@ -174,8 +175,14 @@ public class ClassScheduleActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void startAlarm(int hours, int minutes, int alarmId){
+    public void startAlarm(int day, int hours, int minutes){
+        //automatically set alarm id after other alarms that are in the system
+        int alarmId;
+        if(activeAlarmIds.size()==0) alarmId = 0;
+        else alarmId = activeAlarmIds.get(activeAlarmIds.size()-1);
+
         Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_WEEK, day);
         c.set(Calendar.HOUR_OF_DAY, hours);
         c.set(Calendar.MINUTE, minutes);
         c.set(Calendar.SECOND, 0);
@@ -186,7 +193,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
         activeAlarmIds.add(alarmId);
-        System.out.println("Alarm has been set for "+hours + ":" + minutes);
+        System.out.println("Alarm has been set for "+day+" at " +hours + ":" + minutes);
     }
 
     private void cancelSpecificAlarm(int alarmId){
