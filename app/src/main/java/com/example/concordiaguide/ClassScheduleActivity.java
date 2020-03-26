@@ -83,11 +83,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         //load whether the user has notifications on or off
         loadPreference();
-
-        //change icon depending on user preferences
-        if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
-        else buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
-
+        
         //toggle notifications on or off
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -96,14 +92,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 if(notificationsActive){
                     notificationsActive=false;
                     savePreference(false);
-                    buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
                     cancelAllAlarms();
 
                     notificationsOnOrOff.setText("Notifications are OFF");
                 } else{
                     notificationsActive=true;
                     savePreference(true);
-                    buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
 
                     for(CalendarEvent c : schedule.getEvents()){
                         Date date = c.getStartDate();
@@ -282,12 +276,29 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         editor.putBoolean(NOTIFICATIONS_ACTIVE, active);
         editor.apply();
+
+        updateViewsForNotificationPreference();
     }
 
     public void loadPreference(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
         notificationsActive = sharedPreferences.getBoolean(NOTIFICATIONS_ACTIVE, false);
+
+        updateViewsForNotificationPreference();
+    }
+
+    public void updateViewsForNotificationPreference(){
+        TextView tv = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton b = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+
+        if(notificationsActive){
+            tv.setText("Notifications are ON");
+            b.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+        } else{
+            tv.setText("Notifications are OFF");
+            b.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+        }
     }
 
 }
