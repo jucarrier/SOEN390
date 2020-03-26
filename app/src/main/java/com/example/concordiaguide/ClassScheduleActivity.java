@@ -2,15 +2,19 @@ package com.example.concordiaguide;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 
 import Helpers.CalendarEventDisplayAdapter;
 import Helpers.ClassSchedule;
 import Models.CalendarEvent;
 import Models.CalendarEventDisplayCard;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +37,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClassScheduleActivity extends AppCompatActivity {
-    //TODO: make this a recyclerView so we can scroll and see the events
+
+    public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
 
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
@@ -71,22 +76,31 @@ public class ClassScheduleActivity extends AppCompatActivity {
         readEvents();
 
         buttonTestNotification.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                Calendar c = Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY, 12);
-                c.set(Calendar.MINUTE, 50);
-                c.set(Calendar.SECOND, 0);
+                for(CalendarEvent c : schedule.getEvents()){
+                    System.out.println("Title: " + c.getTitle() + ", time: " + new Date(c.getDtStart()).getHours() + ":" + new Date(c.getStartDate().getMinutes()));
+                }
+
+                Date now = new Date(System.currentTimeMillis());
+                int hour = now.getHours();
+                int minute = now.getMinutes();
+
+                startAlarm(hour, minute + 1, 1);
+                startAlarm(hour, minute + 2, 2);
+                startAlarm(hour, minute + 3, 3);
             }
         });
 
-        //toggle notifications listener
+        //toggle notifications on or off
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(notificationsActive){
                     notificationsActive=false;
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                    cancelAllAlarms();
                 } else{
                     notificationsActive=true;
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
@@ -165,8 +179,49 @@ public class ClassScheduleActivity extends AppCompatActivity {
         }
     }
 
-    private void startAlarm(Calendar c){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void startAlarm(int hours, int minutes, int alarmId){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        activeAlarmIds.add(alarmId);
+        System.out.println("Alarm has been set for "+hours + ":" + minutes);
+    }
+
+    private void cancelSpecificAlarm(int alarmId){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+        for(int i = 0; i<activeAlarmIds.size(); i++){
+            if(activeAlarmIds.get(i) == alarmId) {
+                activeAlarmIds.remove(i);
+            }
+        }
+
+        try {
+            alarmManager.cancel(pendingIntent);
+        } catch (Exception e){
+            System.out.println(e.toString() + " <- if this is a null pointer, the alarm has likely already fired");
+        }
+        System.out.println("Alarm has been cancelled");
+    }
+
+    private void cancelAllAlarms(){
+        for(int i = 0;i<activeAlarmIds.size(); i++){
+            int alarmId = activeAlarmIds.get(i);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+            alarmManager.cancel(pendingIntent);
+        }
 
     }
 
