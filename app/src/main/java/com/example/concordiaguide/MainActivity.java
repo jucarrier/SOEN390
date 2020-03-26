@@ -286,6 +286,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
 
+
+        //Button but_transit = (Button) findViewById(R.id.);
+        final CardView view_transit = (CardView) findViewById(R.id.transit_id) ;
+
+
         //this adds a listener to change the preferred navigation mode based on tab selection
         transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -296,12 +301,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 final CampusBuilder cb = new CampusBuilder(mMap);
 
                 switch (selectedTab) {
-                    case ("walk"):
-                        MainActivity.preferredNavigationMethod = "walking";
-                        break;
                     case ("shuttle"):
                         MainActivity.preferredNavigationMethod = "transit";
-                        onClick2();
+                        /*if (view_transit.getVisibility()== View.VISIBLE)
+                            view_transit.setVisibility(View.INVISIBLE);
+                         else if (view_transit.getVisibility()== View.INVISIBLE) {
+                            view_transit.setVisibility(View.VISIBLE);*/
+                            startActivity(new Intent(getApplicationContext(), Shuttle.class));
+                        //}
                         break;    //fix this when shuttle is added
                     case ("driving"):
                         MainActivity.preferredNavigationMethod = "driving";
@@ -312,7 +319,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     default:
                         MainActivity.preferredNavigationMethod = "walking";
                         break;
-
                 }
                 if (listPoints.size() != 0) {
                     mMap.clear();
@@ -329,7 +335,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                //removing this will cause an error
+                onTabSelected(tab);
             }
         });
 
@@ -346,26 +352,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
-
-    }
-
-    private Marker mMarker;
-    private PlaceInfo mPlace;
-
-    public void onClick2() {
-        Log.d("MainActivity", "onClick: clicked place info");
-        try{
-            mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(MainActivity.this));
-
-            if(mMarker.isInfoWindowShown()){
-                mMarker.hideInfoWindow();
-            }else{
-                Log.d("MainActivity", "onClick: place info: " + mPlace.toString());
-                mMarker.showInfoWindow();
-            }
-        }catch (NullPointerException e){
-            Log.e("MainActivity", "onClick: NullPointerException: " + e.getMessage() );
-        }
     }
 
     public void directionsToBuilding(Building building){

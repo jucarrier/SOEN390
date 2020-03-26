@@ -19,6 +19,86 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
+        <!-- Shuttle popup-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:elevation="15dp"
+            android:layout_above="@+id/relativeLayoutLocateButtonAndCard"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            android:id="@+id/transit_id"
+            android:background="@drawable/popup_bg"
+            tools:context=".Shuttle">
+
+            <TextView
+                android:id="@+id/shuttle_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shuttle options"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_weight="0"
+                app:layout_constraintStart_toStartOf="parent" />
+            <TextView
+                android:id="@+id/shuttle_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Description - testttttttttttttttttttttttttttttttttttt"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/shuttle_name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <Button
+                    android:id="@+id/shuttle_goSGW"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Go to SGW"
+                    android:layout_gravity="center_horizontal|center"/>
+
+                <Button
+                    android:id="@+id/shuttle_goLoyola"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center"
+                    android:text="Go to Loyola"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|bottom"
+                android:orientation="horizontal"
+                >
+                <Button
+                    android:id="@+id/shuttle_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Close"
+                    android:layout_gravity="bottom|start"
+                    android:layout_alignParentLeft="true" />
+
+                <Button
+                    android:id="@+id/shuttle_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:text="See Schedule"
+                    android:layout_alignParentRight="true" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 <!-- relative layout with the locate button and card button to indoor navigation and navigate to campus-->
         <RelativeLayout
             android:id="@+id/relativeLayoutLocateButtonAndCard"
@@ -179,8 +259,6 @@
 
         </androidx.cardview.widget.CardView>
 
-
-
         <fragment
             android:id="@+id/google_map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -189,8 +267,6 @@
             tools:layout="@layout/activity_maps" />
 
     </RelativeLayout>
-
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_viewer"
