@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -42,7 +43,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+
     public boolean notificationsActive = false;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String NOTIFICATIONS_ACTIVE = "notificationsActive";
+
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
@@ -61,7 +67,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
         final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
         final TextView notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
 
-        if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+
 
         //permission check to read calendar events
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
@@ -75,6 +81,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
         //read the events in the calendar as soon as the page opens
         readEvents();
 
+        //load whether the user has notifications on or off
+        loadPreference();
+
+        //change icon depending on user preferences
+        if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+        else buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+
         //toggle notifications on or off
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -82,12 +95,14 @@ public class ClassScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(notificationsActive){
                     notificationsActive=false;
+                    savePreference(false);
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
                     cancelAllAlarms();
 
                     notificationsOnOrOff.setText("Notifications are OFF");
                 } else{
                     notificationsActive=true;
+                    savePreference(true);
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
 
                     for(CalendarEvent c : schedule.getEvents()){
@@ -259,6 +274,20 @@ public class ClassScheduleActivity extends AppCompatActivity {
         }
 
         System.out.println("All alarms cancelled");
+    }
+
+    public void savePreference(boolean active){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(NOTIFICATIONS_ACTIVE, active);
+        editor.apply();
+    }
+
+    public void loadPreference(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        notificationsActive = sharedPreferences.getBoolean(NOTIFICATIONS_ACTIVE, false);
     }
 
 }
