@@ -19,16 +19,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <!--        this is a test button for the notifications -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/testNotificationButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/relativeLayoutLocateButtonAndCard"
-            android:layout_alignParentRight="true"
-            android:layout_margin="8dp"
-            android:visibility="visible"
-            />
 
 <!-- relative layout with the locate button and card button to indoor navigation and navigate to campus-->
         <RelativeLayout

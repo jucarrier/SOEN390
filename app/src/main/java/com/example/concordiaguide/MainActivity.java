@@ -363,17 +363,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         notificationManagerCompat = NotificationManagerCompat.from(this);
 
-        FloatingActionButton fabTest = (FloatingActionButton) findViewById(R.id.testNotificationButton);
-        fabTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startAlarm(8,13);
-                System.out.println("alarm has been set");
-            }
-        });
-
-
-
     }
 
     public void sendOnChannel1(String title, String message){

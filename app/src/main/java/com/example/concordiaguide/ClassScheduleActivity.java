@@ -58,8 +58,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton buttonTestNotification = (FloatingActionButton) findViewById(R.id.buttonTestNotificationSchedule);
         final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+        final TextView notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
 
         if (!notificationsActive) buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
 
@@ -75,35 +75,29 @@ public class ClassScheduleActivity extends AppCompatActivity {
         //read the events in the calendar as soon as the page opens
         readEvents();
 
-        buttonTestNotification.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                for(CalendarEvent c : schedule.getEvents()){
-                    System.out.println("Title: " + c.getTitle() + ", time: " + new Date(c.getDtStart()).getHours() + ":" + new Date(c.getStartDate().getMinutes()));
-                }
-
-                Date now = new Date(System.currentTimeMillis());
-                int hour = now.getHours();
-                int minute = now.getMinutes();
-
-                startAlarm(hour, minute + 1, 1);
-                startAlarm(hour, minute + 2, 2);
-                startAlarm(hour, minute + 3, 3);
-            }
-        });
-
         //toggle notifications on or off
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 if(notificationsActive){
                     notificationsActive=false;
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_off_black_24dp);
                     cancelAllAlarms();
+
+                    notificationsOnOrOff.setText("Notifications are OFF");
                 } else{
                     notificationsActive=true;
                     buttonToggleNotifications.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+                    Date now = new Date(System.currentTimeMillis());
+                    int hour = now.getHours();
+                    int minute = now.getMinutes();
+
+                    startAlarm(hour, minute + 1, 1);
+                    startAlarm(hour, minute + 2, 2);
+                    startAlarm(hour, minute + 3, 3);
+
+                    notificationsOnOrOff.setText("Notifications are ON");
                 }
 
             }
@@ -209,9 +203,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
         try {
             alarmManager.cancel(pendingIntent);
         } catch (Exception e){
-            System.out.println(e.toString() + " <- if this is a null pointer, the alarm has likely already fired");
+            System.out.println(e.toString() + " <- if this is a null pointer exception, the alarm has likely already fired");
         }
-        System.out.println("Alarm has been cancelled");
+        System.out.println("Alarm cancelled");
     }
 
     private void cancelAllAlarms(){
