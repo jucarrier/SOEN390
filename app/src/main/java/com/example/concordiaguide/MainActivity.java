@@ -146,6 +146,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public Campus loyola;
     private DrawerLayout drawer;
 
+    public GoogleMap getmMap() {
+        return mMap;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
@@ -169,7 +173,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        searchView = findViewById(R.id.sv_location);
+        searchView = findViewById(R.id.sv_location2);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -210,12 +214,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 int id = item.getItemId();
                 drawer.closeDrawers();
                 Intent intent = null;
+                Bundle bundle;
                 switch (id) {
                     case (R.id.menu_indoor_navigation):
-                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
+                        bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_campus_navigation):
-                        final Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
                         bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);

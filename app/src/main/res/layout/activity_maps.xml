@@ -19,22 +19,49 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="128dp"
-            android:layout_height="64dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+<!--        this is the locate button -->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@android:drawable/ic_menu_mylocation"
+
+            app:iconSize="32dp"
+            app:iconPadding="2dp"
+            android:insetLeft="8dp"
+            android:insetTop="8dp"
+            android:insetRight="8dp"
+            android:insetBottom="8dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
+            android:elevation="10dp"
+            app:iconTint="@color/white"
             android:onClick="onLocateButtonPressed"
-            android:text="Find me" />
+            android:layout_above="@id/addressCardView"
+            android:layout_alignParentRight="true"
+
+            />
+
+<!--        the text view that the address is printed to -->
+        <TextView
+            android:id="@+id/addressHere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:gravity="bottom|right"
+            android:text="addressHere"
+            android:textAlignment="gravity"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:visibility="visible" />
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+<!--        search bar - some names are incorrect because I created a second search bar by mistake and had to update references to it -->
         <SearchView
-            android:id="@+id/sv_location"
+            android:id="@+id/sv_location2"
             android:layout_width="390dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -48,6 +75,7 @@
             android:iconifiedByDefault="true"
             android:queryHint="Search" />
 
+<!--        this is the slide out toolbar-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -58,28 +86,51 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         <androidx.cardview.widget.CardView
-            android:layout_width="228dp"
-            android:layout_height="52dp"
+            android:id="@+id/addressCardView"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="6dp"
-            android:layout_marginBottom="6dp"
             android:visibility="visible"
             app:contentPaddingBottom="8dp"
-            app:contentPaddingLeft="8dp">
+            app:contentPaddingLeft="8dp"
+            android:elevation="4dp">
 
-            <TextView
-                android:id="@+id/addressHere"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|left"
-                android:gravity="bottom|right"
-                android:text="addressHere"
-                android:textAlignment="gravity"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                tools:visibility="visible" />
+            <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:tabTextAppearance="@style/tabTextStyle"
+                >
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="walk"
+                    android:icon="@drawable/ic_indoor_navigation_24dp"
+
+
+                    />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="shuttle"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="car"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="metro"/>
+
+            </com.google.android.material.tabs.TabLayout>
+
+
         </androidx.cardview.widget.CardView>
+
+
 
         <fragment
             android:id="@+id/google_map"
@@ -87,7 +138,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/activity_maps" />
+
     </RelativeLayout>
+
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_viewer"

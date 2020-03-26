@@ -19,6 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <uses-library android:name="android.test.runner"
+            android:required="false" />
         <activity
             android:name=".ClassScheduleActivity"
             android:label="@string/title_activity_class_schedule"
