@@ -7,9 +7,6 @@ import java.util.HashMap;
 import Models.CalendarEvent;
 
 public class ClassSchedule {
-    //TODO: add a save as JSON method
-    //TODO: add a load from file method
-
     protected ArrayList<CalendarEvent> events;
 
     //TODO: add all concordia class codes here

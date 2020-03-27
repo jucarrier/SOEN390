@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +67,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
         final TextView notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton refreshButton = (FloatingActionButton) findViewById(R.id.buttonRefreshCalendar);
 
 
 
@@ -83,7 +85,18 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         //load whether the user has notifications on or off
         loadPreference();
-        
+
+        //button to refresh the calendar when new events are added
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readEvents();
+                //TODO: fix this method so that it recreates a new recycler view when the user wants to refresh
+                //updating recycler view glitching, sending wrong days
+                //recyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
+
         //toggle notifications on or off
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -100,6 +113,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     savePreference(true);
 
                     for(CalendarEvent c : schedule.getEvents()){
+                        Date now = new Date(System.currentTimeMillis());
                         Date date = c.getStartDate();
                         int hour = date.getHours();
                         int minute = date.getMinutes();
@@ -159,6 +173,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
+
     }
 
     public void readEvents(){
