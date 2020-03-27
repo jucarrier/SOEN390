@@ -7,6 +7,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Shuttle">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="15dp"
+        android:layout_above="@+id/relativeLayoutLocateButtonAndCard"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:id="@+id/shuttle_goCampus"
+        android:background="@drawable/popup_bg"
+        tools:context=".Shuttle">
+
+        <TextView
+            android:id="@+id/shuttle_goCampusTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shuttle options"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_weight="0"
+            app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/shuttle_goCampusDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Description - testttttttttttttttttttttttttttttttttttt"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/shuttle_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:gravity="center|bottom"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/shuttle_goCampusClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Close"
+                android:layout_gravity="bottom|start"
+                android:layout_alignParentLeft="true" />
+
+            <Button
+                android:id="@+id/shuttle_goCampusSeeSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:text="See Schedule"
+                android:layout_alignParentRight="true" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/shuttle_name"
             android:layout_width="wrap_content"

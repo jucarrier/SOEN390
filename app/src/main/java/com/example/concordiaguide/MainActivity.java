@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -287,10 +288,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
 
 
-        //Button but_transit = (Button) findViewById(R.id.);
-        final CardView view_transit = (CardView) findViewById(R.id.transit_id) ;
-
-
         //this adds a listener to change the preferred navigation mode based on tab selection
         transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -303,11 +300,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 switch (selectedTab) {
                     case ("shuttle"):
                         MainActivity.preferredNavigationMethod = "transit";
-                        /*if (view_transit.getVisibility()== View.VISIBLE)
-                            view_transit.setVisibility(View.INVISIBLE);
-                         else if (view_transit.getVisibility()== View.INVISIBLE) {
-                            view_transit.setVisibility(View.VISIBLE);*/
-                            startActivity(new Intent(getApplicationContext(), Shuttle.class));
+                        startActivity(new Intent(getApplicationContext(), Shuttle.class));
                         //}
                         break;    //fix this when shuttle is added
                     case ("driving"):
@@ -494,6 +487,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -548,13 +542,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 // }
                 mMap.addMarker(markerOptions);
 
-                if (listPoints.size() == 1) {
-                    //Create the URL to get request from first marker to second marker
-                    String url = getRequestUrl(listPoints.get(0));
-                    TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-                    taskRequestDirections.execute(url);
-                }
-
+                //Create the URL to get request to marker
+                String url = getRequestUrl(listPoints.get(0));
+                TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
+                taskRequestDirections.execute(url);
             }
         });
     }
