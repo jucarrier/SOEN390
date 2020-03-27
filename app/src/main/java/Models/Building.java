@@ -18,7 +18,7 @@ public class Building {
     private final int fillColor = 0x4FAA0000;
 
     //Defines perimeter
-    final Polygon polygon;
+    Polygon polygon;
 
     public Building(GoogleMap mMap, String name, String address, String description, String initials, Floor[] floors, LatLng... lls) {
         this.name = name;
@@ -27,12 +27,13 @@ public class Building {
         this.initials = initials;
         this.floors = floors;
 
-
-        this.polygon = mMap.addPolygon(new PolygonOptions()
-                .clickable(true)
-                .add(lls)
-                .fillColor(fillColor));
-        this.polygon.setTag(this);
+        if(mMap != null) {
+            this.polygon = mMap.addPolygon(new PolygonOptions()
+                    .clickable(true)
+                    .add(lls)
+                    .fillColor(fillColor));
+            this.polygon.setTag(this);
+        }
     }
 
     public String getName() { return name; }
