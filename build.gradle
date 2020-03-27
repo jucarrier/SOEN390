@@ -4,7 +4,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
@@ -20,7 +20,6 @@ plugins {
 }
 
 
-
 allprojects {
     repositories {
         google()
@@ -31,6 +30,8 @@ allprojects {
         maven {
             url 'https://jitpack.io'
         }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+
     }
 }
 
