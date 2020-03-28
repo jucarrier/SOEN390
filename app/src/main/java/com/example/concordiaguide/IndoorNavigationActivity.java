@@ -63,7 +63,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         }
     }
 
-    private void highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped) {
+    private void highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
         int floorMap = floor.getFloorMap();
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
 
@@ -76,8 +76,17 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             for(Edge e : edges) {
                 edge = vector.findPathByName(e.getEdgeName());
                 if (edge != null) {
-                    edge.setStrokeColor(Color.WHITE);
+                    edge.setStrokeColor(Color.BLUE);
                 }
+            }
+
+            if (!roomNumber.matches("[a-zA-Z]+")) {
+                roomNumber = building.getInitials() + roomNumber;
+            }
+            roomNumber = roomNumber.toUpperCase();
+            edge = vector.findPathByName(roomNumber);
+            if (edge != null) {
+                edge.setFillColor(Color.BLUE);
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
@@ -138,8 +147,8 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                     @Override
                                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                                         String room = roomInput.getEditableText().toString();
-                                        highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
-                                        highlightPathToRoom(room, selectedFloor, isHandicapped);
+                                        //highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
+                                        highlightPathToRoom(room, selectedFloor, isHandicapped, selectedBuilding);
                                         return true;
                                     }
                                 });
