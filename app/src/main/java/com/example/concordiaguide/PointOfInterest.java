@@ -18,7 +18,7 @@ public class PointOfInterest extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fabPOI);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

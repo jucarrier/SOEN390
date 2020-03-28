@@ -267,12 +267,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 int id = item.getItemId();
                 drawer.closeDrawers();
                 Intent intent = null;
+                Bundle bundle;
                 switch (id) {
                     case (R.id.menu_indoor_navigation):
-                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
+                        bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_campus_navigation):
-                        final Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
                         bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
@@ -413,7 +417,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
     //@Override
-    public void onLocateButtonPressed(View view) {
+    public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
@@ -595,7 +599,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+
     }
 
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
