@@ -287,7 +287,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
 
-
+        String shuttle_direction;
         //this adds a listener to change the preferred navigation mode based on tab selection
         transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -410,6 +410,25 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         String insert = "mode=" + MainActivity.preferredNavigationMethod;
         System.out.println(insert);
         String mode = insert;
+
+        String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
+        //Build the full param
+        String param = str_org +"&" + str_dest + "&" +sensor+"&" +mode+"&" +key;
+        //Output format
+        String output = "json";
+        //Create url to request
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
+        return url;
+    }
+    private String getRequestUrl_shuttle(LatLng origin, LatLng dest) {
+        //Value of origin
+        String str_org = "origin=" + origin.latitude +","+origin.longitude;
+        //Value of destination
+        String str_dest = "destination=" + dest.latitude+","+dest.longitude;
+        //Set value enable the sensor
+        String sensor = "sensor=false";
+        //Mode for find direction
+        String mode = "mode=driving";
 
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
