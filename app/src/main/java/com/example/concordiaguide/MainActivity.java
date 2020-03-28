@@ -1,27 +1,42 @@
 package com.example.concordiaguide;
+
 import Models.Building;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.app.job.JobWorkItem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
+import java.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Helpers.ObjectWrapperForBinder;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,13 +56,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,11 +80,19 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+    //for notifications
+    private NotificationManagerCompat notificationManagerCompat;
+    private NotificationHelper notificationHelper;
+
+    protected static String preferredNavigationMethod = "driving";
+    protected Cursor cursor;
+
+    protected TabLayout transportationSelectionTab;
 
     //for finding current location
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-    LatLng currentLocation; //to be filled in later by onLocationChanged
+    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -81,13 +108,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             setContentView(R.layout.activity_maps);
             textViewAddressHere = (TextView) findViewById(R.id.addressHere);
-            if((Object) textViewAddressHere == null){
+            if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
             }
             textViewAddressHere.setText("lat " + lat);
             System.out.println("lat " + lat);
-        } catch (Exception e){
-            System.out.println("begin \n" +e+ "\n end");
+        } catch (Exception e) {
+            System.out.println("begin \n" + e + "\n end");
         }
     }
 
@@ -165,7 +192,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case LOCATION_REQUEST:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mMap.setMyLocationEnabled(true);
@@ -175,13 +202,15 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
 
-
     public GoogleMap getmMap() {
         return mMap;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        notificationHelper = new NotificationHelper(this);
+
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -189,8 +218,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        onLocationChanged(location);
+        //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        //onLocationChanged(location);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -208,6 +237,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         toggle.syncState();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
 
@@ -224,6 +254,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
+
 
         mapFragment.getMapAsync(this);
 
@@ -262,7 +293,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
                         break;
-
                 }
                 if (intent != null) {
                     startActivity(intent);
@@ -275,12 +305,94 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         Building building;
 
-        try{
-            building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
 
+        transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
+
+
+        //this adds a listener to change the preferred navigation mode based on tab selection
+        transportationSelectionTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String selectedTab = tab.getContentDescription().toString();
+                System.out.println(selectedTab);
+
+                switch (selectedTab) {
+                    case ("walk"):
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
+                    case ("shuttle"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;    //fix this when shuttle is added
+                    case ("driving"):
+                        MainActivity.preferredNavigationMethod = "driving";
+                        break;
+                    case ("publicTransportation"):
+                        MainActivity.preferredNavigationMethod = "transit";
+                        break;
+                    default:
+                        MainActivity.preferredNavigationMethod = "walking";
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //removing this will cause an error
+            }
+        });
+
+        CardView cardViewNavigationPrompt = (CardView) findViewById(R.id.cardViewNavigationPrompt);
+        cardViewNavigationPrompt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+
+        long LOCATION_REFRESH_TIME = 20000;
+        float LOCATION_REFRESH_DISTANCE = 5;
+        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+
+        //zoom to current location as soon as the app opens
+
+
+    }
+
+    public void sendOnChannel1(String title, String message){
+        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
+        notificationHelper.getManager().notify(1, nb.build());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void startAlarm(int hours, int minutes){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
     public void directionsToBuilding(Building building){
@@ -343,7 +455,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //Set value enable the sensor
         String sensor = "sensor=false";
         //Mode for find direction
-        String mode = "mode=driving";
+        String insert = "mode=" + MainActivity.preferredNavigationMethod;
+        System.out.println(insert);
+        String mode = insert;
 
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
@@ -425,7 +539,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
@@ -435,6 +549,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         CampusBuilder cb = new CampusBuilder(mMap);
         sgw = cb.buildSGW();
         loyola = cb.buildLoyola();
+
+        //map onclick listener - this will cause events to happen whenever you tap the main map
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                searchView.clearFocus();
+            }
+        });
 
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
@@ -477,9 +599,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
 
     }
+
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
 
         @Override
@@ -529,5 +653,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
+
 
 }
