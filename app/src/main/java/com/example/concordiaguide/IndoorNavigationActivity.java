@@ -9,6 +9,7 @@ import com.devs.vectorchildfinder.VectorDrawableCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,15 +19,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.InputStream;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
+import Helpers.GraphBuilder;
 import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
+import Models.Edge;
 import Models.Floor;
+import Models.Node;
 
 public class IndoorNavigationActivity extends AppCompatActivity {
     private Campus selectedCampus;

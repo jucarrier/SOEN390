@@ -691,4 +691,100 @@
       android:fillColor="#da3636"
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
+
+  <path
+      android:name="temp"
+      android:pathData="M 180,215 l 660,0 l 0,580 l -660,0 l 0,-585"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#CBB5F3"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_1_801+867+865+863_803_110"
+      android:pathData="M 180, 215 l 110,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_2_803_805.01+805.02+805.03_60"
+      android:pathData="M 290, 215 l 60,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_3_805.01+805.02+805.03_807_130"
+      android:pathData="M 350, 215 l 130,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_4_807_x1_70"
+      android:pathData="M 480, 215 l 70,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_5_x1_806.01+806.02+806.03_110"
+      android:pathData="M 550, 215 l 0,110"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_6_806.01+806.02+806.03_x2_75"
+      android:pathData="M 550, 325 l 0,75"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_7_x2_862+Elevator 1+Elevator 2_180"
+      android:pathData="M 550, 400 l -180,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_8_862+Elevator 1+Elevator 2_Stairs+860.01+860.03+860.04+860.05+860.06_100"
+      android:pathData="M 370, 400 l -100,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_9_Stairs+860.01+860.03+860.04+860.05+860.06_859_90"
+      android:pathData="M 270, 400 l -90,0"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_10_859_861_80"
+      android:pathData="M 180, 400 l 0,-80"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
+
+  <path
+      android:name="edge_11_861_801+867+865+863_105"
+      android:pathData="M 180, 320 l 0,-105"
+      android:strokeAlpha="1"
+      android:strokeWidth="10"
+      android:strokeColor="#000000"
+      android:fillAlpha="1"/>
 </vector>
