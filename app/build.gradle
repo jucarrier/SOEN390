@@ -25,8 +25,15 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+        unitTests.all {
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo1.maven.org/maven2'
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
 }
+android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -44,6 +51,9 @@ dependencies {
 }
 
 apply plugin: 'jacoco'
+
+
+
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     reports {
         xml.enabled = true
@@ -72,6 +82,17 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     }
 }
 
+jacoco {
+    toolVersion '0.8.4'
+}
+
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+sonarqube {
+    properties {
+        property 'sonar.java.coveragePlugin', "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+    }
 }
