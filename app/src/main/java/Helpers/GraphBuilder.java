@@ -1,5 +1,7 @@
 package Helpers;
 
+import android.util.Log;
+
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -19,25 +21,44 @@ public class GraphBuilder {
     private static final String fnode = "FNODE";
     private static final String weight = "WEIGHT";
 
-    private static XmlPullParser parser;
+    private String handicapped_source;  // = "Elevator 1";
+    private String not_handicapped_source;  // = "Stairs";
+    private Graph<Node, Edge> floorGraph;
 
-    public GraphBuilder() {
+    //you can get the parser like so:
+    //getResources().getXml(R.drawable.ic_hall_8)
+    public GraphBuilder(XmlPullParser parser, String handicapped_source, String not_handicapped_source) {
+        floorGraph = createGraph(parser);
+        this.handicapped_source = handicapped_source;
+        this.not_handicapped_source = not_handicapped_source;
     }
 
-    public List<Edge> getShortestPathEdgeListFor(Node target, ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths) {
-        return paths.getPath(target).getEdgeList();
+    //returns the list of edges of the shortest path to the targetRoom with considerations if handicapped
+    public List<Edge> getShortestPathEdgeListFor(String targetRoom, Boolean handicapped) throws RoomNotExistsException {
+        //gets the graph with the all the shortest paths to all nodes from the sourceRoom
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths;
+
+        if(handicapped) {
+            paths = getShortestPathsGraph(handicapped_source);
+        } else {
+            paths = getShortestPathsGraph(not_handicapped_source);
+        }
+
+        return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
     }
 
-    public ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> getShortestPathsGraph(String room, Graph<Node, Edge> graph) throws RoomNotExistsException {
-        DijkstraShortestPath<Node, Edge> dijkstraAlg = new DijkstraShortestPath<>(graph);
-        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = dijkstraAlg.getPaths(getRoomNode(room, graph));
+    //returns the graph with the all the shortest paths to all nodes from the sourceRoom
+    private ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> getShortestPathsGraph(String room) throws RoomNotExistsException {
+        DijkstraShortestPath<Node, Edge> dijkstraAlg = new DijkstraShortestPath<>(floorGraph);
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = dijkstraAlg.getPaths(getRoomNode(room));
         return paths;
     }
 
-    public Node getRoomNode(String room, Graph<Node, Edge> graph) throws RoomNotExistsException {
-        for(Node node : graph.vertexSet()) {
+    //get the node corresponding to the room given
+    private Node getRoomNode(String room) throws RoomNotExistsException {
+        for(Node node : floorGraph.vertexSet()) {
             for(String r : node.getRooms()) {
-                if(room.equals(room)) {
+                if(r.equals(room)) {
                     return node;
                 }
             }
@@ -46,9 +67,8 @@ public class GraphBuilder {
         throw new RoomNotExistsException("Room [ " + room + " ] does not exist.");
     }
 
-    //you can get the parser like so:
-    //getResources().getXml(R.drawable.ic_hall_8)
-    public Graph<Node, Edge> createGraph(XmlPullParser parser) {
+    //returns the complete graph of the floor
+    private Graph<Node, Edge> createGraph(XmlPullParser parser) {
         //initialize needed variables
         Graph<Node, Edge> gFloor = GraphTypeBuilder.<Node, Edge> undirected().allowingMultipleEdges(false).allowingSelfLoops(false).edgeClass(Edge.class).weighted(true).buildGraph();
         String[] elements, sourceRooms, targetRooms;
@@ -113,7 +133,7 @@ public class GraphBuilder {
         return gFloor;
     }
 
-    private class RoomNotExistsException extends Throwable {
+    public class RoomNotExistsException extends Throwable {
         public RoomNotExistsException(String errorMessage) {
             super(errorMessage);
         }

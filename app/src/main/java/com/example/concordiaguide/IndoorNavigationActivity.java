@@ -24,6 +24,7 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import Helpers.GraphBuilder;
@@ -47,6 +48,8 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Campus layola;
     private String[] campusLabels = {"SGW - Downtown", "Layola"};
 
+    private Boolean isHandicapped = false;
+
 
     private void highlightRoom(String roomName, int floorMap, Building building) {
         if (!roomName.matches("[a-zA-Z]+")) {
@@ -57,6 +60,27 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
         if (room != null) {
             room.setFillColor(Color.BLUE);
+        }
+    }
+
+    private void highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped) {
+        int floorMap = floor.getFloorMap();
+        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
+
+        try {
+            List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
+
+            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);;
+            VectorDrawableCompat.VFullPath edge;
+
+            for(Edge e : edges) {
+                edge = vector.findPathByName(e.getEdgeName());
+                if (edge != null) {
+                    edge.setStrokeColor(Color.WHITE);
+                }
+            }
+        } catch (GraphBuilder.RoomNotExistsException e) {
+            e.printStackTrace();
         }
     }
 
@@ -113,7 +137,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                 roomInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                                     @Override
                                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        highlightRoom(roomInput.getEditableText().toString(), selectedFloor.getFloorMap(), selectedBuilding);
+                                        String room = roomInput.getEditableText().toString();
+                                        highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
+                                        highlightPathToRoom(room, selectedFloor, isHandicapped);
                                         return true;
                                     }
                                 });
