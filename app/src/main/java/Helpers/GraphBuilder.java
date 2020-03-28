@@ -16,19 +16,14 @@ import Models.Floor;
 import Models.Node;
 
 public class GraphBuilder {
-    private static final String edge = "EDGE";
-    private static final String inode = "INODE";
-    private static final String fnode = "FNODE";
-    private static final String weight = "WEIGHT";
-
-    private String handicapped_source;  // = "Elevator 1";
-    private String not_handicapped_source;  // = "Stairs";
+    private String handicapped_source;  // example: "Elevator 1"
+    private String not_handicapped_source;  // example: "Stairs"
     private Graph<Node, Edge> floorGraph;
 
     //you can get the parser like so:
-    //getResources().getXml(R.drawable.ic_hall_8)
+    //getResources().getXml(R.drawable.ic_hall_8)           <---- from within an activity, otherwise the getResource() method won't work
     public GraphBuilder(XmlPullParser parser, String handicapped_source, String not_handicapped_source) {
-        floorGraph = createGraph(parser);
+        this.floorGraph = createGraph(parser);
         this.handicapped_source = handicapped_source;
         this.not_handicapped_source = not_handicapped_source;
     }
