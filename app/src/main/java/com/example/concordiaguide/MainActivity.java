@@ -92,7 +92,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     //for finding current location
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged
+    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -367,6 +367,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         float LOCATION_REFRESH_DISTANCE = 5;
         locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
 
+        //zoom to current location as soon as the app opens
+
+
     }
 
     public void sendOnChannel1(String title, String message){
@@ -591,6 +594,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             }
         });
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);
     }
 
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
