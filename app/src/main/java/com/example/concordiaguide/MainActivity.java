@@ -236,12 +236,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 int id = item.getItemId();
                 drawer.closeDrawers();
                 Intent intent = null;
+                Bundle bundle;
                 switch (id) {
                     case (R.id.menu_indoor_navigation):
-                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
+                        bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_campus_navigation):
-                        final Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
                         bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
