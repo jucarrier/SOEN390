@@ -26,11 +26,11 @@ public class PoiTypesActivity extends AppCompatActivity {
                 new PoiType(R.drawable.ic_bank, "Bank"),
                 new PoiType(R.drawable.ic_restaurant, "Restaurant")
         };
-        List<PoiType> mTypes = Arrays.asList(types);
+        List<PoiType> mTypes = Arrays.asList(types);//passed the POI category types as a list
 
         RecyclerView rc = (RecyclerView) findViewById(R.id.type_list);
         rc.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerView.Adapter poiAdapter = new PoiTypeAdapter(this, mTypes);
+        RecyclerView.Adapter poiAdapter = new PoiTypeAdapter(this, mTypes);//passed the list into the instace of PoiTypeAdapter then set it
         rc.setAdapter(poiAdapter);
     }
 

@@ -58,10 +58,29 @@
             android:name=".BuildingInfoPopup"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
-        <activity android:name=".PoiTypesActivity"
+        <activity
+            android:name=".PoiTypesActivity"
             android:label="Points of Interest"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar"/>
+        <activity
+            android:name=".PlaceDetailsActivity"
+            android:label="PlaceDetailsActivity">
+        </activity>
+        <activity
+            android:name=".ShowPlacesOnMapActivity"
+            android:label="ShowPlacesOnMapActivity">
+        </activity>
+        <activity
+            android:name=".PlaceOnMapActivity"
+            android:label="PlaceOnMapActivity">
+        </activity>
+        <activity
+            android:name=".NearByPoiActivity"
+            android:label="NearByPoiActivity">
+        </activity>
+
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

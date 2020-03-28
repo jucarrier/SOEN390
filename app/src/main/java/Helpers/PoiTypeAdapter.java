@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import Models.PoiType;
+
+import com.example.concordiaguide.NearByPoiActivity;
 import com.example.concordiaguide.PoiTypesActivity;
 import com.example.concordiaguide.R;
 
@@ -75,7 +77,7 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
 
                 final Bundle bundle = new Bundle();
                 bundle.putBinder("type", new ObjectWrapperForBinder(mPlaceTypes.get(position)));
-                mContext.startActivity(new Intent(mContext, PoiTypesActivity.class).putExtras(bundle));//need to make a new page
+                mContext.startActivity(new Intent(mContext, NearByPoiActivity.class).putExtras(bundle));//need to make a new page
             }
         });
 
