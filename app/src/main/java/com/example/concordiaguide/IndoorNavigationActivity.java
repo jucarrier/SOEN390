@@ -39,18 +39,19 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private AutoCompleteTextView roomInput;
 
 
-    private void highlightRoom(String roomName, int floorMap, Building building) {
+    public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
         VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
         VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
         if (room != null) {
             room.setFillColor(Color.BLUE);
-            return;
+            return room;
         }
         roomName = building.getInitials().toUpperCase() + roomName.replaceAll("\\D+", "");
         room = vector.findPathByName(roomName);
         if (room != null) {
             room.setFillColor(Color.BLUE);
         }
+        return room;
     }
 
     @Override
@@ -144,10 +145,6 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         this.sgw = sgw;
         this.layola = layola;
         setUp(this);
-    }
-
-    public ImageView getImageView() {
-        return imageView;
     }
 
     public Spinner getCampusSpinner() {
