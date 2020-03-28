@@ -86,7 +86,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         } else {
             textViewAvailability.setText("Not found!");
         }
-
+        //passes data to display
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +99,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             }
         });
 
+        //passes data to display desired location on map and its distance from user
         linearLayoutShowDistanceOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

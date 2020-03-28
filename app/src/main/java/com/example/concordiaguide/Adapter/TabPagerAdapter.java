@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int total_pages = 2;
+    private static final int total_pages = 1;
 
     public TabPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -15,14 +15,15 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch (position) {
+        /*switch (position) {
             case 0:
                 return new NearByFragment();
             case 1:
                 return new MyLocationFragment();
 
-        }
-        return null;
+        }*/
+        return new NearByFragment();
+        //return null;
     }
 
     @Override
@@ -36,8 +37,8 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 return "Near By";
-            case 1:
-                return "My Location";
+            //case 1:
+              //  return "My Location";
         }
         return null;
     }

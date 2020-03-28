@@ -7,8 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.concordiaguide.Fragments.NearByFragment;
 import com.example.concordiaguide.Models.PoiType;
 import com.google.android.material.tabs.TabLayout;
+import com.example.concordiaguide.Adapter.PoiTypeAdapter;
 
 import com.example.concordiaguide.Adapter.*;
 
@@ -18,57 +20,43 @@ import Helpers.ObjectWrapperForBinder;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 
 public class NearByPlacesActivity extends AppCompatActivity {
 
-    public TabLayout tabLayout;
-    public ViewPager viewPager;
+   // public TabLayout tabLayout;
+   // public ViewPager viewPager;
+    public NearByFragment nearByFragment;
+
+    Bundle bundle= getIntent().getExtras();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //set to transition to desired layout
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        //get type clicked
-       // PoiType type = (PoiType)((ObjectWrapperForBinder)getIntent().getExtras().getBinder("type")).getData();
+        checkPermission();
+       // tabLayout = findViewById(R.id.tabs);//both tab and viewpager are reference from xml file
+        //viewPager = findViewById(R.id.viewpager);
 
-        //checkPermission();
-        tabLayout = findViewById(R.id.tabs);//both tab and viewpager are reference from xml file
-        viewPager = findViewById(R.id.viewpager);
 
-        viewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager()));
+        nearByFragment= new NearByFragment();
+       // PoiType poiType= (PoiType)((ObjectWrapperForBinder)getIntent().getExtras().getBinder("type").get);
+        loadFragment(nearByFragment);
 
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                tabLayout.setupWithViewPager(viewPager);
-            }
-        });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
+    public void loadFragment(Fragment fragment){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fmt= fm.beginTransaction();
+        fmt.replace(R.id.tab_coordinator_layout, fragment);
+        fmt.commit();
+    }
 
     private void checkPermission() {
         int PERMISSION_ALL = 1;

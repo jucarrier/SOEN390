@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import Helpers.ObjectWrapperForBinder;
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.concordiaguide.Models.PoiType;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +43,7 @@ import com.example.concordiaguide.Models.MyPlaces;
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.PlacesResult;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
+import com.example.concordiaguide.Adapter.PoiTypeAdapter;
 
 public class NearByFragment extends Fragment {
 
@@ -69,6 +72,7 @@ public class NearByFragment extends Fragment {
 
     private static final String TAG="locationservice";
 
+   /* PoiType poi= (PoiType)((ObjectWrapperForBinder)getIntent().getExtras().getBinder(key:"type")).getData();*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,7 +84,7 @@ public class NearByFragment extends Fragment {
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
 
         locationService();
-
+        //onclick to the search button, following occurs
         imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
