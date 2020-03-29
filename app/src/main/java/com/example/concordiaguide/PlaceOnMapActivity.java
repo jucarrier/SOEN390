@@ -56,6 +56,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
+            //assigns data fetched from previous activty and maps them to following variables
             results = (Results) bundle.getSerializable("result");
             lat = bundle.getDouble("lat");
             lng = bundle.getDouble("lng");

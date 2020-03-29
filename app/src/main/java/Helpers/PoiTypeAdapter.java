@@ -13,7 +13,6 @@ import android.widget.TextView;
 import Models.PoiType;
 
 import com.example.concordiaguide.NearByPoiActivity;
-import com.example.concordiaguide.PoiTypesActivity;
 import com.example.concordiaguide.R;
 
 
@@ -68,16 +67,18 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
         //get element from your dataset at this position
         //and replace the contents of the view with that element
         holder.icon.setImageResource(mPlaceTypes.get(position).getIconResource());
-        holder.name.setText(mPlaceTypes.get(position).getType());
+        holder.name.setText(mPlaceTypes.get(position).getPoiType());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClickEvent: caught");
+                Bundle bundle = new Bundle();
+                bundle.putBinder("poitype", new ObjectWrapperForBinder(mPlaceTypes.get(position).getPoiType()));
 
-                final Bundle bundle = new Bundle();
-                bundle.putBinder("type", new ObjectWrapperForBinder(mPlaceTypes.get(position)));
-                mContext.startActivity(new Intent(mContext, NearByPoiActivity.class).putExtras(bundle));//need to make a new page
+                Intent intent= new Intent(mContext, NearByPoiActivity.class);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
 

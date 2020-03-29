@@ -167,6 +167,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+
         Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         onLocationChanged(location);
 
@@ -228,7 +229,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
                         break;
                     case (R.id.find_POI):
-                        intent = new Intent(getApplicationContext(), PoiTypesActivity.class);
+                        intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
                         break;
                     case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));

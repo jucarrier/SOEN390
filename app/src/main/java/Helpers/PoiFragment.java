@@ -61,30 +61,31 @@ public class PoiFragment extends Fragment {
 
     private Spinner spinner_nearby_choices;
 
-    //currently using these as test, can add more types later on.
-    public static final String TYPE_CAFE="cafe";
+    public static final String TYPE_METRO="subway_station";
     public static final String TYPE_BANK="bank";
+    public static final String TYPE_PHARMACY="pharmacy";
+    public static final String TYPE_GYM="gym";
+    public static final String TYPE_CAFE="cafe";
+    public static final String TYPE_BAR="bar";
     public static final String TYPE_RESTAURANT="restaurant";
+
 
     private static final String TAG="locationservice";
 
     @Nullable
     @Override
-   /* public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
-        View view= inflater.inflate(R.layout.)
-        return view;
-    }*/
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_near_by, container, false);
         //all these references can be found on fragment_near_by.xml
         spinner_nearby_choices = view.findViewById(R.id.spinner_nearby_choices);
-        imageViewSearch = view.findViewById(R.id.imageViewSearch);
+       imageViewSearch = view.findViewById(R.id.imageViewSearch);
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
 
         locationService();
-
+        /*Bundle bundle= getArguments();
+        String type_PoiType= bundle.getString("poitype");
+*/
         imageViewSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,11 +111,31 @@ public class PoiFragment extends Fragment {
                             getNearByPlaces();
                             break;
                         }
-
+                        case "Pharmacy": {
+                            placeType = TYPE_PHARMACY;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Bar": {
+                            placeType = TYPE_BAR;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Metro": {
+                            placeType = TYPE_METRO;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Gym": {
+                            placeType = TYPE_GYM;
+                            getNearByPlaces();
+                            break;
+                        }
                     }
                 }
             }
         });
+
 
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,21 +150,6 @@ public class PoiFragment extends Fragment {
 
     }
 
-    //this method helps to build the url that would be passed for HTTP requests
-    private String buildUrl(double latitude, double longitude, String API_KEY){
-
-        StringBuilder urlStr = new StringBuilder("api/place/search/json?");
-
-        urlStr.append("&location=");
-        urlStr.append(Double.toString(latitude));
-        urlStr.append(",");
-        urlStr.append(Double.toString(longitude));
-        urlStr.append("&radius=500"); // places between 5 kilometer
-        urlStr.append("&types=" + placeType.toLowerCase());
-        urlStr.append("&sensor=false&key=" + API_KEY);
-
-        return urlStr.toString();
-    }
     private class MyLocationListener implements LocationListener {
 
         @Override //breaks down location coordinates and maps them to lattitude/longitude variables
@@ -219,6 +225,21 @@ public class PoiFragment extends Fragment {
             Toast.makeText(getContext(), "GPS off", Toast.LENGTH_SHORT).show();
         }
     }
+    //this method helps to build the url that would be passed for HTTP requests
+    private String buildUrl(double latitude, double longitude, String API_KEY){
+
+        StringBuilder urlStr = new StringBuilder("api/place/search/json?");
+
+        urlStr.append("&location=");
+        urlStr.append(Double.toString(latitude));
+        urlStr.append(",");
+        urlStr.append(Double.toString(longitude));
+        urlStr.append("&radius=500"); // places between 5 kilometer
+        urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
+        urlStr.append("&sensor=false&key=" + API_KEY);
+
+        return urlStr.toString();
+    }
     private void getNearByPlaces(){
         String apiKey = getContext().getResources().getString(R.string.api_key);
         String url = buildUrl(lat, lng, apiKey);
@@ -235,7 +256,7 @@ public class PoiFragment extends Fragment {
             public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
-                Log.d("MyPlaces", myPlaces.getResults().get(0).toString());
+              //  Log.d("MyPlaces", myPlaces.getResults().get(0).toString());
 
                 PlaceRecyclerViewAdapter adapter = new PlaceRecyclerViewAdapter(getContext(), myPlaces, lat, lng);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
