@@ -23,7 +23,9 @@
     <include layout="@layout/content_poi" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+
         android:id="@+id/fabPOI"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

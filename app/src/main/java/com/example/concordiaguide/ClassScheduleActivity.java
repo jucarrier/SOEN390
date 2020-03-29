@@ -1,23 +1,27 @@
 package com.example.concordiaguide;
 
 import android.Manifest;
+
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import Helpers.ClassSchedule;
+import Models.CalendarEvent;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Build;
-import android.os.Bundle;
-
 import Helpers.CalendarEventDisplayAdapter;
-import Helpers.ClassSchedule;
-import Models.CalendarEvent;
 import Models.CalendarEventDisplayCard;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,21 +33,24 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+
+import java.util.Calendar;
 import java.util.HashMap;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClassScheduleActivity extends AppCompatActivity {
-
-    public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
-
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+
+    public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
 
     public boolean notificationsActive = false;
 

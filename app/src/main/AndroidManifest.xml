@@ -32,6 +32,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.concordiaguide.MainActivity" />
         </activity>
+
         <activity
             android:name=".PointOfInterest"
             android:label="@string/title_activity_poi"
@@ -69,6 +70,14 @@
             android:name=".BuildingInfoPopup"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
+        <activity
+            android:name=".Shuttle"
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
+        <activity
+            android:name=".Shuttle_schedule"
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -83,12 +92,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <receiver android:name=".AlertReceiver"/>
