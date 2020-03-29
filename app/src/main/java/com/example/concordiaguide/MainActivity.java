@@ -270,7 +270,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         listPoints = new ArrayList<>();
 
         Building building;
-
         try{
             building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
@@ -445,13 +444,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
-               // if (listPoints.size() == 1) {
-                    //Add first marker to the map
-               //     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-               // } else {
-                    //Add second marker to the map
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-               // }
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
                 mMap.addMarker(markerOptions);
 
                 if (listPoints.size() == 1) {
