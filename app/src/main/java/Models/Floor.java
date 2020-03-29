@@ -2,8 +2,6 @@ package Models;
 
 import android.graphics.drawable.Drawable;
 
-import com.example.concordiaguide.R;
-
 public class Floor {
     private String floorName;
     private int floorMap;

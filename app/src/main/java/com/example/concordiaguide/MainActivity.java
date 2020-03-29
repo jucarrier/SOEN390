@@ -7,19 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.app.job.JobWorkItem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,15 +25,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,10 +69,6 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
-    //for notifications
-    private NotificationManagerCompat notificationManagerCompat;
-    private NotificationHelper notificationHelper;
-
     protected static String preferredNavigationMethod = "driving";
     protected Cursor cursor;
 
@@ -208,8 +194,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        notificationHelper = new NotificationHelper(this);
-
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -365,8 +349,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-
         long LOCATION_REFRESH_TIME = 20000;
         float LOCATION_REFRESH_DISTANCE = 5;
         locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
@@ -374,11 +356,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //zoom to current location as soon as the app opens
 
 
-    }
-
-    public void sendOnChannel1(String title, String message){
-        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
-        notificationHelper.getManager().notify(1, nb.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -654,55 +631,4 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
-    public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
-
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
-            JSONObject jsonObject = null;
-            List<List<HashMap<String, String>>> routes = null;
-            try {
-                jsonObject = new JSONObject(strings[0]);
-                DirectionsParser directionsParser = new DirectionsParser();
-                routes = directionsParser.parse(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
-            //Get list route and display it into the map
-
-            ArrayList points = null;
-
-            PolylineOptions polylineOptions = null;
-
-            for (List<HashMap<String, String>> path : lists) {
-                points = new ArrayList();
-                polylineOptions = new PolylineOptions();
-
-                for (HashMap<String, String> point : path) {
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lon = Double.parseDouble(point.get("lon"));
-
-                    points.add(new LatLng(lat,lon));
-                }
-
-                polylineOptions.addAll(points);
-                polylineOptions.width(15);
-                polylineOptions.color(Color.BLUE);
-                polylineOptions.geodesic(true);
-            }
-
-            if (polylineOptions!=null) {
-                mMap.addPolyline(polylineOptions);
-            } else {
-                Toast.makeText(getApplicationContext(), "Direction not found!", Toast.LENGTH_SHORT).show();
-            }
-
-        }
-    }
-
-
 }
