@@ -74,4 +74,18 @@ public class IndoorNavigationTest {
         room = indoorNavigationActivity.highlightRoom("801", eightFloor.getFloorMap(), hall);
         assertEquals(room.getFillColor(), Color.BLUE);
     }
+
+    @Test
+    public void verifyRoomPathing() {
+        Building hall = sgw.getBuilding("Hall");
+        Floor eightFloor = hall.getFloor(8);
+        VectorDrawableCompat.VFullPath edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("820", eightFloor, false, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, true, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("tree", eightFloor, true, hall);
+        assertNull(edge);
+    }
 }

@@ -63,15 +63,16 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         return room;
     }
 
-    private void highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
+    public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
         int floorMap = floor.getFloorMap();
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
+        VectorDrawableCompat.VFullPath edge = null;
 
         try {
+            roomNumber = roomNumber.replaceAll("\\D+", "");
             List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
 
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);;
-            VectorDrawableCompat.VFullPath edge;
 
             for(Edge e : edges) {
                 edge = vector.findPathByName(e.getEdgeName());
@@ -91,6 +92,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
         }
+        return edge;
     }
 
     @Override
