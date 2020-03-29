@@ -277,15 +277,25 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         listPoints = new ArrayList<>();
 
         Building building;
-
+        //catch the info from BuildingInfo
         try {
             building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
         }
 
-        transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
+        //catch shuttle coord
+        LatLng from, to;
+        try {
+            from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
+            to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
+            shuttledirection(from, to);
 
+        } catch (Exception e) {
+        }
+
+
+        transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
         String shuttle_direction;
         //this adds a listener to change the preferred navigation mode based on tab selection
@@ -359,6 +369,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         trd.execute(reqUrl);
     }
 
+    public void shuttledirection(LatLng from, LatLng to){
+        TaskRequestDirections trd = new TaskRequestDirections();
+        String url = getRequestUrl_shuttle(from, to);
+
+        trd.execute(url);
+    }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -420,6 +437,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
         return url;
     }
+
+
     private String getRequestUrl_shuttle(LatLng origin, LatLng dest) {
         //Value of origin
         String str_org = "origin=" + origin.latitude +","+origin.longitude;

@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.cardview.widget.CardView;
 
 public class Shuttle_schedule extends Activity {
     @Override
@@ -29,6 +26,5 @@ public class Shuttle_schedule extends Activity {
                 Shuttle_schedule.super.onBackPressed();
             }
         });
-
     }
 }
