@@ -119,6 +119,7 @@
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
   <path
+      android:name="Elevator"
       android:pathData="M694.98,540.43h40.02v41.43h-40.02z"
       android:strokeAlpha="1"
       android:strokeWidth="2"
@@ -349,6 +350,7 @@
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
   <path
+      android:name="Stairs"
       android:pathData="m547.14,169 l0,-39.49"
       android:strokeAlpha="1"
       android:strokeWidth="2"
