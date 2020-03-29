@@ -236,6 +236,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+        boolean flag = false;
+        try {
+            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            onLocationChanged(location);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         mapFragment.getMapAsync(this);
 
@@ -345,15 +353,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
-
-        boolean flag = false;
-        try {
-            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-            onLocationChanged(location);
-            flag = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         if(!flag) {
             long LOCATION_REFRESH_TIME = 20000;
