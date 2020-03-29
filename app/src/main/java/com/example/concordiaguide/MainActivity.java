@@ -380,6 +380,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
         }
     }
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Bundle b = intent.getExtras();
+        shuttle_active = b.getBoolean("active");
+        mMap.clear();
+        onMapReady(mMap);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void startAlarm(int hours, int minutes){
