@@ -10,11 +10,14 @@ import java.util.Arrays;
 import Models.Building;
 import Models.Campus;
 import Models.Floor;
+import Models.GatewayNodes;
 
 public class CampusBuilder {
     GoogleMap mMap;
+    GatewayNodes basicGatewayNode;
 
     public CampusBuilder(GoogleMap mMap) {
+        basicGatewayNode = new GatewayNodes("Elevator 1", "Elevator 1", "Stairs", "Stairs", null);
         this.mMap = mMap;
     }
 
@@ -22,7 +25,7 @@ public class CampusBuilder {
 
         Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", "Description", "H",
                 new Floor[]{
-                        new Floor("8th", 8, R.drawable.ic_hall_8, "Elevator 1", "Stairs",
+                        new Floor("8th", 8, R.drawable.ic_hall_8, basicGatewayNode,
                                 new String[]{"H867", "H801", "H803", "H805.03", "H805.02", "H805.01",
                                         "H807", "H811", "H813", "H815", "H817", "H819", "H821", "H823",
                                         "H825", "H827", "H829", "H831", "H833", "H835", "H837", "H841",
@@ -34,7 +37,7 @@ public class CampusBuilder {
                                         "H842", "H852", "H881", "H838", "Washroom - Men", "H886", "H854",
                                         "H820", "H822", "H832.02", "H832.05", "H832.03", "H832.01",
                                         "H832.06", "H802.01", "H898", "838.01"}),
-                        new Floor("9th", 9, R.drawable.ic_hall_9, "Elevator 1", "Elevator 2",
+                        new Floor("9th", 9, R.drawable.ic_hall_9, basicGatewayNode,
                                 new String[]{"H927-1", "H927-2", "H925", "H925-1", "H925-3", "H923",
                                         "H921", "H919", "H917", "H913", "H911", "H909", "H907", "H903",
                                         "H967", "H965", "H961-1", "H961-3", "H961-7", "H961-9",
