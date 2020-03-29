@@ -20,22 +20,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-<!--        this is the locate button -->
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            style="@style/Widget.MaterialComponents.Button.Icon"
-            app:icon="@android:drawable/ic_menu_mylocation"
-            app:iconSize="32dp"
-            app:iconPadding="2dp"
-            android:insetLeft="8dp"
-            android:insetTop="8dp"
-            android:insetRight="8dp"
-            android:insetBottom="8dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
-            android:elevation="10dp"
-            app:iconTint="@color/white"
-            android:onClick="onLocateButtonPressed"/>
 
 <!-- relative layout with the locate button and card button to indoor navigation and navigate to campus-->
         <RelativeLayout
