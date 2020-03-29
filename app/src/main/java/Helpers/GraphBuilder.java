@@ -13,33 +13,66 @@ import java.util.List;
 
 import Models.Edge;
 import Models.Floor;
+import Models.GatewayNodes;
 import Models.Node;
 
 public class GraphBuilder {
-    private String handicapped_source;  // example: "Elevator 1"
-    private String not_handicapped_source;  // example: "Stairs"
+    public enum Direction {
+        UP, DOWN, OUTSIDE
+    }
+
+    //private String handicapped_source;  // example: "Elevator 1"
+    //private String not_handicapped_source;  // example: "Stairs"
+    private GatewayNodes gatewayNodes;
     private Graph<Node, Edge> floorGraph;
 
     //you can get the parser like so:
     //getResources().getXml(R.drawable.ic_hall_8)           <---- from within an activity, otherwise the getResource() method won't work
     public GraphBuilder(XmlPullParser parser, Floor floor) {
         this.floorGraph = createGraph(parser);
-        this.handicapped_source = floor.getHandicappedStart();
-        this.not_handicapped_source = floor.getNonHandicappedStart();
+        this.gatewayNodes = floor.getGatewayNodes();
     }
 
     //returns the list of edges of the shortest path to the targetRoom with considerations if handicapped
-    public List<Edge> getShortestPathEdgeListFor(String targetRoom, Boolean handicapped) throws RoomNotExistsException {
-        //gets the graph with the all the shortest paths to all nodes from the sourceRoom
+    public List<Edge> getShortestPathTo(String targetRoom, boolean handicapped, Direction direction) throws RoomNotExistsException {
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths;
 
-        if(handicapped) {
-            paths = getShortestPathsGraph(handicapped_source);
+        //gets the graph with the all the shortest paths to all nodes from the sourceRoom
+        if(handicapped && direction == Direction.UP) {
+            paths = getShortestPathsGraph(gatewayNodes.getHandicappedUp());
+        } else if(handicapped && direction == Direction.DOWN) {
+            paths = getShortestPathsGraph(gatewayNodes.getHandicappedDown());
+        } else if(!handicapped && direction == Direction.UP) {
+            paths = getShortestPathsGraph(gatewayNodes.getNonHandicappedUp());
+        } else if(!handicapped && direction == Direction.DOWN) {
+            paths = getShortestPathsGraph(gatewayNodes.getNonHandicappedDown());
+        } else if(direction == Direction.OUTSIDE) {
+            paths = getShortestPathsGraph(gatewayNodes.getOutside());
         } else {
-            paths = getShortestPathsGraph(not_handicapped_source);
+            paths = null;
         }
 
         return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
+    }
+
+    //returns the list of edges of the shortest path from the sourceRoom with considerations if handicapped to the stairs/elevator/outside
+    public List<Edge> getShortestPathFrom(String sourceRoom, boolean handicapped, Direction direction) throws RoomNotExistsException {
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = getShortestPathsGraph(sourceRoom);
+
+        //gets the graph with the all the shortest paths to all nodes from the sourceRoom
+        if(handicapped && direction == Direction.UP) {
+            return paths.getPath(getRoomNode(gatewayNodes.getHandicappedUp())).getEdgeList();
+        } else if(handicapped && direction == Direction.DOWN) {
+            return paths.getPath(getRoomNode(gatewayNodes.getHandicappedDown())).getEdgeList();
+        } else if(!handicapped && direction == Direction.UP) {
+            return paths.getPath(getRoomNode(gatewayNodes.getNonHandicappedUp())).getEdgeList();
+        } else if(!handicapped && direction == Direction.DOWN) {
+            return paths.getPath(getRoomNode(gatewayNodes.getNonHandicappedDown())).getEdgeList();
+        } else if(direction == Direction.OUTSIDE) {
+            return paths.getPath(getRoomNode(gatewayNodes.getOutside())).getEdgeList();
+        } else {
+            return null;
+        }
     }
 
     //returns the graph with the all the shortest paths to all nodes from the sourceRoom

@@ -74,7 +74,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor);
 
         try {
-            List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
+            List<Edge> edges = gb.getShortestPathTo(roomNumber, isHandicapped, GraphBuilder.Direction.DOWN);
 
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
 

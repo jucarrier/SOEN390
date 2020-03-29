@@ -63,10 +63,10 @@ public class GraphBuilderTest {
     }
 
     @Test
-    public void verifyGetShortestPathEdgeListFor() {
+    public void verifyGetShortestPathTo() {
         Boolean flag = false;
         try {
-            List<Edge> edgeList = graphBuilder.getShortestPathEdgeListFor("807", false);
+            List<Edge> edgeList = graphBuilder.getShortestPathTo("807", false, GraphBuilder.Direction.DOWN);
             if(edgeList != null) {
                 flag = true;
             }
