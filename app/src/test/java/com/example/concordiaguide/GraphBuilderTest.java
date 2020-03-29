@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import java.util.List;
+
 import Helpers.CampusBuilder;
 import Helpers.GraphBuilder;
 import Models.Campus;
@@ -53,6 +55,20 @@ public class GraphBuilderTest {
                 if(name.equals(room)) {
                     flag = true;
                 }
+            }
+        } catch(GraphBuilder.RoomNotExistsException e) {
+            e.printStackTrace();
+        }
+        assertTrue(flag);
+    }
+
+    @Test
+    public void verifyGetShortestPathEdgeListFor() {
+        Boolean flag = false;
+        try {
+            List<Edge> edgeList = graphBuilder.getShortestPathEdgeListFor("807", false);
+            if(edgeList != null) {
+                flag = true;
             }
         } catch(GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
