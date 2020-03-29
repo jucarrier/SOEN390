@@ -11,7 +11,9 @@
 
     <dist:module dist:instant="true" />
 
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,6 +26,15 @@
         <activity
             android:name=".ClassScheduleActivity"
             android:label="@string/title_activity_class_schedule"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.concordiaguide.MainActivity" />
+        </activity>
+        <activity
+            android:name=".PointOfInterest"
+            android:label="@string/title_activity_poi"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar">
             <meta-data
@@ -102,6 +113,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".AlertReceiver"/>
     </application>
 
 </manifest>
