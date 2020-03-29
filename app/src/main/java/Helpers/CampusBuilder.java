@@ -17,7 +17,7 @@ public class CampusBuilder {
     GatewayNodes basicGatewayNode;
 
     public CampusBuilder(GoogleMap mMap) {
-        basicGatewayNode = new GatewayNodes("Elevator", "Elevator", "Stairs", "Stairs", null);
+        basicGatewayNode = new GatewayNodes("Elevator 1", "Elevator 1", "Stairs", "Stairs", null);
         this.mMap = mMap;
     }
 
