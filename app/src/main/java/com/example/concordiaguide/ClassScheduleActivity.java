@@ -1,19 +1,31 @@
 package com.example.concordiaguide;
 
 import android.Manifest;
+
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import Helpers.ClassSchedule;
 import Models.CalendarEvent;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
+import Helpers.CalendarEventDisplayAdapter;
+import Models.CalendarEventDisplayCard;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.CalendarContract;
 import android.view.View;
@@ -21,17 +33,38 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import java.util.Calendar;
+import java.util.HashMap;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClassScheduleActivity extends AppCompatActivity {
     Cursor cursor;
     ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+
+    public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
+
+    Cursor cursor;
+    ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+
+    public boolean notificationsActive = false;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String NOTIFICATIONS_ACTIVE = "notificationsActive";
+
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,83 +73,258 @@ public class ClassScheduleActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button buttonShowEvents = (Button) findViewById(R.id.buttonShowCalendarEvents);
-        final TextView showCalendarEvents = (TextView) findViewById(R.id.textViewShowCalendarEvents);   //this needs to be final because it is accessed by an inner class
-        //showCalendarEvents.setText("default text here");
+        final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+        final TextView notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton refreshButton = (FloatingActionButton) findViewById(R.id.buttonRefreshCalendar);
 
+
+
+        //permission check to read calendar events
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALENDAR}, 1);
             return;
         }
 
+        //cursor that reads the calendar events
         cursor = getContentResolver().query(CalendarContract.Events.CONTENT_URI, null, null, null, null);
 
-        buttonShowEvents.setOnClickListener(new View.OnClickListener() {
+        //read the events in the calendar as soon as the page opens
+        readEvents();
+
+        //load whether the user has notifications on or off
+        loadPreference();
+
+        //button to refresh the calendar when new events are added
+        refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                readEvents();
+                //TODO: fix this method so that it recreates a new recycler view when the user wants to refresh
+                //updating recycler view glitching, sending wrong days
+                //recyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
 
-                if(cursor.equals(null)) Toast.makeText(getApplicationContext(), "cursor is null", Toast.LENGTH_LONG).show();
-                else Toast.makeText(getApplicationContext(), "cursor exists", Toast.LENGTH_LONG).show();
+        //toggle notifications on or off
+        buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                if(notificationsActive){
+                    notificationsActive=false;
+                    savePreference(false);
+                    cancelAllAlarms();
 
-                while(cursor.moveToNext()){
-                    if(cursor!=null){
-                        int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
-                        int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
-                        int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
-                        int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
-                        int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
-                        int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
+                    notificationsOnOrOff.setText("Notifications are OFF");
+                } else{
+                    notificationsActive=true;
+                    savePreference(true);
 
-                        String idValue = cursor.getString(id1);
-                        String titleValue = cursor.getString(id2);
-                        String descriptionValue = cursor.getString(id3);
-                        String locationValue = cursor.getString(id4);
-                        int startTime = cursor.getInt(id5); //start time in ms since 1970
-                        int endTime = cursor.getInt(id6);   //this time is in milliseconds since 1970
+                    for(CalendarEvent c : schedule.getEvents()){
+                        Date now = new Date(System.currentTimeMillis());
+                        Date date = c.getStartDate();
+                        int hour = date.getHours();
+                        int minute = date.getMinutes();
+                        int day;
 
-                        schedule.addEvent(new CalendarEvent(idValue, titleValue, locationValue, startTime, endTime));
-
-                        Date startAsDate = new java.util.Date((startTime*1000));
-
-
-                        if (titleValue!=null){
-
-                            //System.out.println(titleValue);
-
-                            Pattern p = Pattern.compile("\\d{3}\\D");
-                            Matcher m = p.matcher(titleValue);
-
-                            if(m.find()) System.out.println("matches " + titleValue + ", starttime: " + startAsDate.toString());
+                        if(c.getDays()!=null){
+                            if(c.getDays().get("Sunday")) {
+                                day = Calendar.SUNDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Monday")) {
+                                day = Calendar.MONDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Tuesday")) {
+                                day = Calendar.TUESDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Wednesday")) {
+                                day = Calendar.WEDNESDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Thursday")) {
+                                day = Calendar.THURSDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Friday")) {
+                                day = Calendar.FRIDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                            if(c.getDays().get("Saturday")) {
+                                day = Calendar.SATURDAY;
+                                startAlarm(day, hour, minute);
+                            }
+                        } else{
+                            System.out.println("CalendarEvent is null");
                         }
 
-
-
-                    }else{
-
-                        showCalendarEvents.setText("no events found");
-
                     }
+
+                    notificationsOnOrOff.setText("Notifications are ON");
                 }
 
             }
         });
 
+        ArrayList<CalendarEventDisplayCard> eventsToDisplay = new ArrayList<>();
+        for(CalendarEvent ce : schedule.getEvents()){
+            eventsToDisplay.add(new CalendarEventDisplayCard(R.drawable.ic_event_black_24dp, ce.getTitle(), ce.getLocation(), (HashMap<String, Boolean>) ce.getDays()));
+        }
+
+        recyclerView = findViewById(R.id.classScheduleRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerViewLayoutManager = new LinearLayoutManager(this);
+        recyclerViewAdapter = new CalendarEventDisplayAdapter(eventsToDisplay);
+
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
+
+    }
+
+    public void readEvents(){
+        while(cursor.moveToNext()){
+            if(cursor!=null){
+                //get the column ids of the calendar attributes
+                int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
+                int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
+                int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
+                int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
+                int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
+                int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
+                int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
+                int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
+                int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
+
+                //get values associated with those column ids
+                String idValue = cursor.getString(id1);
+                int idInt = cursor.getInt(id1);
+                String titleValue = cursor.getString(id2);
+                String descriptionValue = cursor.getString(id3);
+                String locationValue = cursor.getString(id4);
+                long startTime = (long) cursor.getLong(id5);
+                long endTime = (long) cursor.getLong(id6);
+                String repetitionRule = cursor.getString(id7);
+                String duration = cursor.getString(id8);
+                String rDate = cursor.getString(id9);
+
+                //if the event has a title, check to make sure it is a valid lecture or tutorial
+                if(titleValue!=null){
+                    System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
+
+                    //regex for matching event title patterns - looking for no more than 3 digits
+                    Pattern threeDigitPattern = Pattern.compile("\\d{3}");
+                    Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
+
+                    Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
+                    Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
+
+                    //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                    //if it contains a valid class name
+                    boolean hasClassName = false;
+                    for(String s : ClassSchedule.getValidClasses()){
+                        if(titleValue.toLowerCase().contains(s)) hasClassName = true;
+                    }
+
+                    if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
+                    }
+                }
+
+            }else{
+                System.out.println("no events found");
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void startAlarm(int day, int hours, int minutes){
+        //automatically set alarm id after other alarms that are in the system
+        int alarmId;
+        if(activeAlarmIds.size()==0) alarmId = 0;
+        else alarmId = activeAlarmIds.get(activeAlarmIds.size()-1);
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_WEEK, day);
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
+        activeAlarmIds.add(alarmId);
+        System.out.println("Alarm has been set for day "+day+" at " +hours + ":" + minutes);
+    }
+
+    private void cancelSpecificAlarm(int alarmId){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+        for(int i = 0; i<activeAlarmIds.size(); i++){
+            if(activeAlarmIds.get(i) == alarmId) {
+                activeAlarmIds.remove(i);
+            }
+        }
+
+        try {
+            alarmManager.cancel(pendingIntent);
+        } catch (Exception e){
+            System.out.println(e.toString() + " <- if this is a null pointer exception, the alarm has likely already fired");
+        }
+        System.out.println("Alarm cancelled");
+    }
+
+    private void cancelAllAlarms(){
+        for(int i = 0;i<activeAlarmIds.size(); i++){
+            int alarmId = activeAlarmIds.get(i);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlertReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
+
+            alarmManager.cancel(pendingIntent);
+        }
+
+        System.out.println("All alarms cancelled");
+    }
+
+    public void savePreference(boolean active){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(NOTIFICATIONS_ACTIVE, active);
+        editor.apply();
+
+        updateViewsForNotificationPreference();
+    }
+
+    public void loadPreference(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        notificationsActive = sharedPreferences.getBoolean(NOTIFICATIONS_ACTIVE, false);
+
+        updateViewsForNotificationPreference();
+    }
+
+    public void updateViewsForNotificationPreference(){
+        TextView tv = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton b = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+
+        if(notificationsActive){
+            tv.setText("Notifications are ON");
+            b.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+        } else{
+            tv.setText("Notifications are OFF");
+            b.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+        }
     }
 
 }
+

@@ -2,6 +2,7 @@ package com.example.concordiaguide;
 
 import Models.Building;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,22 +13,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import java.util.Calendar;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -51,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -66,13 +71,15 @@ import Models.Campus;
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     protected static String preferredNavigationMethod = "driving";
     protected Cursor cursor;
+
     private boolean shuttle_active = false;
+
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-    LatLng currentLocation; //to be filled in later by onLocationChanged
+    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -88,6 +95,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             setContentView(R.layout.activity_maps);
             textViewAddressHere = (TextView) findViewById(R.id.addressHere);
+
             if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
             }
@@ -181,11 +189,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
-
     public GoogleMap getmMap() {
         return mMap;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
@@ -195,8 +203,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        onLocationChanged(location);
+
+        //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        //onLocationChanged(location);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -244,12 +253,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 int id = item.getItemId();
                 drawer.closeDrawers();
                 Intent intent = null;
+                Bundle bundle;
                 switch (id) {
                     case (R.id.menu_indoor_navigation):
-                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class);
+                        bundle = new Bundle();
+                        bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
+                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_campus_navigation):
-                        final Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
                         bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
@@ -296,7 +309,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
@@ -356,6 +368,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
+  
+        long LOCATION_REFRESH_TIME = 20000;
+        float LOCATION_REFRESH_DISTANCE = 5;
+        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
     }
 
     protected void onNewIntent(Intent intent) {
@@ -366,6 +382,20 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         shuttle_active = b.getBoolean("active");
         mMap.clear();
         onMapReady(mMap);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void startAlarm(int hours, int minutes){
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hours);
+        c.set(Calendar.MINUTE, minutes);
+        c.set(Calendar.SECOND, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
     public void directionsToBuilding(Building building){
@@ -407,7 +437,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
     //@Override
-    public void onLocateButtonPressed(View view) {
+    public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
@@ -448,7 +478,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         String insert = "mode=" + MainActivity.preferredNavigationMethod;
         System.out.println(insert);
         String mode = insert;
-
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
         String param = str_org +"&" + str_dest + "&" +sensor+"&" +mode+"&" +key;
@@ -459,7 +488,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         return url;
     }
 
-
     private String getRequestUrl_shuttle(LatLng origin, LatLng dest) {
         //Value of origin
         String str_org = "origin=" + origin.latitude +","+origin.longitude;
@@ -469,7 +497,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         String sensor = "sensor=false";
         //Mode for find direction
         String mode = "mode=driving";
-
         String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
         //Build the full param
         String param = str_org +"&" + str_dest + "&" +sensor+"&" +mode+"&" +key;
@@ -552,6 +579,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         mMap = googleMap;
 
         mMap.getUiSettings().setZoomControlsEnabled(false);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
@@ -571,6 +599,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         });
 
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+
             @Override
             public void onPolygonClick(Polygon polygon) {
                 //used to send building object to popup activity
@@ -619,6 +648,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 taskRequestDirections.execute(url);
             }
         });
+
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+
     }
 
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>> > {
@@ -670,6 +703,4 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
-
-
 }
