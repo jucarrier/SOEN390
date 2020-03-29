@@ -52,9 +52,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
 
-    Cursor cursor;
-    ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
-
     public boolean notificationsActive = false;
 
     public static final String SHARED_PREFS = "sharedPrefs";

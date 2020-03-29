@@ -70,10 +70,6 @@ public class CalendarEvent {
             if(third.contains("FR")) days.put("Friday", true); else days.put("Friday", false);
             if(third.contains("SA")) days.put("Saturday", true); else days.put("Saturday", false);
 
-
-
-
-
         } else System.out.println("repRule null");
     }
 
@@ -119,7 +115,7 @@ public class CalendarEvent {
     }
 
 
-    public int getDtStart() {
+    public long getDtStart() {
         return dtStart;
     }
 
@@ -128,7 +124,7 @@ public class CalendarEvent {
     }
 
 
-    public int getDtEnd() {
+    public long getDtEnd() {
         return dtEnd;
     }
 
