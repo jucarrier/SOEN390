@@ -22,10 +22,10 @@ public class GraphBuilder {
 
     //you can get the parser like so:
     //getResources().getXml(R.drawable.ic_hall_8)           <---- from within an activity, otherwise the getResource() method won't work
-    public GraphBuilder(XmlPullParser parser, String handicapped_source, String not_handicapped_source) {
+    public GraphBuilder(XmlPullParser parser, Floor floor) {
         this.floorGraph = createGraph(parser);
-        this.handicapped_source = handicapped_source;
-        this.not_handicapped_source = not_handicapped_source;
+        this.handicapped_source = floor.getHandicappedStart();
+        this.not_handicapped_source = floor.getNonHandicappedStart();
     }
 
     //returns the list of edges of the shortest path to the targetRoom with considerations if handicapped
@@ -43,14 +43,14 @@ public class GraphBuilder {
     }
 
     //returns the graph with the all the shortest paths to all nodes from the sourceRoom
-    private ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> getShortestPathsGraph(String room) throws RoomNotExistsException {
+    public ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> getShortestPathsGraph(String room) throws RoomNotExistsException {
         DijkstraShortestPath<Node, Edge> dijkstraAlg = new DijkstraShortestPath<>(floorGraph);
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = dijkstraAlg.getPaths(getRoomNode(room));
         return paths;
     }
 
     //get the node corresponding to the room given
-    private Node getRoomNode(String room) throws RoomNotExistsException {
+    public Node getRoomNode(String room) throws RoomNotExistsException {
         for(Node node : floorGraph.vertexSet()) {
             for(String r : node.getRooms()) {
                 if(r.equals(room)) {
@@ -63,7 +63,7 @@ public class GraphBuilder {
     }
 
     //returns the complete graph of the floor
-    private Graph<Node, Edge> createGraph(XmlPullParser parser) {
+    public Graph<Node, Edge> createGraph(XmlPullParser parser) {
         //initialize needed variables
         Graph<Node, Edge> gFloor = GraphTypeBuilder.<Node, Edge> undirected().allowingMultipleEdges(false).allowingSelfLoops(false).edgeClass(Edge.class).weighted(true).buildGraph();
         String[] elements, sourceRooms, targetRooms;

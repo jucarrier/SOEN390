@@ -71,7 +71,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             roomNumber = roomNumber.substring(1);
         }
 
-        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
+        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor);
 
         try {
             List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
