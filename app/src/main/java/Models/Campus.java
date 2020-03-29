@@ -16,4 +16,13 @@ public class Campus {
     }
 
     public List<Building> getBuildings() { return buildings; }
+
+    public Building getBuilding(String name) {
+        for (Building b : buildings) {
+            if (b.name.toLowerCase().equals(name.toLowerCase())) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

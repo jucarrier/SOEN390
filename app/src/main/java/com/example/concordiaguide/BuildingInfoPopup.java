@@ -28,7 +28,7 @@ public class BuildingInfoPopup extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width * 0.8), (int)(height * 0.6));
+        getWindow().setLayout((int)(width * 0.8), (int)(height * 0.35));
 
         //set listener for buttons
         Button buttonClose = (Button)findViewById(R.id.popup_button_close);
@@ -50,11 +50,9 @@ public class BuildingInfoPopup extends Activity {
         //get views
         TextView name = (TextView)findViewById(R.id.popup_name);
         TextView address = (TextView)findViewById(R.id.popup_address);
-        TextView description = (TextView)findViewById(R.id.popup_description);
 
         //set view content
         name.setText(building.getName());
         address.setText(building.getAddress());
-        description.setText(building.getDescription());
     }
 }
