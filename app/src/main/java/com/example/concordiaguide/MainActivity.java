@@ -195,6 +195,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //locate current location
+        super.onCreate(savedInstanceState);
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -205,7 +206,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         //onLocationChanged(location);
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
         searchView = findViewById(R.id.sv_location2);
@@ -349,9 +349,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        long LOCATION_REFRESH_TIME = 20000;
-        float LOCATION_REFRESH_DISTANCE = 5;
-        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+//        long LOCATION_REFRESH_TIME = 20000;
+//        float LOCATION_REFRESH_DISTANCE = 5;
+//        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
 
         //zoom to current location as soon as the app opens
 
