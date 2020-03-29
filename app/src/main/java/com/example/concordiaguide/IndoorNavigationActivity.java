@@ -64,14 +64,19 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     }
 
     public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
-        VectorDrawableCompat.VFullPath edge = null;
         int floorMap = floor.getFloorMap();
+        VectorDrawableCompat.VFullPath edge = null;
+
+        if(roomNumber.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+            roomNumber = roomNumber.substring(1);
+        }
+
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
 
         try {
             List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
 
-            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);;
+            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
 
             for(Edge e : edges) {
                 edge = vector.findPathByName(e.getEdgeName());
@@ -80,9 +85,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 }
             }
 
-            if (!roomNumber.matches("[a-zA-Z]+")) {
-                roomNumber = building.getInitials() + roomNumber;
-            }
+            roomNumber = building.getInitials() + roomNumber;
             roomNumber = roomNumber.toUpperCase();
             edge = vector.findPathByName(roomNumber);
             if (edge != null) {
