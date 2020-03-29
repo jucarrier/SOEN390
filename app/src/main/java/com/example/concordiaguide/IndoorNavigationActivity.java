@@ -9,6 +9,7 @@ import com.devs.vectorchildfinder.VectorDrawableCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,15 +19,21 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.io.InputStream;
+import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
+import Helpers.GraphBuilder;
 import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
+import Models.Edge;
 import Models.Floor;
+import Models.Node;
 
 public class IndoorNavigationActivity extends AppCompatActivity {
     private ImageView imageView;
@@ -37,6 +44,8 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Spinner buildingSpinner;
     private Spinner floorSpinner;
     private AutoCompleteTextView roomInput;
+
+    private Boolean isHandicapped = false;
 
 
     public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
@@ -52,6 +61,36 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             room.setFillColor(Color.BLUE);
         }
         return room;
+    }
+
+    private void highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
+        int floorMap = floor.getFloorMap();
+        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor.getHandicappedStart(), floor.getNonHandicappedStart());
+
+        try {
+            List<Edge> edges = gb.getShortestPathEdgeListFor(roomNumber, isHandicapped);
+
+            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);;
+            VectorDrawableCompat.VFullPath edge;
+
+            for(Edge e : edges) {
+                edge = vector.findPathByName(e.getEdgeName());
+                if (edge != null) {
+                    edge.setStrokeColor(Color.BLUE);
+                }
+            }
+
+            if (!roomNumber.matches("[a-zA-Z]+")) {
+                roomNumber = building.getInitials() + roomNumber;
+            }
+            roomNumber = roomNumber.toUpperCase();
+            edge = vector.findPathByName(roomNumber);
+            if (edge != null) {
+                edge.setFillColor(Color.BLUE);
+            }
+        } catch (GraphBuilder.RoomNotExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -113,7 +152,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                 roomInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                                     @Override
                                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        highlightRoom(roomInput.getEditableText().toString(), selectedFloor.getFloorMap(), selectedBuilding);
+                                        String room = roomInput.getEditableText().toString();
+                                        //highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
+                                        highlightPathToRoom(room, selectedFloor, isHandicapped, selectedBuilding);
                                         return true;
                                     }
                                 });
