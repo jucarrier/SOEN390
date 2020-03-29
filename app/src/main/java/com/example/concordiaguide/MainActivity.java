@@ -202,8 +202,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             return;
         }
 
-        //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        //onLocationChanged(location);
+        boolean flag = false;
+        try {
+            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            onLocationChanged(location);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -238,7 +244,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
-
 
         mapFragment.getMapAsync(this);
 
@@ -349,13 +354,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        long LOCATION_REFRESH_TIME = 20000;
-        float LOCATION_REFRESH_DISTANCE = 5;
-        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
-
-        //zoom to current location as soon as the app opens
-
-
+        if(!flag) {
+            long LOCATION_REFRESH_TIME = 20000;
+            float LOCATION_REFRESH_DISTANCE = 5;
+            locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
