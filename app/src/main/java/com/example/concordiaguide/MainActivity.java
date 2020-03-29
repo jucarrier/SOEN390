@@ -273,10 +273,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         break;
                     case (R.id.find_POI):
                         intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
-                    case (R.id.menu_Point_of_interest):
-                        intent = new Intent(getApplicationContext(), PointOfInterest.class);
-                        break;
-                    case (R.id.menu_to_sgw):
+                   case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_loyola):
