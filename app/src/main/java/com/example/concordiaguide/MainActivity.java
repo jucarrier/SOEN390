@@ -204,8 +204,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             return;
         }
 
-        Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        onLocationChanged(location);
+        boolean flag = false;
+        try {
+            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            onLocationChanged(location);
+            flag = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -240,7 +246,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 return false;
             }
         });
-
 
         mapFragment.getMapAsync(this);
 
@@ -293,9 +298,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         Bundle b = in.getExtras();
 
         Building building;
-        //catch the info from BuildingInfo
+
         try {
-            building = (Building) ((ObjectWrapperForBinder) b.getBinder("building")).getData();
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
         }
@@ -368,20 +373,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
-  
-        long LOCATION_REFRESH_TIME = 20000;
-        float LOCATION_REFRESH_DISTANCE = 5;
-        //locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
-    }
 
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        // getIntent() should always return the most recent
-        setIntent(intent);
-        Bundle b = intent.getExtras();
-        shuttle_active = b.getBoolean("active");
-        mMap.clear();
-        onMapReady(mMap);
+        if(!flag) {
+            long LOCATION_REFRESH_TIME = 20000;
+            float LOCATION_REFRESH_DISTANCE = 5;
+            locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
