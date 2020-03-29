@@ -33,6 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -42,8 +43,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
 
-    Cursor cursor;
-    ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
+    public Cursor cursor;
+    public ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
 
     public boolean notificationsActive = false;
 
@@ -55,6 +56,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
+    public String eventsRead = ""; //used for testing to make sure readEvents has run
+
+    public FloatingActionButton buttonToggleNotifications;
+    public TextView notificationsOnOrOff;
+    public FloatingActionButton refreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +69,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+        notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        refreshButton = (FloatingActionButton) findViewById(R.id.buttonRefreshCalendar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+        FloatingActionButton buttonToggleNotifications = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
         final TextView notificationsOnOrOff = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
         FloatingActionButton refreshButton = (FloatingActionButton) findViewById(R.id.buttonRefreshCalendar);
 
@@ -176,59 +186,63 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     }
 
-    public void readEvents(){
-        while(cursor.moveToNext()){
-            if(cursor!=null){
-                //get the column ids of the calendar attributes
-                int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
-                int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
-                int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
-                int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
-                int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
-                int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
-                int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
-                int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
-                int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
+    public void readEvents() throws NullPointerException {
+        if (cursor!=null){
+            while(cursor.moveToNext()){
+                if(cursor!=null){
+                    //get the column ids of the calendar attributes
+                    int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
+                    int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
+                    int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
+                    int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
+                    int id5 = cursor.getColumnIndex(CalendarContract.Events.DTSTART);
+                    int id6 = cursor.getColumnIndex(CalendarContract.Events.DTEND);
+                    int id7 = cursor.getColumnIndex(CalendarContract.Events.RRULE);
+                    int id8 = cursor.getColumnIndex(CalendarContract.Events.DURATION);
+                    int id9 = cursor.getColumnIndex(CalendarContract.Events.RDATE);
 
-                //get values associated with those column ids
-                String idValue = cursor.getString(id1);
-                int idInt = cursor.getInt(id1);
-                String titleValue = cursor.getString(id2);
-                String descriptionValue = cursor.getString(id3);
-                String locationValue = cursor.getString(id4);
-                long startTime = (long) cursor.getLong(id5);
-                long endTime = (long) cursor.getLong(id6);
-                String repetitionRule = cursor.getString(id7);
-                String duration = cursor.getString(id8);
-                String rDate = cursor.getString(id9);
+                    //get values associated with those column ids
+                    String idValue = cursor.getString(id1);
+                    int idInt = cursor.getInt(id1);
+                    String titleValue = cursor.getString(id2);
+                    String descriptionValue = cursor.getString(id3);
+                    String locationValue = cursor.getString(id4);
+                    long startTime = (long) cursor.getLong(id5);
+                    long endTime = (long) cursor.getLong(id6);
+                    String repetitionRule = cursor.getString(id7);
+                    String duration = cursor.getString(id8);
+                    String rDate = cursor.getString(id9);
 
-                //if the event has a title, check to make sure it is a valid lecture or tutorial
-                if(titleValue!=null){
-                    System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
+                    //if the event has a title, check to make sure it is a valid lecture or tutorial
+                    if(titleValue!=null){
+                        System.out.println(idValue + " - " + titleValue + " - "+ new Date(startTime).toString());
 
-                    //regex for matching event title patterns - looking for no more than 3 digits
-                    Pattern threeDigitPattern = Pattern.compile("\\d{3}");
-                    Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
+                        //regex for matching event title patterns - looking for no more than 3 digits
+                        Pattern threeDigitPattern = Pattern.compile("\\d{3}");
+                        Pattern moreThanThreeDigitPattern = Pattern.compile("\\d{4,100}");
 
-                    Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
-                    Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
+                        Matcher threeDigitMatcher = threeDigitPattern.matcher(titleValue);
+                        Matcher moreThanThreeDigitMatcher = moreThanThreeDigitPattern.matcher(titleValue);
 
-                    //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
-                    //if it contains a valid class name
-                    boolean hasClassName = false;
-                    for(String s : ClassSchedule.getValidClasses()){
-                        if(titleValue.toLowerCase().contains(s)) hasClassName = true;
+                        //if matches 3 digits and does not match more than 3 digits, it is likely a class with a 3 digit number
+                        //if it contains a valid class name
+                        boolean hasClassName = false;
+                        for(String s : ClassSchedule.getValidClasses()){
+                            if(titleValue.toLowerCase().contains(s)) hasClassName = true;
+                        }
+
+                        if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
+                            schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
+                        }
                     }
 
-                    if(new Date(startTime).after(new Date(ClassSchedule.getImportantDates().get("winter2020start"))) && hasClassName && threeDigitMatcher.find() && !moreThanThreeDigitMatcher.find()){
-                        schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
-                    }
+                }else{
+                    System.out.println("no events found");
                 }
-
-            }else{
-                System.out.println("no events found");
             }
         }
+
+        eventsRead= "eventsRead";
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -236,7 +250,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
         //automatically set alarm id after other alarms that are in the system
         int alarmId;
         if(activeAlarmIds.size()==0) alarmId = 0;
-        else alarmId = activeAlarmIds.get(activeAlarmIds.size()-1);
+        else alarmId = activeAlarmIds.get(activeAlarmIds.size()-1)+1;
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_WEEK, day);
@@ -251,28 +265,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), AlarmManager.INTERVAL_DAY*7, pendingIntent);
         activeAlarmIds.add(alarmId);
         System.out.println("Alarm has been set for day "+day+" at " +hours + ":" + minutes);
+        System.out.println("id: " + alarmId + ", size: " + activeAlarmIds.size());
     }
 
-    private void cancelSpecificAlarm(int alarmId){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, intent, 0);
-
-        for(int i = 0; i<activeAlarmIds.size(); i++){
-            if(activeAlarmIds.get(i) == alarmId) {
-                activeAlarmIds.remove(i);
-            }
-        }
-
-        try {
-            alarmManager.cancel(pendingIntent);
-        } catch (Exception e){
-            System.out.println(e.toString() + " <- if this is a null pointer exception, the alarm has likely already fired");
-        }
-        System.out.println("Alarm cancelled");
-    }
-
-    private void cancelAllAlarms(){
+    public void cancelAllAlarms(){
         for(int i = 0;i<activeAlarmIds.size(); i++){
             int alarmId = activeAlarmIds.get(i);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -281,6 +277,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
             alarmManager.cancel(pendingIntent);
         }
+        activeAlarmIds.clear();
 
         System.out.println("All alarms cancelled");
     }
@@ -310,10 +307,24 @@ public class ClassScheduleActivity extends AppCompatActivity {
         if(notificationsActive){
             tv.setText("Notifications are ON");
             b.setImageResource(R.drawable.ic_alarm_on_black_24dp);
+            b.setTag(R.drawable.ic_alarm_on_black_24dp);
         } else{
             tv.setText("Notifications are OFF");
             b.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+            b.setTag(R.drawable.ic_alarm_off_black_24dp);
         }
+    }
+
+    public FloatingActionButton getToggleNotifications(){
+        return this.buttonToggleNotifications;
+    }
+
+    public TextView getNotificationsOnOrOff(){
+        return this.notificationsOnOrOff;
+    }
+
+    public FloatingActionButton getRefreshButton(){
+        return this.refreshButton;
     }
 
 }
