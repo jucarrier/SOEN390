@@ -66,7 +66,7 @@ import Models.Campus;
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     protected static String preferredNavigationMethod = "driving";
     protected Cursor cursor;
-
+    private boolean shuttle_active = false;
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
@@ -276,22 +276,25 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         listPoints = new ArrayList<>();
 
+        Intent in = getIntent();
+        Bundle b = in.getExtras();
+
         Building building;
         //catch the info from BuildingInfo
         try {
-            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            building = (Building) ((ObjectWrapperForBinder) b.getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
         }
 
-        //catch shuttle coord
-        LatLng from, to;
+        //LatLng from, to;
         try {
-            from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
-            to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
-            shuttledirection(from, to);
-
+            //from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
+            //to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
+            //shuttleDirection(from, to);
+            shuttle_active = b.getBoolean("active");
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -309,10 +312,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
                 switch (selectedTab) {
                     case ("shuttle"):
-                        MainActivity.preferredNavigationMethod = "transit";
                         startActivity(new Intent(getApplicationContext(), Shuttle.class));
-                        //}
-                        break;    //fix this when shuttle is added
+                        break;
                     case ("driving"):
                         MainActivity.preferredNavigationMethod = "driving";
                         break;
@@ -357,6 +358,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         });
     }
 
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // getIntent() should always return the most recent
+        setIntent(intent);
+        Bundle b = intent.getExtras();
+        shuttle_active = b.getBoolean("active");
+        mMap.clear();
+        onMapReady(mMap);
+    }
+
     public void directionsToBuilding(Building building){
         AddressDecoder ad = new AddressDecoder();
         TaskRequestDirections trd = new TaskRequestDirections();
@@ -369,9 +380,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         trd.execute(reqUrl);
     }
 
-    public void shuttledirection(LatLng from, LatLng to){
+    public void shuttleDirection(LatLng from, LatLng to){
         TaskRequestDirections trd = new TaskRequestDirections();
+        listPoints.add(to);
         String url = getRequestUrl_shuttle(from, to);
+
+        MarkerOptions marker_from = new MarkerOptions();
+        marker_from.position(from);
+        MarkerOptions marker_to = new MarkerOptions();
+        marker_to.position(to);
+        marker_from.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));//Add second marker to the map
+        marker_to.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        mMap.addMarker(marker_from);
+        mMap.addMarker(marker_to);
 
         trd.execute(url);
     }
@@ -559,12 +580,24 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
             }
         });
+
+        if(shuttle_active == true){
+            LatLng from, to;
+            try {
+                from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
+                to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
+                shuttleDirection(from, to);
+                //shuttle_active = false;
+            } catch (Exception e) {
+            }
+        }
+
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
 
-                if (listPoints.size() == 1) {
+                if (listPoints.size() > 0) {
                     listPoints.clear();
                     mMap.clear();
                     sgw = cb.buildSGW();

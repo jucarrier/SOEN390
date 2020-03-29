@@ -18,8 +18,8 @@ public class Shuttle extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shuttle);
-        final String latlng_SGW = "45.497041, -73.578481";
-        final String latlng_Loyola = "45.458372, -73.638267";
+        final LatLng latlng_SGW = new LatLng(45.497041, -73.578481);
+        final LatLng latlng_Loyola = new LatLng(45.458372, -73.638267);
 
         //Size of the popup window
         DisplayMetrics dm = new DisplayMetrics();
@@ -30,13 +30,20 @@ public class Shuttle extends Activity {
 
 
         //Cardview from choosing go Loyola or go SGW
+        final Button goCampusClose = (Button) findViewById(R.id.shuttle_goCampusClose);
+
         Button goLoyola = (Button) findViewById(R.id.shuttle_goLoyola);
         goLoyola.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
-                campuText("Direction to Loyola", "\nPlease go to SGW Shuttle stop (1455 Boulevard de Maisonneuve) O using your preferred travel method and see schedule for the next Shuttle departure");
+                campuText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
-                goToCampus(latlng_SGW, latlng_Loyola);
+                goCampusClose.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View pw) {
+                        Shuttle.super.onBackPressed();
+                        goToCampus(latlng_SGW, latlng_Loyola);
+                    }
+                });
             }
         });
 
@@ -44,16 +51,21 @@ public class Shuttle extends Activity {
         goSGW.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
-                campuText("Direction to SGW", "\nPlease go to Loyola Shuttle stop (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
+                campuText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
-                goToCampus(latlng_Loyola, latlng_SGW);
+                goCampusClose.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View pw) {
+                        Shuttle.super.onBackPressed();
+                        goToCampus(latlng_Loyola, latlng_SGW);
+                    }
+                });
             }
         });
 
-        Button goCampusClose = (Button) findViewById(R.id.shuttle_goCampusClose);
         goCampusClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 Shuttle.super.onBackPressed();
+
             }
         });
 
@@ -93,7 +105,7 @@ public class Shuttle extends Activity {
         final Bundle bundle = new Bundle();
         bundle.putBinder("From", new ObjectWrapperForBinder(from));
         bundle.putBinder("To", new ObjectWrapperForBinder(to));
-
+        bundle.putBoolean("active", true);
         this.startActivity(new Intent(this, MainActivity.class).putExtras(bundle));
     }
 }
