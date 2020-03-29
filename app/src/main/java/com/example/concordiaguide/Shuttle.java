@@ -18,8 +18,7 @@ public class Shuttle extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shuttle);
-        final LatLng latlng_SGW = new LatLng(45.497041, -73.578481);
-        final LatLng latlng_Loyola = new LatLng(45.458372, -73.638267);
+        final LatLng[] latlng = new LatLng[2];
 
         //Size of the popup window
         DisplayMetrics dm = new DisplayMetrics();
@@ -41,9 +40,10 @@ public class Shuttle extends Activity {
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View pw) {
                         Shuttle.super.onBackPressed();
-                        goToCampus(latlng_SGW, latlng_Loyola);
                     }
                 });
+                latlng[0] = new LatLng(45.497041, -73.578481);
+                latlng[1] = new LatLng(45.458372, -73.638267);
             }
         });
 
@@ -56,16 +56,18 @@ public class Shuttle extends Activity {
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View pw) {
                         Shuttle.super.onBackPressed();
-                        goToCampus(latlng_Loyola, latlng_SGW);
                     }
                 });
+                latlng[0] = new LatLng(45.458372, -73.638267);
+                latlng[1] = new LatLng(45.497041, -73.578481);
             }
         });
 
-        goCampusClose.setOnClickListener(new View.OnClickListener() {
+        Button start = (Button) findViewById(R.id.shuttle_goCampusStart);
+        start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 Shuttle.super.onBackPressed();
-
+                goToCampus(latlng[0], latlng[1]);
             }
         });
 
