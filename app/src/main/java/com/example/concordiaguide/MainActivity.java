@@ -1,5 +1,4 @@
 package com.example.concordiaguide;
-
 import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -8,19 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.app.job.JobWorkItem;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,15 +25,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,10 +69,6 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
-    //for notifications
-    private NotificationManagerCompat notificationManagerCompat;
-    private NotificationHelper notificationHelper;
-
     protected static String preferredNavigationMethod = "driving";
     protected Cursor cursor;
 
@@ -108,6 +93,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             setContentView(R.layout.activity_maps);
             textViewAddressHere = (TextView) findViewById(R.id.addressHere);
+
             if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
             }
@@ -201,7 +187,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
-
     public GoogleMap getmMap() {
         return mMap;
     }
@@ -209,8 +194,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        notificationHelper = new NotificationHelper(this);
-
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -218,6 +201,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
+
         //Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         //onLocationChanged(location);
 
@@ -365,8 +349,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-
         long LOCATION_REFRESH_TIME = 20000;
         float LOCATION_REFRESH_DISTANCE = 5;
         locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
@@ -374,11 +356,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //zoom to current location as soon as the app opens
 
 
-    }
-
-    public void sendOnChannel1(String title, String message){
-        NotificationCompat.Builder nb = notificationHelper.getChannel1Notification(title, message);
-        notificationHelper.getManager().notify(1, nb.build());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -540,6 +517,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         mMap = googleMap;
 
         mMap.getUiSettings().setZoomControlsEnabled(false);
+      
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
@@ -653,6 +631,4 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         }
     }
-
-
 }
