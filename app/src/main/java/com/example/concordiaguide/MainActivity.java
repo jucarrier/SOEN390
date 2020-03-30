@@ -305,16 +305,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         } catch (Exception e) {
         }
 
-        //LatLng from, to;
-        try {
-            //from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
-            //to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
-            //shuttleDirection(from, to);
-            shuttle_active = b.getBoolean("active");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
         String shuttle_direction;
@@ -583,7 +573,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setPadding(0, 0,0,350);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
