@@ -6,4 +6,25 @@
     <string name="title_activity_indoor_navigation">IndoorNavigationActivity</string>
     <string name="title_activity_campus_navigation">CampusNavigationActivity</string>
     <string name="title_activity_class_schedule">ClassScheduleActivity</string>
+    <string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>
+    
+    <string-array name="nearby_option">
+        <item>Select a Category</item>
+        <item>Metro</item>
+        <item>Bank</item>
+        <item>Pharmacy</item>
+        <item>Gym</item>
+        <item>Coffee Shop</item>
+        <item>Bar</item>
+        <item>Restaurant</item>
+    </string-array>
+
+    <string name="H867">H867</string>
+    <string name="hall_8">Hall_8</string>
+    <string name="floor_view">floor_view</string>
+    <string name="room_name">room_name</string>
+    <string name="title_activity_poi">PoiActivity</string>
+    <string name="shuttle_string">The Shuttle route takes approximately 30 minutes.
+    Please show your <b>Concordia ID card</b> to the driver.
+    </string>
 </resources>
