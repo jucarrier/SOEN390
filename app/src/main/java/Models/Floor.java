@@ -7,16 +7,14 @@ public class Floor {
     private int floorMap;
     public int floorLevel;
     private String[] roomNames;
-    private String handicappedStart;
-    private String nonHandicappedStart;
+    private GatewayNodes gatewayNodes;
 
-    public Floor(String floorName, int floorLevel, int floorMap, String handicappedStart, String nonHandicappedStart, String[] roomNames) {
+    public Floor(String floorName, int floorLevel, int floorMap, GatewayNodes gatewayNodes, String[] roomNames) {
         this.floorMap = floorMap;
         this.floorName = floorName;
         this.floorLevel = floorLevel;
         this.roomNames = roomNames;
-        this.handicappedStart = handicappedStart;
-        this.nonHandicappedStart = nonHandicappedStart;
+        this.gatewayNodes = gatewayNodes;
     }
 
     public String getFloorName() {
@@ -28,11 +26,6 @@ public class Floor {
     public int getFloorMap() {
         return floorMap;
     }
-    public String getHandicappedStart() {
-        return handicappedStart;
-    }
-    public String getNonHandicappedStart() {
-        return nonHandicappedStart;
-    }
+    public GatewayNodes getGatewayNodes() { return gatewayNodes; }
     public int getFloorLevel() { return floorLevel; }
 }

@@ -7,8 +7,8 @@ import java.util.HashMap;
 import Models.CalendarEvent;
 
 public class ClassSchedule {
-    protected ArrayList<CalendarEvent> events;
 
+    protected ArrayList<CalendarEvent> events;
     //TODO: add all concordia class codes here
     protected static String[] validClasses = new String[] {"soen", "engr", "comp", "math", "lecture", "tutorial"};
     protected static HashMap<String, Long> importantDates = new HashMap<String, Long>();
@@ -19,7 +19,6 @@ public class ClassSchedule {
         importantDates.put("summer2020start", 1588305600000L);  //may1
         importantDates.put("summer2020end", 1598932800000L);    //sept1
     }
-
 
     public ClassSchedule(ArrayList<CalendarEvent> events) {
         this.events = events;
