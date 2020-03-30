@@ -53,7 +53,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             googleMap.getUiSettings().setCompassEnabled(true);
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
+           // googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
     }
 }

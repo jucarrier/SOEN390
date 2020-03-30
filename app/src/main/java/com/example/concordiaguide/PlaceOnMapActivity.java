@@ -80,13 +80,20 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     private void showOnMap() {
+        LatLng currentPosition = new LatLng(lat, lng); // user location
         pos = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
+
         //Toast.makeText(this, String.valueOf(pos), Toast.LENGTH_SHORT).show();
         //marker.remove();
+        googleMap.addMarker(new MarkerOptions().position(currentPosition)
+                .title("Your Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                .alpha(1f))
+                .showInfoWindow();
         this.googleMap.addMarker(new MarkerOptions().position(pos)
                 .title(results.getName())
                 .snippet(results.getVicinity())
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 .alpha(1f));
 
         this.googleMap.getUiSettings().setCompassEnabled(true);
@@ -96,13 +103,13 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     private void showDistance() {
-        LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
         LatLng currentPosition = new LatLng(lat, lng); // user location
+        LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
         // for destination
         googleMap.addMarker(new MarkerOptions().position(destinationPosition)
                 .title(results.getName())
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 .snippet(results.getVicinity())
                 .alpha(1f))
                 .showInfoWindow();
@@ -115,14 +122,14 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         // for current
         googleMap.addMarker(new MarkerOptions().position(currentPosition)
                 .title("Your Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 .alpha(1f))
                 .showInfoWindow();
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 13.0f));
         googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
+       // googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         String url = getDirectionsUrl(currentPosition, destinationPosition);
 
