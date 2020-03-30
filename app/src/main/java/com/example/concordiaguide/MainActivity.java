@@ -297,13 +297,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         Intent in = getIntent();
         Bundle b = in.getExtras();
 
+        /*
         Building building;
 
         try {
             building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
-        }
+        }*/
 
         //LatLng from, to;
         try {
@@ -380,6 +381,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
         }
     }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
@@ -626,6 +629,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         }
 
+        Building building;
+
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            directionsToBuilding(building);
+        } catch (Exception e) {
+        }
+
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -644,7 +655,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 markerOptions.position(latLng);
 
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                // }
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
                 mMap.addMarker(markerOptions);
 
                 //Create the URL to get request to marker
