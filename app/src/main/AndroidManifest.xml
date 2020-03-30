@@ -33,15 +33,7 @@
                 android:value="com.example.concordiaguide.MainActivity" />
         </activity>
 
-        <activity
-            android:name=".PointOfInterest"
-            android:label="@string/title_activity_poi"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.concordiaguide.MainActivity" />
-        </activity>
+
         <activity
             android:name=".CampusNavigationActivity"
             android:label="@string/title_activity_campus_navigation"
@@ -71,6 +63,28 @@
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
         <activity
+            android:name=".PoiTypesActivity"
+            android:label="Points of Interest"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"/>
+        <activity
+            android:name=".PlaceDetailsActivity"
+            android:label="PlaceDetailsActivity">
+        </activity>
+        <activity
+            android:name=".ShowPlacesOnMapActivity"
+            android:label="ShowPlacesOnMapActivity">
+        </activity>
+        <activity
+            android:name=".PlaceOnMapActivity"
+            android:label="PlaceOnMapActivity">
+        </activity>
+        <activity
+            android:name=".NearByPoiActivity"
+            android:label="NearByPoiActivity">
+        </activity>
+
+        <activity
             android:name=".Shuttle"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
@@ -78,6 +92,7 @@
             android:name=".Shuttle_schedule"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

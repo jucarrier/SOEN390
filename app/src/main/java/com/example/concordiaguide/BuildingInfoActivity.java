@@ -28,7 +28,6 @@ public class BuildingInfoActivity extends AppCompatActivity {
 
         //set info
         Log.d(TAG, "onClickEvent: caught");
-        //Building building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
         building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
 
         TextView name = findViewById(R.id.building_info_name);
@@ -57,6 +56,6 @@ public class BuildingInfoActivity extends AppCompatActivity {
         openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityIfNeeded(openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         */
-       startActivity(openMainActivity);
+        this.startActivity(openMainActivity);
     }
 }

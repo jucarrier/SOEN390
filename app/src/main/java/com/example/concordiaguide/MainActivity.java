@@ -77,9 +77,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
+   LatLng currentLocation; //to be filled in later by onLocationChanged
+   double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+   // LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -87,10 +89,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
     public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        currentLocation = new LatLng(lat, lng);
-
+        if(location!=null) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            currentLocation = new LatLng(lat, lng);
+        }
         try {
 
             setContentView(R.layout.activity_maps);
@@ -204,6 +207,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             return;
         }
 
+        // Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+        //onLocationChanged(location);
         boolean flag = false;
         try {
             Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
@@ -275,10 +280,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_class_schedule):
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
                         break;
-                    case (R.id.menu_Point_of_interest):
-                        intent = new Intent(getApplicationContext(), PointOfInterest.class);
-                        break;
-                    case (R.id.menu_to_sgw):
+                    case (R.id.find_POI):
+                        intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
+                   case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_loyola):
@@ -297,13 +301,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         Intent in = getIntent();
         Bundle b = in.getExtras();
 
+        /*
         Building building;
 
         try {
             building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
-        }
+        }*/
 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
@@ -363,6 +368,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(intent);
             }
         });
+        /* 
+        long LOCATION_REFRESH_TIME = 20000;
+        float LOCATION_REFRESH_DISTANCE = 5;
+        locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
+
+        //zoom to current location as soon as the app opens
+        */
+
 
         if(!flag) {
             long LOCATION_REFRESH_TIME = 20000;
@@ -370,6 +383,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
         }
     }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
@@ -618,6 +633,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         }
 
+        Building building;
+
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            directionsToBuilding(building);
+        } catch (Exception e) {
+        }
+
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
@@ -636,7 +659,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 markerOptions.position(latLng);
 
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                // }
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
                 mMap.addMarker(markerOptions);
 
                 //Create the URL to get request to marker
