@@ -77,11 +77,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
-   LatLng currentLocation; //to be filled in later by onLocationChanged
+   //LatLng currentLocation; //to be filled in later by onLocationChanged
    double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-   // LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+   LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -207,8 +207,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             return;
         }
 
-        // Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        //onLocationChanged(location);
         boolean flag = false;
         try {
             Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
@@ -309,16 +307,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             directionsToBuilding(building);
         } catch (Exception e) {
         }*/
-
-        //LatLng from, to;
-        try {
-            //from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
-            //to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
-            //shuttleDirection(from, to);
-            shuttle_active = b.getBoolean("active");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
@@ -598,7 +586,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setPadding(0, 0,0,350);
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
