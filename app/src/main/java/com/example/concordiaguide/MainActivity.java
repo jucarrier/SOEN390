@@ -678,8 +678,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+        try {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+        } catch (Exception e) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.495782, -73.579320), 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+        }
 
     }
 
