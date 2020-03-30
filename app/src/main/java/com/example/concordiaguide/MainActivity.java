@@ -207,8 +207,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             return;
         }
 
-        // Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        //onLocationChanged(location);
         boolean flag = false;
         try {
             Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
