@@ -32,10 +32,12 @@ public class CalendarEvent {
     public CalendarEvent(int id, String stringId, String title, String location, long dtStart, long dtEnd, String repRule){
         this.id = id;
         this.stringId = stringId;
+
         this.title = title;
         this.location = location;
         this.dtStart = dtStart;
         this.dtEnd = dtEnd;
+
         this.startDate = new Date(dtStart);
         this.endDate = new Date(dtEnd);
         this.rRule = repRule;
@@ -68,10 +70,6 @@ public class CalendarEvent {
             if(third.contains("FR")) days.put("Friday", true); else days.put("Friday", false);
             if(third.contains("SA")) days.put("Saturday", true); else days.put("Saturday", false);
 
-
-
-
-
         } else System.out.println("repRule null");
     }
 
@@ -97,6 +95,7 @@ public class CalendarEvent {
 
     public void setStringId(String stringId) {
         this.stringId = stringId;
+
     }
 
     public String getTitle() {
@@ -115,6 +114,7 @@ public class CalendarEvent {
         this.location = location;
     }
 
+
     public long getDtStart() {
         return dtStart;
     }
@@ -122,6 +122,7 @@ public class CalendarEvent {
     public void setDtStart(int dtStart) {
         this.dtStart = dtStart;
     }
+
 
     public long getDtEnd() {
         return dtEnd;

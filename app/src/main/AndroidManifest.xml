@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <dist:module dist:instant="true" />
 
@@ -24,14 +24,6 @@
         <uses-library android:name="android.test.runner"
             android:required="false" />
         <activity
-            android:name=".CampusBuildingDirectionActivity"
-            android:label="CampusBuildingDirectionActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.concordiaguide.MainActivity" />
-        </activity>
-        <activity
             android:name=".ClassScheduleActivity"
             android:label="@string/title_activity_class_schedule"
             android:parentActivityName=".MainActivity"
@@ -40,15 +32,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.concordiaguide.MainActivity" />
         </activity>
-        <activity
-            android:name=".PointOfInterest"
-            android:label="@string/title_activity_poi"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.concordiaguide.MainActivity" />
-        </activity>
+
+
         <activity
             android:name=".CampusNavigationActivity"
             android:label="@string/title_activity_campus_navigation"
@@ -71,10 +56,43 @@
             android:name=".BuildingInfoActivity"
             android:label="BuildingInfoActivity"
             android:parentActivityName=".CampusNavigationActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+        </activity>
         <activity
             android:name=".BuildingInfoPopup"
-            android:theme="@style/AppTheme.PopupBuildingInfo"></activity>
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
+        <activity
+            android:name=".PoiTypesActivity"
+            android:label="Points of Interest"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"/>
+        <activity
+            android:name=".PlaceDetailsActivity"
+            android:label="PlaceDetailsActivity">
+        </activity>
+        <activity
+            android:name=".ShowPlacesOnMapActivity"
+            android:label="ShowPlacesOnMapActivity">
+        </activity>
+        <activity
+            android:name=".PlaceOnMapActivity"
+            android:label="PlaceOnMapActivity">
+        </activity>
+        <activity
+            android:name=".NearByPoiActivity"
+            android:label="NearByPoiActivity">
+        </activity>
+
+        <activity
+            android:name=".Shuttle"
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
+        <activity
+            android:name=".Shuttle_schedule"
+            android:theme="@style/AppTheme.PopupBuildingInfo">
+        </activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -89,12 +107,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <receiver android:name=".AlertReceiver"/>
