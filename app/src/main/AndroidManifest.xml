@@ -83,6 +83,9 @@
             android:name=".NearByPoiActivity"
             android:label="NearByPoiActivity">
         </activity>
+        <activity
+            android:name=".CampusBuildingDirectionActivity"
+            android:label="CampusBuildingDirectionActivity"></activity>
 
         <activity
             android:name=".Shuttle"
