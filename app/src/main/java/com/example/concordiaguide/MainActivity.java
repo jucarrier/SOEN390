@@ -77,11 +77,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
-   LatLng currentLocation; //to be filled in later by onLocationChanged
+   //LatLng currentLocation; //to be filled in later by onLocationChanged
    double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-   // LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+   LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
