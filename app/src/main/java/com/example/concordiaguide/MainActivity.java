@@ -297,13 +297,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         Intent in = getIntent();
         Bundle b = in.getExtras();
 
+        /*
         Building building;
 
         try {
             building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
-        }
+        }*/
 
         //LatLng from, to;
         try {
@@ -380,6 +381,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
         }
     }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
@@ -624,6 +627,14 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 //shuttle_active = false;
             } catch (Exception e) {
             }
+        }
+
+        Building building;
+
+        try {
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            directionsToBuilding(building);
+        } catch (Exception e) {
         }
 
         //Add listener to polygons to show the building info popup

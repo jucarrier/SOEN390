@@ -56,6 +56,6 @@ public class BuildingInfoActivity extends AppCompatActivity {
         openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityIfNeeded(openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         */
-       startActivity(openMainActivity);
+        this.startActivity(openMainActivity);
     }
 }
