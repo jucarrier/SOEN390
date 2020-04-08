@@ -722,7 +722,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             } else {
                 Toast.makeText(getApplicationContext(), "Direction not found!", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 }
