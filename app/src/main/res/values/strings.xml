@@ -9,7 +9,7 @@
     <string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>
     
     <string-array name="nearby_option">
-        <item>Select a Category</item>
+        <item>Select a Point of Interest</item>
         <item>Metro</item>
         <item>Bank</item>
         <item>Pharmacy</item>

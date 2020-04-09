@@ -20,7 +20,7 @@ import java.util.List;
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     List<Results> results = new ArrayList<Results>();
-
+    //when clicked show the list of places on map, this activity puts a marker on all the suggested POI's
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

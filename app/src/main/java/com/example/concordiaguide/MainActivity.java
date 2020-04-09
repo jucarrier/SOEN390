@@ -459,6 +459,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     //@Override
     public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
+        if(currentLocation!= null)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try{
@@ -678,7 +679,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
-
+        if(currentLocation!= null)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
 
     }

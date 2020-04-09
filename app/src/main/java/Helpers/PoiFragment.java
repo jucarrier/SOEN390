@@ -136,7 +136,7 @@ public class PoiFragment extends Fragment {
             }
         });
 
-
+        //on press would show  showPlacesOnMap activity
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +149,7 @@ public class PoiFragment extends Fragment {
         return view;
 
     }
-
+    //helper methods
     private class MyLocationListener implements LocationListener {
 
         @Override //breaks down location coordinates and maps them to lattitude/longitude variables

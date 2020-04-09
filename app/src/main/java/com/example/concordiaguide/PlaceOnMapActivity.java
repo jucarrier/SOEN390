@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
-
+//comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
     // variable
     private Results results;
     private LatLng pos;
@@ -49,12 +49,12 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);//use activity_maps
-
+        //sets up the map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
-
+        //gets all the necessary info from previous activity (NearbyPOIactivity->POIfragment)
         if (bundle != null) {
             //assigns data fetched from previous activty and maps them to following variables
             results = (Results) bundle.getSerializable("result");
@@ -73,24 +73,25 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         if (type.equals("distance")) {
-            showDistance();
+            showDistance();//
         } else {
             showOnMap();
         }
     }
 
-    private void showOnMap() {
+    private void showOnMap() {//adds marker to the desired POI location
         LatLng currentPosition = new LatLng(lat, lng); // user location
         pos = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
         //Toast.makeText(this, String.valueOf(pos), Toast.LENGTH_SHORT).show();
         //marker.remove();
-        googleMap.addMarker(new MarkerOptions().position(currentPosition)
+
+        googleMap.addMarker(new MarkerOptions().position(currentPosition)//to check users location
                 .title("Your Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 .alpha(1f))
                 .showInfoWindow();
-        this.googleMap.addMarker(new MarkerOptions().position(pos)
+        this.googleMap.addMarker(new MarkerOptions().position(pos)//to check POI's location
                 .title(results.getName())
                 .snippet(results.getVicinity())
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
@@ -102,7 +103,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(16.5f));
     }
 
-    private void showDistance() {
+    private void showDistance() {//draws polylines between user and POI destination
         LatLng currentPosition = new LatLng(lat, lng); // user location
         LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
@@ -117,9 +118,9 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(destinationPosition));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destinationPosition, 13.0f));
         googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        //googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // for current
+        // for current/user location
         googleMap.addMarker(new MarkerOptions().position(currentPosition)
                 .title("Your Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
@@ -143,10 +144,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
-        // Origin of route
+        // Start of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
-        // Destination of route
+        // End of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
 
