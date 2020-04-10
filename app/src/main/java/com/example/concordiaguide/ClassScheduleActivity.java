@@ -192,9 +192,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
     }
 
     public void readEvents() throws NullPointerException {
-        if (cursor!=null){
-            while(cursor.moveToNext()){
-                if(cursor!=null){
+//        if (cursor!=null){
+            while(cursor != null && cursor.moveToNext()){
+//                if(cursor!=null){
                     //get the column ids of the calendar attributes
                     int id1 = cursor.getColumnIndex(BaseColumns._ID);
                     int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
@@ -241,11 +241,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         }
                     }
 
-                }else{
-                    System.out.println("no events found");
-                }
+//                }else{
+//                    System.out.println("no events found");
+//                }
             }
-        }
+//        }
 
         eventsRead= "eventsRead";
     }

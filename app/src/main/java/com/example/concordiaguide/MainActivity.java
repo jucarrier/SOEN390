@@ -104,9 +104,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
+            } else {
+                textViewAddressHere.setText("lat " + lat);
+                System.out.println("lat " + lat);
             }
-            textViewAddressHere.setText("lat " + lat);
-            System.out.println("lat " + lat);
         } catch (Exception e) {
             System.out.println("begin \n" + e + "\n end");
         }
