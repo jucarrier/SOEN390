@@ -167,21 +167,21 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
-
+                                // Purposely do nothing
                             }
                         });
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        // Purposely do nothing
                     }
                 });
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Purposely do nothing
             }
         });
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

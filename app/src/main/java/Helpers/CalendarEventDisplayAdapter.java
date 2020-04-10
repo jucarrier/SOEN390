@@ -64,6 +64,9 @@ public class CalendarEventDisplayAdapter extends RecyclerView.Adapter<CalendarEv
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CalendarEventDisplayCard currentItem = list.get(position);
+        String white = "#FFFFFF";
+
+
 
         try {
             holder.imageView.setImageResource(currentItem.getImageResource());
@@ -72,24 +75,24 @@ public class CalendarEventDisplayAdapter extends RecyclerView.Adapter<CalendarEv
 
             if(currentItem.getDays().get("Monday")){
                 holder.monday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.monday.setTextColor(Color.parseColor("#FFFFFF"));    //using color.white turns the text blue, need to use parseColor instead
+                holder.monday.setTextColor(Color.parseColor(white));    //using color.white turns the text blue, need to use parseColor instead
             }
 
             if(currentItem.getDays().get("Tuesday")){
                 holder.tuesday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.tuesday.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.tuesday.setTextColor(Color.parseColor(white));
             }
             if(currentItem.getDays().get("Wednesday")){
                 holder.wednesday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.wednesday.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.wednesday.setTextColor(Color.parseColor(white));
             }
             if(currentItem.getDays().get("Thursday")){
                 holder.thursday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.thursday.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.thursday.setTextColor(Color.parseColor(white));
             }
             if(currentItem.getDays().get("Friday")){
                 holder.friday.setBackgroundResource(R.drawable.day_indicator_background);
-                holder.friday.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.friday.setTextColor(Color.parseColor(white));
             }
 
         } catch (Exception e){
