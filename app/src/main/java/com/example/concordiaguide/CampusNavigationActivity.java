@@ -20,11 +20,11 @@ public class CampusNavigationActivity extends AppCompatActivity {
 
     enum Campuses {
         SGW,
-        Loyola
+        LAYOLA
     }
 
-    private static Campus sgw, loyola;
-    private static Campuses currentCampus;
+    private Campus sgw, loyola;
+    private Campuses currentCampus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
                     recyclerViewLoyola.setVisibility(View.GONE);
                 } else {
                     title.setText("Loyola");
-                    currentCampus = Campuses.Loyola;
+                    currentCampus = Campuses.LAYOLA;
                     recyclerViewSgw.setVisibility(View.GONE);
                     recyclerViewLoyola.setVisibility(View.VISIBLE);
                 }
@@ -87,7 +87,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
                 recyclerViewLoyola.setVisibility(View.GONE);
             } else {
                 title.setText("Loyola");
-                currentCampus = Campuses.Loyola;
+                currentCampus = Campuses.LAYOLA;
                 recyclerViewSgw.setVisibility(View.GONE);
                 recyclerViewLoyola.setVisibility(View.VISIBLE);
                 switchButton.setChecked(true);

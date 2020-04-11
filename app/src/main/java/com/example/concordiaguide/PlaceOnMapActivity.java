@@ -45,6 +45,8 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap googleMap;
     private String type;
 
+    private String parserTask = "ParserTask";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,17 +247,17 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask", jsonData[0].toString());
+                Log.d(parserTask, jsonData[0].toString());
                 DirectionsJSONParser parser = new DirectionsJSONParser();
-                Log.d("ParserTask", parser.toString());
+                Log.d(parserTask, parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.d("ParserTask", "Executing routes");
-                Log.d("ParserTask", routes.toString());
+                Log.d(parserTask, "Executing routes");
+                Log.d(parserTask, routes.toString());
 
             } catch (Exception e) {
-                Log.d("ParserTask", e.toString());
+                Log.d(parserTask, e.toString());
                 e.printStackTrace();
             }
             return routes;

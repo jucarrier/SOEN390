@@ -13,7 +13,7 @@ public class OpeningHours implements Serializable {
     private Boolean openNow;
     @SerializedName("weekday_text")
     @Expose
-    private List<Object> weekdayText = null;
+    private transient List<Object> weekdayText = null;
 
     public Boolean getOpenNow() {
         return openNow;
