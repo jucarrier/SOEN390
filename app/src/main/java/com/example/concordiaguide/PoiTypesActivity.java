@@ -33,5 +33,4 @@ public class PoiTypesActivity extends AppCompatActivity {
         RecyclerView.Adapter poiAdapter = new PoiTypeAdapter(this, mTypes);//passed the list into the instace of PoiTypeAdapter then set it
         rc.setAdapter(poiAdapter);
     }
-
 }
