@@ -1,7 +1,6 @@
 package com.example.concordiaguide;
 
 import android.Manifest;
-
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,10 +22,12 @@ import Helpers.CalendarEventDisplayAdapter;
 import Models.CalendarEventDisplayCard;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.BaseColumns;
 import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
@@ -86,7 +87,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
 
         //permission check to read calendar events
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALENDAR}, 1);
             return;
         }
@@ -186,16 +187,16 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_ALWAYS);
+        recyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
 
     }
 
     public void readEvents() throws NullPointerException {
-        if (cursor!=null){
-            while(cursor.moveToNext()){
-                if(cursor!=null){
+//        if (cursor!=null){
+            while(cursor != null && cursor.moveToNext()){
+//                if(cursor!=null){
                     //get the column ids of the calendar attributes
-                    int id1 = cursor.getColumnIndex(CalendarContract.Events._ID);
+                    int id1 = cursor.getColumnIndex(BaseColumns._ID);
                     int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
                     int id3 = cursor.getColumnIndex(CalendarContract.Events.DESCRIPTION);
                     int id4 = cursor.getColumnIndex(CalendarContract.Events.EVENT_LOCATION);
@@ -240,11 +241,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
                         }
                     }
 
-                }else{
-                    System.out.println("no events found");
-                }
+//                }else{
+//                    System.out.println("no events found");
+//                }
             }
-        }
+//        }
 
         eventsRead= "eventsRead";
     }

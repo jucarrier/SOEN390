@@ -31,6 +31,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     // variable
     private Results results;
     private double lat, lng;
+    private String result = "result";
 
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            results = (Results) bundle.getSerializable("result");
+            results = (Results) bundle.getSerializable(result);
             lat = bundle.getDouble("lat");
             lng = bundle.getDouble("lng");
             //Toast.makeText(this, String.valueOf(results.getPhotos()[0].getPhoto_reference()), Toast.LENGTH_SHORT).show();
@@ -90,7 +91,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra("result", results);
+                intent.putExtra(result, results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "map");
@@ -102,7 +103,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra("result", results);
+                intent.putExtra(result, results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "distance");
@@ -115,7 +116,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
         textViewName = findViewById(R.id.textViewName);
-       // textViewRating = findViewById(R.id.textViewRating);
+       // textViewRatPling = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
        // textViewAvailability = findViewById(R.id.textViewAvailability);
       //  ratingBar = findViewById(R.id.ratingBar);

@@ -26,7 +26,7 @@ public class App extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
-                    "channel1",
+                    CHANNEL_1_ID,
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             channel1.setDescription("Main notification channel");

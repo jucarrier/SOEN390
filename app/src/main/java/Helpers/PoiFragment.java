@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -131,6 +132,9 @@ public class PoiFragment extends Fragment {
                             getNearByPlaces();
                             break;
                         }
+                        default: {
+                            break;
+                        }
                     }
                 }
             }
@@ -163,17 +167,17 @@ public class PoiFragment extends Fragment {
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
-
+            // Required for interface implementation. Not necessary for our purposes.
         }
 
         @Override
         public void onProviderEnabled(String provider) {
-
+            // Required for interface implementation. Not necessary for our purposes.
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
+            // Required for interface implementation. Not necessary for our purposes.
         }
     }
     private void locationService(){
@@ -189,8 +193,8 @@ public class PoiFragment extends Fragment {
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
             final LocationListener locationListener = new PoiFragment.MyLocationListener();
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(),
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }//if the permissions don't match, do nothing
@@ -209,7 +213,7 @@ public class PoiFragment extends Fragment {
                     } else {//show users location
                         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 return;
                             }
 

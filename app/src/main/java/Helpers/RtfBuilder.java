@@ -5,11 +5,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RtfBuilder {
     private static Retrofit rtf= null;
-    private static final String Base_URL="https://maps.googleapis.com/maps/";
+    private static final String BASE_URL="https://maps.googleapis.com/maps/";
 
     public static Retrofit builder(){
         if(rtf== null){
-            rtf= new Retrofit.Builder().baseUrl(Base_URL).addConverterFactory(GsonConverterFactory.create()).build();
+            rtf= new Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
         }
         return rtf;
     }
