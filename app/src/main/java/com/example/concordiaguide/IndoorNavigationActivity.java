@@ -2,14 +2,6 @@ package com.example.concordiaguide;
 
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.devs.vectorchildfinder.VectorChildFinder;
-import com.devs.vectorchildfinder.VectorDrawableCompat;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.devs.vectorchildfinder.VectorChildFinder;
+import com.devs.vectorchildfinder.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +27,6 @@ import Models.Building;
 import Models.Campus;
 import Models.Edge;
 import Models.Floor;
-import Models.Node;
 
 public class IndoorNavigationActivity extends AppCompatActivity {
     private ImageView imageView;
@@ -67,7 +60,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         int floorMap = floor.getFloorMap();
         VectorDrawableCompat.VFullPath edge = null;
 
-        if(roomNumber.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+        if (roomNumber.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
             roomNumber = roomNumber.substring(1);
         }
 
@@ -78,7 +71,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
 
-            for(Edge e : edges) {
+            for (Edge e : edges) {
                 edge = vector.findPathByName(e.getEdgeName());
                 if (edge != null) {
                     edge.setStrokeColor(Color.BLUE);
@@ -116,14 +109,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     }
 
     public void setUp(final AppCompatActivity self) {
-        campusSpinner = (Spinner) findViewById(R.id.campus_spinner);
+        campusSpinner = findViewById(R.id.campus_spinner);
         ArrayAdapter<String> campusSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);
         campusSpinner.setAdapter(campusSpinnerAdapter);
 
         campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                buildingSpinner = (Spinner) findViewById(R.id.building_spinner);
+                buildingSpinner = findViewById(R.id.building_spinner);
                 ArrayList<String> buildingLabels = new ArrayList<>();
                 final Campus selectedCampus = position == 0 ? sgw : layola;
                 for (Building b : selectedCampus.getBuildings()) {
@@ -135,7 +128,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 buildingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        floorSpinner = (Spinner) findViewById(R.id.floor_spinner);
+                        floorSpinner = findViewById(R.id.floor_spinner);
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
 
                         ArrayList<String> floorLabels = new ArrayList<>();
@@ -150,7 +143,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
-                                roomInput = (AutoCompleteTextView) findViewById(R.id.search_room_name);
+                                roomInput = findViewById(R.id.search_room_name);
                                 roomInput.setAdapter(roomNameAdapter);
                                 imageView.setImageResource(selectedFloor.getFloorMap());
 

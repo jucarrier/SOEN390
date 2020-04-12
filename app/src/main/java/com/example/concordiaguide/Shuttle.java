@@ -9,11 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+
 import com.google.android.gms.maps.model.LatLng;
+
 import Helpers.ObjectWrapperForBinder;
-import Models.Building;
 
 public class Shuttle extends Activity {
+    String shuttle_from, shuttle_to;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +32,12 @@ public class Shuttle extends Activity {
 
 
         //Cardview from choosing go Loyola or go SGW
-        final Button goCampusClose = (Button) findViewById(R.id.shuttle_goCampusClose);
+        final Button goCampusClose = findViewById(R.id.shuttle_goCampusClose);
 
-        Button goLoyola = (Button) findViewById(R.id.shuttle_goLoyola);
+        Button goLoyola = findViewById(R.id.shuttle_goLoyola);
         goLoyola.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
-                final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
+                final CardView goCampus = findViewById(R.id.shuttle_goCampus);
                 campusText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
@@ -47,10 +50,10 @@ public class Shuttle extends Activity {
             }
         });
 
-        Button goSGW = (Button) findViewById(R.id.shuttle_goSGW);
+        Button goSGW = findViewById(R.id.shuttle_goSGW);
         goSGW.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
-                final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
+                final CardView goCampus = findViewById(R.id.shuttle_goCampus);
                 campusText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +66,7 @@ public class Shuttle extends Activity {
             }
         });
 
-        Button start = (Button) findViewById(R.id.shuttle_goCampusStart);
+        Button start = findViewById(R.id.shuttle_goCampusStart);
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 Shuttle.super.onBackPressed();
@@ -71,7 +74,7 @@ public class Shuttle extends Activity {
             }
         });
 
-        Button goCampusSchedule = (Button) findViewById(R.id.shuttle_goCampusSeeSchedule);
+        Button goCampusSchedule = findViewById(R.id.shuttle_goCampusSeeSchedule);
         goCampusSchedule.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 startActivity(new Intent(getApplicationContext(), Shuttle_schedule.class));
@@ -79,14 +82,14 @@ public class Shuttle extends Activity {
         });
 
         //set listener for buttons
-        Button buttonClose = (Button) findViewById(R.id.shuttle_close);
+        Button buttonClose = findViewById(R.id.shuttle_close);
         buttonClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 Shuttle.super.onBackPressed();
             }
         });
 
-        Button buttonInfo = (Button) findViewById(R.id.shuttle_schedule);
+        Button buttonInfo = findViewById(R.id.shuttle_schedule);
         buttonInfo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 startActivity(new Intent(getApplicationContext(), Shuttle_schedule.class));
@@ -95,13 +98,12 @@ public class Shuttle extends Activity {
     }
 
     public void campusText(String title, String desc) {
-        TextView campTitle = (TextView) findViewById(R.id.shuttle_goCampusTitle);
-        TextView campDesc = (TextView) findViewById(R.id.shuttle_goCampusDesc);
+        TextView campTitle = findViewById(R.id.shuttle_goCampusTitle);
+        TextView campDesc = findViewById(R.id.shuttle_goCampusDesc);
         campTitle.setText(title);
         campDesc.setText(desc);
     }
 
-    String shuttle_from, shuttle_to;
     private void goToCampus(LatLng from, LatLng to) {
         final Bundle bundle = new Bundle();
         bundle.putBinder("From", new ObjectWrapperForBinder(from));

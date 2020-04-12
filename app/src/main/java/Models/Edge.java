@@ -10,23 +10,22 @@ public class Edge extends DefaultWeightedEdge {
         this.edgeName = edgeName;
     }
 
-    public String getEdgeName() { return edgeName; }
-
-    @Override
-    public String toString()
-    {
+    public String getEdgeName() {
         return edgeName;
     }
 
     @Override
-    public int hashCode()
-    {
+    public String toString() {
+        return edgeName;
+    }
+
+    @Override
+    public int hashCode() {
         return toString().hashCode();
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return (o instanceof Edge) && (toString().equals(o.toString()));
     }
 }

@@ -13,12 +13,12 @@ import Models.Floor;
 import Models.GatewayNodes;
 
 public class CampusBuilder {
+    private final String defaultDescription = "Description";
+    private final String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
     GoogleMap mMap;
     GatewayNodes basicGatewayNode;
     private String stairNode = "Stairs";
     private String elevatorOneNode = "Elevator 1";
-    private final String defaultDescription = "Description";
-    private final String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
 
     public CampusBuilder(GoogleMap mMap) {
         basicGatewayNode = new GatewayNodes(elevatorOneNode, elevatorOneNode, stairNode, stairNode, null);

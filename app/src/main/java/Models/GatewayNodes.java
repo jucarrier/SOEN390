@@ -15,9 +15,23 @@ public class GatewayNodes {
         this.outside = outside;
     }
 
-    public String getHandicappedUp() { return handicappedUp; }
-    public String getHandicappedDown() { return handicappedDown; }
-    public String getNonHandicappedUp() { return nonHandicappedUp; }
-    public String getNonHandicappedDown() { return nonHandicappedDown; }
-    public String getOutside() { return outside; }
+    public String getHandicappedUp() {
+        return handicappedUp;
+    }
+
+    public String getHandicappedDown() {
+        return handicappedDown;
+    }
+
+    public String getNonHandicappedUp() {
+        return nonHandicappedUp;
+    }
+
+    public String getNonHandicappedDown() {
+        return nonHandicappedDown;
+    }
+
+    public String getOutside() {
+        return outside;
+    }
 }

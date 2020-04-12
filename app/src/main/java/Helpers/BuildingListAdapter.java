@@ -25,21 +25,6 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     private List<Building> mBuildings;
     private Context mContext;
 
-    // Provide a reference to the views for each data item
-    public static class BuildingListViewHolder extends RecyclerView.ViewHolder {
-
-        TextView initials;
-        TextView name;
-        RelativeLayout parentLayout;
-
-        public BuildingListViewHolder(View itemView) {
-            super(itemView);
-            initials = itemView.findViewById(R.id.building_initials);
-            name = itemView.findViewById(R.id.building_name);
-            parentLayout = itemView.findViewById(R.id.building_list_item_parent_layout);
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public BuildingListAdapter(Context context, List<Building> buildings) {
         mContext = context;
@@ -49,7 +34,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     // Create new views (invoked by the layout manager)
     @Override
     public BuildingListAdapter.BuildingListViewHolder onCreateViewHolder(ViewGroup parent,
-                                                               int viewType) {
+                                                                         int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_building_list_item, parent, false);
@@ -85,6 +70,21 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     @Override
     public int getItemCount() {
         return mBuildings.size();
+    }
+
+    // Provide a reference to the views for each data item
+    public static class BuildingListViewHolder extends RecyclerView.ViewHolder {
+
+        TextView initials;
+        TextView name;
+        RelativeLayout parentLayout;
+
+        public BuildingListViewHolder(View itemView) {
+            super(itemView);
+            initials = itemView.findViewById(R.id.building_initials);
+            name = itemView.findViewById(R.id.building_name);
+            parentLayout = itemView.findViewById(R.id.building_list_item_parent_layout);
+        }
     }
 
 }
