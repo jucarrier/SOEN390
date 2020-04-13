@@ -3,6 +3,7 @@ package Helpers;
 import android.util.Log;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -51,8 +52,14 @@ public class GraphBuilder {
         } else {
             paths = null;
         }
-
-        return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
+        GraphPath path = null;
+        if (paths != null) {
+            path = paths.getPath(getRoomNode(targetRoom));
+        }
+        if (path != null) {
+            return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
+        }
+        return null;
     }
 
     //returns the list of edges of the shortest path from the sourceRoom with considerations if handicapped to the stairs/elevator/outside

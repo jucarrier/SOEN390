@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -69,7 +70,9 @@ import Helpers.CampusBuilder;
 import Models.Campus;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
-    protected static String preferredNavigationMethod = "driving";
+    private static final String drivingMethod = "driving";
+    private final String LAYOLA_NAME = "loyola";
+    protected static String preferredNavigationMethod = drivingMethod;
     protected Cursor cursor;
 
     private boolean shuttle_active = false;
@@ -77,11 +80,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
-   LatLng currentLocation; //to be filled in later by onLocationChanged
+   //LatLng currentLocation; //to be filled in later by onLocationChanged
    double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-   // LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+   LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -101,9 +104,10 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
             if ((Object) textViewAddressHere == null) {
                 System.out.println("latitude not found");
+            } else {
+                textViewAddressHere.setText("lat " + lat);
+                System.out.println("lat " + lat);
             }
-            textViewAddressHere.setText("lat " + lat);
-            System.out.println("lat " + lat);
         } catch (Exception e) {
             System.out.println("begin \n" + e + "\n end");
         }
@@ -189,6 +193,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     mMap.setMyLocationEnabled(true);
                 }
                 break;
+            default :
+                // do nothing
+                break;
         }
     }
 
@@ -202,13 +209,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //locate current location
         textViewAddressHere = (TextView) findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
 
-        // Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-        //onLocationChanged(location);
         boolean flag = false;
         try {
             Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
@@ -268,13 +273,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case (R.id.menu_indoor_navigation):
                         bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
-                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        bundle.putBinder(LAYOLA_NAME, new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), IndoorNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_campus_navigation):
                         bundle = new Bundle();
                         bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
-                        bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                        bundle.putBinder(LAYOLA_NAME, new ObjectWrapperForBinder(loyola));
                         intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                         break;
                     case (R.id.menu_class_schedule):
@@ -282,11 +287,15 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                         break;
                     case (R.id.find_POI):
                         intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
+                        break;
                    case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                         break;
                     case (R.id.menu_to_loyola):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 17));
+                        break;
+                    default :
+                        // No option selected
                         break;
                 }
                 if (intent != null) {
@@ -310,16 +319,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         } catch (Exception e) {
         }*/
 
-        //LatLng from, to;
-        try {
-            //from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
-            //to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
-            //shuttleDirection(from, to);
-            shuttle_active = b.getBoolean("active");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 
         String shuttle_direction;
@@ -336,8 +335,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                     case ("shuttle"):
                         startActivity(new Intent(getApplicationContext(), Shuttle.class));
                         break;
-                    case ("driving"):
-                        MainActivity.preferredNavigationMethod = "driving";
+                    case (drivingMethod):
+                        MainActivity.preferredNavigationMethod = drivingMethod;
                         break;
                     case ("publicTransportation"):
                         MainActivity.preferredNavigationMethod = "transit";
@@ -373,7 +372,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 Intent intent = null;
                 final Bundle bundle = new Bundle();
                 bundle.putBinder("sgw", new ObjectWrapperForBinder(sgw));
-                bundle.putBinder("loyola", new ObjectWrapperForBinder(loyola));
+                bundle.putBinder(LAYOLA_NAME, new ObjectWrapperForBinder(loyola));
                 intent = new Intent(getApplicationContext(), CampusNavigationActivity.class).putExtras(bundle);
                 startActivity(intent);
             }
@@ -532,7 +531,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         String responseString = "";
         InputStream inputStream = null;
         HttpURLConnection httpURLConnection = null;
-        try{
+        try {
             URL url = new URL(reqUrl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.connect();
@@ -599,9 +598,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setPadding(0, 0,0,350);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
             return;
         }
@@ -679,8 +680,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         });
 
+
+/*
         if(currentLocation!= null)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+*/
+        try {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+        } catch (Exception e) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.495782, -73.579320), 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+        }
 
     }
 

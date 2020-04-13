@@ -35,7 +35,7 @@ public class Shuttle extends Activity {
         goLoyola.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
-                campuText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
+                campusText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View pw) {
@@ -51,7 +51,7 @@ public class Shuttle extends Activity {
         goSGW.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 final CardView goCampus = (CardView) findViewById(R.id.shuttle_goCampus);
-                campuText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
+                campusText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
                 goCampus.setVisibility(View.VISIBLE);
                 goCampusClose.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View pw) {
@@ -78,7 +78,6 @@ public class Shuttle extends Activity {
             }
         });
 
-
         //set listener for buttons
         Button buttonClose = (Button) findViewById(R.id.shuttle_close);
         buttonClose.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +94,7 @@ public class Shuttle extends Activity {
         });
     }
 
-    public void campuText(String title, String desc) {
+    public void campusText(String title, String desc) {
         TextView campTitle = (TextView) findViewById(R.id.shuttle_goCampusTitle);
         TextView campDesc = (TextView) findViewById(R.id.shuttle_goCampusDesc);
         campTitle.setText(title);
