@@ -100,6 +100,9 @@ public class ClassScheduleActivityTest {
         //assert that the new text is different from the pre-toggle text, i.e. the text has successfully been changed
         if (a.equals("Notifications are ON")) assert b.equals("Notifications are OFF");
         else assert b.equals("Notifications are ON");
+
+        //add another click to make sure cancelAllAlarms has been tested (in the event that alarms were toggled off when the test began)
+        onView(withId(R.id.buttonToggleNotifications)).perform(click());
     }
 
     private static Matcher<View> childAtPosition(
