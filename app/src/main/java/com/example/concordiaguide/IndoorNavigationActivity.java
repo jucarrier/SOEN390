@@ -28,6 +28,12 @@ import Models.Campus;
 import Models.Edge;
 import Models.Floor;
 
+
+/**
+ * The IndoorNavigationActivity describes how the indoor navigation is handled.
+ * It contains the methods to find the optimal path between rooms in a floor as well as
+ * highlight that path.
+ */
 public class IndoorNavigationActivity extends AppCompatActivity {
     private ImageView imageView;
     private Campus sgw;
@@ -41,6 +47,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Boolean isHandicapped = false;
 
 
+    /**
+     * Finds a room on a floor and turns it blue.
+     *
+     * @param roomName Name of the room
+     * @param floorMap Drawable on which the room to highlight is on
+     * @param building Building where the floor in
+     * @return The SVG path describing the room.
+     */
     public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
         VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
         VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
@@ -56,6 +70,15 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         return room;
     }
 
+    /**
+     * This method highlights the path that the user should take to get to the room they select.
+     *
+     * @param roomNumber Number of the room to navigate to
+     * @param floor Floor where the room is
+     * @param isHandicapped True if the path must be handicap-accessible. False otherwise.
+     * @param building Building where the room is located
+     * @return SVG path describing the edge directing users to the room
+     */
     public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
         int floorMap = floor.getFloorMap();
         VectorDrawableCompat.VFullPath edge = null;
@@ -108,6 +131,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         setUp(self);
     }
 
+    /**
+     * This method is called on creation. It gets the campus building and floor data it needs
+     * to present to the user so they can select the room they want to navigate to.
+     * Also sets up the spinners displayed in the activity.
+     *
+     * @param self The activity getting set up.
+     */
     public void setUp(final AppCompatActivity self) {
         campusSpinner = findViewById(R.id.campus_spinner);
         ArrayAdapter<String> campusSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);

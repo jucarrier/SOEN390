@@ -1,5 +1,9 @@
 package Models;
 
+/**
+ * Represents one node that is used for indoor navigation. All navigation must be done from node
+ * to node.
+ */
 public class Node {
     private final String[] rooms;
 

@@ -1,5 +1,8 @@
 package Models;
 
+/**
+ * Nodes that represent ways to go outside of the floor you are currently on
+ */
 public class GatewayNodes {
     private String handicappedUp;
     private String handicappedDown;

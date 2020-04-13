@@ -4,6 +4,10 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+/**
+ * Represents a campus at Concordia. There are two at Concordia: SGW and Layola. If this project
+ * was extended to support other universities this class would see more use.
+ */
 public class Campus {
     //Where to zoom in
     public final LatLng center;

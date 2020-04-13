@@ -65,6 +65,12 @@ import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
 
+/**
+ * This is the class that displays the map to the user. It is the one that is active when the app
+ * is first opened.
+ *
+ * @param <locationManager> For use when locating the device
+ */
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     private static final String drivingMethod = "driving";
     private static final int LOCATION_REQUEST = 500;
@@ -87,7 +93,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private GoogleMap mMap;
     private DrawerLayout drawer;
 
-    //this is the listener method that constantly updates the user's location for usage in other methods
+    /**
+     * this is the listener method that constantly updates the user's location for usage in other methods
+     *
+     * @param location The location of the user
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
@@ -126,6 +136,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         //removing this will cause an error
     }
 
+    /**
+     * Method that is called when permissions are checked.
+     *
+     * @param requestCode  What type of request is requested
+     * @param permissions  List of permissions that are handled
+     * @param grantResults What permissions are accepted or denied
+     */
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -359,6 +376,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
+    /**
+     * This method displays the path from a user's location to a building.
+     *
+     * @param building The building to be navigated to
+     */
     public void directionsToBuilding(Building building) {
         AddressDecoder ad = new AddressDecoder();
         TaskRequestDirections trd = new TaskRequestDirections();
@@ -511,8 +533,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     *
+     * @param googleMap The map that is ready
      */
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

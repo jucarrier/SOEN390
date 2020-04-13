@@ -26,7 +26,13 @@ public class GraphBuilder {
         this.gatewayNodes = floor.getGatewayNodes();
     }
 
-    //returns the list of edges of the shortest path to the targetRoom with considerations if handicapped
+    /**
+     * @param targetRoom Room to navigate to
+     * @param handicapped Should the path be handicap accessible
+     * @param direction Direction to head initially
+     * @return the list of edges of the shortest path to the targetRoom with considerations if handicapped
+     * @throws RoomNotExistsException Thrown if the targetRoom does not exist
+     */
     public List<Edge> getShortestPathTo(String targetRoom, boolean handicapped, Direction direction) throws RoomNotExistsException {
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths;
 
@@ -54,7 +60,9 @@ public class GraphBuilder {
         return null;
     }
 
-    //returns the list of edges of the shortest path from the sourceRoom with considerations if handicapped to the stairs/elevator/outside
+    /**
+     * @return the list of edges of the shortest path from the sourceRoom with considerations if handicapped to the stairs/elevator/outside
+     */
     public List<Edge> getShortestPathFrom(String sourceRoom, boolean handicapped, Direction direction) throws RoomNotExistsException {
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = getShortestPathsGraph(sourceRoom);
 
@@ -74,14 +82,26 @@ public class GraphBuilder {
         }
     }
 
-    //returns the graph with the all the shortest paths to all nodes from the sourceRoom
+    /**
+     * This method uses Dijkstra's algorithm to find the shortest path to a room.
+     *
+     * @param room Name of the room to get the path to
+     * @return the graph with  the all the shortest paths to all nodes from the sourceRoom
+     * @throws RoomNotExistsException thrown if room does not exist
+     */
     public ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> getShortestPathsGraph(String room) throws RoomNotExistsException {
         DijkstraShortestPath<Node, Edge> dijkstraAlg = new DijkstraShortestPath<>(floorGraph);
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = dijkstraAlg.getPaths(getRoomNode(room));
         return paths;
     }
 
-    //get the node corresponding to the room given
+    /**
+     * get the node corresponding to the room given
+     *
+     * @param room Name of the room
+     * @return the node that represents the room that is passed as a parameter
+     * @throws RoomNotExistsException thrown if the room that is passed does not exist
+     */
     public Node getRoomNode(String room) throws RoomNotExistsException {
         for (Node node : floorGraph.vertexSet()) {
             for (String r : node.getRooms()) {
@@ -94,7 +114,10 @@ public class GraphBuilder {
         throw new RoomNotExistsException("Room [ " + room + " ] does not exist.");
     }
 
-    //returns the complete graph of the floor
+    /**
+     * @param parser Parser that can read the XML that represents a floor
+     * @return the complete graph of the floor
+     */
     public Graph<Node, Edge> createGraph(XmlPullParser parser) {
         //initialize needed variables
         Graph<Node, Edge> gFloor = GraphTypeBuilder.<Node, Edge>undirected().allowingMultipleEdges(false).allowingSelfLoops(false).edgeClass(Edge.class).weighted(true).buildGraph();

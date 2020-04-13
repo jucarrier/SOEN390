@@ -18,6 +18,9 @@ import com.example.concordiaguide.R;
 import Models.MyPlaces;
 import Models.Results;
 
+/**
+ * Custom view adapter that uses the RecyclerView to display locations
+ */
 public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
