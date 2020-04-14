@@ -47,15 +47,17 @@ import java.util.regex.Pattern;
 public class ClassScheduleActivity extends AppCompatActivity {
     public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
 
-    public Cursor cursor;
+    public Cursor cursor;   //cursor is needed to access events from google calendar
     public ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
 
     public boolean notificationsActive = false;
 
+    //shared preferences will be used to store the user's preference for whether notifications are active or not
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NOTIFICATIONS_ACTIVE = "notificationsActive";
 
 
+    //recyclerview to display calendar events to the user
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
@@ -111,7 +113,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
-        //toggle notifications on or off
+        /**
+         * This onclickListener is used to toggle notifications on or off. When toggling notifications on,
+         * it iterates through the list of calendar events and sets a new alarm for each one. When toggling
+         * them off, it calls the cancelAllAlarms method.
+         */
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -119,6 +125,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 if(notificationsActive){
                     notificationsActive=false;
                     savePreference(false);
+
+                    //all alarms are cancelled when the notifications are toggled off
                     cancelAllAlarms();
 
                     notificationsOnOrOff.setText("Notifications are OFF");
@@ -126,6 +134,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     notificationsActive=true;
                     savePreference(true);
 
+                    //when the nofifications are toggled on, we must iterate through the class schedule and set a new alarm for each event
                     for(CalendarEvent c : schedule.getEvents()){
                         Date now = new Date(System.currentTimeMillis());
                         Date date = c.getStartDate();
@@ -174,11 +183,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
+        //create a list of events that must be displayed, which will be used by the recyclerview
         ArrayList<CalendarEventDisplayCard> eventsToDisplay = new ArrayList<>();
         for(CalendarEvent ce : schedule.getEvents()){
             eventsToDisplay.add(new CalendarEventDisplayCard(R.drawable.ic_event_black_24dp, ce.getTitle(), ce.getLocation(), (HashMap<String, Boolean>) ce.getDays()));
         }
 
+        //set up the recyclerview
         recyclerView = findViewById(R.id.classScheduleRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerViewLayoutManager = new LinearLayoutManager(this);
