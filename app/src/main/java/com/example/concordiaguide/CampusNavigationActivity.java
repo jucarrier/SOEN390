@@ -1,27 +1,21 @@
 package com.example.concordiaguide;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import Helpers.BuildingListAdapter;
 import Helpers.ObjectWrapperForBinder;
 import Models.Campus;
 
 public class CampusNavigationActivity extends AppCompatActivity {
-
-    enum Campuses {
-        SGW,
-        LAYOLA
-    }
 
     private Campus sgw, loyola;
     private Campuses currentCampus;
@@ -35,15 +29,15 @@ public class CampusNavigationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //set event listener for switch button
-        Switch switchButton = (Switch) findViewById(R.id.campus_switch);
+        Switch switchButton = findViewById(R.id.campus_switch);
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
                 TextView title = findViewById(R.id.building_list_campus);
-                RecyclerView recyclerViewSgw = (RecyclerView) findViewById(R.id.building_list_sgw);
-                RecyclerView recyclerViewLoyola = (RecyclerView) findViewById(R.id.building_list_loyola);
+                RecyclerView recyclerViewSgw = findViewById(R.id.building_list_sgw);
+                RecyclerView recyclerViewLoyola = findViewById(R.id.building_list_loyola);
 
-                if(b == false) {
+                if (b == false) {
                     title.setText("SGW");
                     currentCampus = Campuses.SGW;
                     recyclerViewSgw.setVisibility(View.VISIBLE);
@@ -58,29 +52,33 @@ public class CampusNavigationActivity extends AppCompatActivity {
         });
 
         //get bundle sent
-        if(sgw == null) { sgw = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("sgw")).getData(); }
-        if(loyola == null) { loyola = (Campus) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("loyola")).getData(); }
+        if (sgw == null) {
+            sgw = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("sgw")).getData();
+        }
+        if (loyola == null) {
+            loyola = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("loyola")).getData();
+        }
 
         //create list for sgw and loyola
-        RecyclerView recyclerViewSgw = (RecyclerView) findViewById(R.id.building_list_sgw);
+        RecyclerView recyclerViewSgw = findViewById(R.id.building_list_sgw);
         recyclerViewSgw.setLayoutManager(new LinearLayoutManager(this));
         RecyclerView.Adapter mAdapterSgw = new BuildingListAdapter(this, sgw.getBuildings());
         recyclerViewSgw.setAdapter(mAdapterSgw);
 
-        RecyclerView recyclerViewLoyola = (RecyclerView) findViewById(R.id.building_list_loyola);
+        RecyclerView recyclerViewLoyola = findViewById(R.id.building_list_loyola);
         recyclerViewLoyola.setLayoutManager(new LinearLayoutManager(this));
         RecyclerView.Adapter mAdapterLoyola = new BuildingListAdapter(this, loyola.getBuildings());
         recyclerViewLoyola.setAdapter(mAdapterLoyola);
 
         //set title
         TextView title = findViewById(R.id.building_list_campus);
-        if(currentCampus == null) {
+        if (currentCampus == null) {
             title.setText("SGW");
             currentCampus = Campuses.SGW;
             recyclerViewSgw.setVisibility(View.VISIBLE);
             recyclerViewLoyola.setVisibility(View.GONE);
         } else {
-            if(currentCampus == Campuses.SGW) {
+            if (currentCampus == Campuses.SGW) {
                 title.setText("SGW");
                 currentCampus = Campuses.SGW;
                 recyclerViewSgw.setVisibility(View.VISIBLE);
@@ -94,6 +92,11 @@ public class CampusNavigationActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    enum Campuses {
+        SGW,
+        LAYOLA
     }
 
 }

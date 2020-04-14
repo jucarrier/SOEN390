@@ -15,8 +15,8 @@ import Models.Building;
 
 public class BuildingInfoActivity extends AppCompatActivity {
     private static final String TAG = "BuildingInfoActivity";
-    private Button directions;
     Building building;
+    private Button directions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
 
         //set info
         Log.d(TAG, "onClickEvent: caught");
-        building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
 
         TextView name = findViewById(R.id.building_info_name);
         TextView address = findViewById(R.id.building_info_address);
@@ -38,7 +38,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
         address.setText(building.getAddress());
         description.setText(building.getDescription());
 
-        directions = (Button) findViewById(R.id.directions_button);
+        directions = findViewById(R.id.directions_button);
 
         directions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +48,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void directionsButtonClicked(Building b){
+    private void directionsButtonClicked(Building b) {
         final Bundle bundle = new Bundle();
         bundle.putBinder("building", new ObjectWrapperForBinder(b));
         Intent openMainActivity = new Intent(this, MainActivity.class).putExtras(bundle);

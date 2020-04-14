@@ -12,21 +12,27 @@ import Models.Campus;
 import Models.Floor;
 import Models.GatewayNodes;
 
+/**
+ * This class handles creating the campus object that are used throughout the project to
+ * represent the campuses that are part of concordia as well as the buildings that are part of
+ * the campuses.
+ */
 public class CampusBuilder {
-    GoogleMap mMap;
-    GatewayNodes basicGatewayNode;
+    private final String defaultDescription = "Description";
+    private GoogleMap mMap;
+    private GatewayNodes basicGatewayNode;
     private String stairNode = "Stairs";
     private String elevatorOneNode = "Elevator 1";
-    private final String defaultDescription = "Description";
-    private final String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
 
     public CampusBuilder(GoogleMap mMap) {
         basicGatewayNode = new GatewayNodes(elevatorOneNode, elevatorOneNode, stairNode, stairNode, null);
         this.mMap = mMap;
     }
 
+    /**
+     * @return Returns a Campus object representing the downtown campus
+     */
     public Campus buildSGW() {
-
         Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", defaultDescription, "H",
                 new Floor[]{
                         new Floor("8th", 8, R.drawable.ic_hall_8, basicGatewayNode,
@@ -193,6 +199,9 @@ public class CampusBuilder {
 
     }
 
+    /**
+     * @return Returns Returns a Campus object representing the Layola campus
+     */
     public Campus buildLoyola() {
 
         Building ad = new Building(mMap, "Administration building", "Refectory, Montreal, QC H4B", defaultDescription, "AD",
@@ -215,6 +224,7 @@ public class CampusBuilder {
                 new LatLng(45.457800, -73.639828),
                 new LatLng(45.457912, -73.640122));
 
+        String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
         Building cc = new Building(mMap, "Central Building", deafultLayolaAddress, defaultDescription, "CC",
                 new Floor[]{},
                 new LatLng(45.458379, -73.640792),
