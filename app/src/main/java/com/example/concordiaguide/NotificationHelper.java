@@ -11,8 +11,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 public class NotificationHelper extends ContextWrapper {
-    public static final String channel1ID = "channel1ID";
-    public static final String channel1Name = "channel 1";
+    public static final String CHANNEL_1_ID = "channel1ID";
+    public static final String CHANNEL_1_NAME = "channel 1";
 
     private NotificationManager manager;
 
@@ -23,8 +23,8 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createChannels(){
-        NotificationChannel channel1 = new NotificationChannel(channel1ID, channel1Name, NotificationManager.IMPORTANCE_DEFAULT);
+    public void createChannels() {
+        NotificationChannel channel1 = new NotificationChannel(CHANNEL_1_ID, CHANNEL_1_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         channel1.enableVibration(true);
         channel1.enableLights(true);
         channel1.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
@@ -32,15 +32,15 @@ public class NotificationHelper extends ContextWrapper {
         getManager().createNotificationChannel(channel1);
     }
 
-    public NotificationManager getManager(){
-        if(manager==null){
+    public NotificationManager getManager() {
+        if (manager == null) {
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return manager;
     }
 
-    public NotificationCompat.Builder getChannel1Notification (String title, String message){
-        return new NotificationCompat.Builder(getApplicationContext(), channel1ID)
+    public NotificationCompat.Builder getChannel1Notification(String title, String message) {
+        return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_directions_walk_black_24dp);

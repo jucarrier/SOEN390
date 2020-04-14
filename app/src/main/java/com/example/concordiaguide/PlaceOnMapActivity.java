@@ -3,9 +3,10 @@ package com.example.concordiaguide;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,11 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
-import Helpers.DirectionsJSONParser;
-
-import Models.Results;
-import Models.Location;
 
 import org.json.JSONObject;
 
@@ -34,6 +30,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Helpers.DirectionsJSONParser;
+import Models.Location;
+import Models.Results;
+
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     // variable
@@ -44,6 +44,8 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private double lat, lng;
     private GoogleMap googleMap;
     private String type;
+
+    private String parserTask = "ParserTask";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +131,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 13.0f));
         googleMap.getUiSettings().setCompassEnabled(true);
-       // googleMap.getUiSettings().setZoomControlsEnabled(true);
+        // googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         String url = getDirectionsUrl(currentPosition, destinationPosition);
 
@@ -191,7 +193,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             }
 
             data = sb.toString();
-            Log.d("downloadUrl", data.toString());
+            Log.d("downloadUrl", data);
             br.close();
 
         } catch (Exception e) {
@@ -215,7 +217,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             try {
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
-                Log.d("Background Task data", data.toString());
+                Log.d("Background Task data", data);
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
@@ -245,17 +247,17 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d("ParserTask", jsonData[0].toString());
+                Log.d(parserTask, jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser();
-                Log.d("ParserTask", parser.toString());
+                Log.d(parserTask, parser.toString());
 
                 // Starts parsing data
                 routes = parser.parse(jObject);
-                Log.d("ParserTask", "Executing routes");
-                Log.d("ParserTask", routes.toString());
+                Log.d(parserTask, "Executing routes");
+                Log.d(parserTask, routes.toString());
 
             } catch (Exception e) {
-                Log.d("ParserTask", e.toString());
+                Log.d(parserTask, e.toString());
                 e.printStackTrace();
             }
             return routes;

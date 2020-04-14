@@ -1,38 +1,38 @@
 package com.example.concordiaguide;
 
-import Models.Photos;
-import Models.Results;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.squareup.picasso.Picasso;
 
-import androidx.appcompat.app.AppCompatActivity;
+import Models.Photos;
+import Models.Results;
 
 public class PlaceDetailsActivity extends AppCompatActivity {
     private ImageView imageView;
     private Photos photos;
     private TextView textViewName;
-  //private TextView textViewRating;
+    //private TextView textViewRating;
     private TextView textViewAddress;
-  //private TextView textViewAvailability;
-  //private RatingBar ratingBar;
- //   private LinearLayout linearLayoutRating;
+    //private TextView textViewAvailability;
+    //private RatingBar ratingBar;
+    //   private LinearLayout linearLayoutRating;
     private LinearLayout linearLayoutShowOnMap;
     private LinearLayout linearLayoutShowDistanceOnMap;
     // variable
     private Results results;
     private double lat, lng;
+    private String result = "result";
 
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
 
@@ -42,7 +42,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            results = (Results) bundle.getSerializable("result");
+            results = (Results) bundle.getSerializable(result);
             lat = bundle.getDouble("lat");
             lng = bundle.getDouble("lng");
             //Toast.makeText(this, String.valueOf(results.getPhotos()[0].getPhoto_reference()), Toast.LENGTH_SHORT).show();
@@ -74,23 +74,23 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         textViewName.setText(results.getName());
         textViewAddress.setText(results.getVicinity());
         // check if ratings is available for the place
-       // if (results.getRating() != null) {
-          //  linearLayoutRating.setVisibility(View.VISIBLE);
-           // textViewRating.setText(results.getRating());
-          //  ratingBar.setRating(Float.valueOf(results.getRating()));
-       //}
+        // if (results.getRating() != null) {
+        //  linearLayoutRating.setVisibility(View.VISIBLE);
+        // textViewRating.setText(results.getRating());
+        //  ratingBar.setRating(Float.valueOf(results.getRating()));
+        //}
         // check if opening hours is available
-      //  if (results.getOpeningHours() != null) {
-     //       textViewAvailability.setText(!results.getOpeningHours().getOpenNow() ? "Close now" : "Open now");
-     //   } else {
-      //      textViewAvailability.setText("Not found!");
-     //   }
+        //  if (results.getOpeningHours() != null) {
+        //       textViewAvailability.setText(!results.getOpeningHours().getOpenNow() ? "Close now" : "Open now");
+        //   } else {
+        //      textViewAvailability.setText("Not found!");
+        //   }
 
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra("result", results);
+                intent.putExtra(result, results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "map");
@@ -102,7 +102,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra("result", results);
+                intent.putExtra(result, results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "distance");
@@ -110,15 +110,16 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
     private void init() {
-       // linearLayoutRating = findViewById(R.id.linearLayoutRating);
+        // linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
         textViewName = findViewById(R.id.textViewName);
-       // textViewRating = findViewById(R.id.textViewRating);
+        // textViewRatPling = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
-       // textViewAvailability = findViewById(R.id.textViewAvailability);
-      //  ratingBar = findViewById(R.id.ratingBar);
+        // textViewAvailability = findViewById(R.id.textViewAvailability);
+        //  ratingBar = findViewById(R.id.ratingBar);
     }
 
 }

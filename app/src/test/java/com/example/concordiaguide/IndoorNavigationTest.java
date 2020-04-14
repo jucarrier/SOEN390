@@ -1,29 +1,25 @@
 package com.example.concordiaguide;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.devs.vectorchildfinder.VectorDrawableCompat;
-import com.google.android.gms.maps.GoogleMap;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import Helpers.CampusBuilder;
-import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
 import Models.Floor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -79,14 +75,18 @@ public class IndoorNavigationTest {
 
     @Test
     public void verifyRoomPathing() {
+        final String EDGE_NAME = "edge_35_823_820_50";
         Building hall = sgw.getBuilding("Hall");
         Floor eightFloor = hall.getFloor(8);
         VectorDrawableCompat.VFullPath edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("820", eightFloor, false, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, true, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("tree", eightFloor, true, hall);
         assertNull(edge);
     }
