@@ -190,6 +190,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method reads calendar events - it uses the cursor to get values from each column to be assembled
+     * and displayed to the user. Events are filtered for classes that follow a standard naming format, containing
+     * 3 numbers and a concordia class code, or the word "lecture" or "tutorial"
+     * @throws NullPointerException
+     */
     public void readEvents() throws NullPointerException {
         if (cursor!=null){
             while(cursor.moveToNext()){
@@ -272,6 +278,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
         System.out.println("id: " + alarmId + ", size: " + activeAlarmIds.size());
     }
 
+    /**
+     * Uses the AlarmManager to clear all active alarms.
+     * Clears the active alarm IDs from activeAlarmIds.
+     */
     public void cancelAllAlarms(){
         for(int i = 0;i<activeAlarmIds.size(); i++){
             int alarmId = activeAlarmIds.get(i);
@@ -286,6 +296,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
         System.out.println("All alarms cancelled");
     }
 
+    /**
+     * This method uses android's SharedPreferences to save the user's preference for whether notifications are active or not.
+     * @param active - boolean, whether the user wants notifications to be active.
+     */
     public void savePreference(boolean active){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -296,6 +310,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
         updateViewsForNotificationPreference();
     }
 
+    /**
+     * Loads the user's saved preference for whether notifications should be active ore not.
+     */
     public void loadPreference(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
@@ -304,6 +321,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
         updateViewsForNotificationPreference();
     }
 
+    /**
+     * Updates the icon for the alarm toggle button and the textview specifying whether notifications are active.
+     */
     public void updateViewsForNotificationPreference(){
         TextView tv = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
         FloatingActionButton b = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
