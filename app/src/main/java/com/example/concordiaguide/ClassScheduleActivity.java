@@ -339,17 +339,5 @@ public class ClassScheduleActivity extends AppCompatActivity {
         }
     }
 
-    public FloatingActionButton getToggleNotifications(){
-        return this.buttonToggleNotifications;
-    }
-
-    public TextView getNotificationsOnOrOff(){
-        return this.notificationsOnOrOff;
-    }
-
-    public FloatingActionButton getRefreshButton(){
-        return this.refreshButton;
-    }
-
 }
 
