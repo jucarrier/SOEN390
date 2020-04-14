@@ -46,11 +46,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
     public boolean notificationsActive = false;
 
-    //shared preferences will be used to store the user's preference for whether notifications are active or not
-    public static final String SHARED_PREFS = "sharedPrefs";
-    public static final String NOTIFICATIONS_ACTIVE = "notificationsActive";
-
-
     //recyclerview to display calendar events to the user
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
@@ -60,9 +55,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public FloatingActionButton buttonToggleNotifications;
     public TextView notificationsOnOrOff;
     public FloatingActionButton refreshButton;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
