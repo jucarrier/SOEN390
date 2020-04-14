@@ -75,14 +75,18 @@ public class IndoorNavigationTest {
 
     @Test
     public void verifyRoomPathing() {
+        final String EDGE_NAME = "edge_35_823_820_50";
         Building hall = sgw.getBuilding("Hall");
         Floor eightFloor = hall.getFloor(8);
         VectorDrawableCompat.VFullPath edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("820", eightFloor, false, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, true, hall);
-        assertEquals(edge.getFillColor(), Color.BLUE);
+        assertEquals(edge.getStrokeColor(), Color.BLUE);
+        assertEquals(edge.getPathName(), EDGE_NAME);
         edge = indoorNavigationActivity.highlightPathToRoom("tree", eightFloor, true, hall);
         assertNull(edge);
     }

@@ -103,9 +103,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
             roomNumber = building.getInitials() + roomNumber;
             roomNumber = roomNumber.toUpperCase();
-            edge = vector.findPathByName(roomNumber);
-            if (edge != null) {
-                edge.setFillColor(Color.BLUE);
+            VectorDrawableCompat.VFullPath roomNode = vector.findPathByName(roomNumber);
+            if (roomNode != null) {
+                roomNode.setFillColor(Color.BLUE);
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
