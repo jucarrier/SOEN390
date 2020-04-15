@@ -1,5 +1,7 @@
 package com.example.concordiaguide;
 
+import Helpers.GoogleApiService;
+import Helpers.PoiFragment;
 import Models.Building;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -30,27 +32,30 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import Helpers.ObjectWrapperForBinder;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +73,9 @@ import java.util.List;
 
 import Helpers.CampusBuilder;
 import Models.Campus;
+import Helpers.PlacesResult;
+import Models.MyPlaces;
+import Models.Results;
 
 public class MainActivity<locationManager> extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
     private static final String drivingMethod = "driving";
@@ -76,6 +84,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected Cursor cursor;
 
     private boolean shuttle_active = false;
+    private boolean test = false;
 
     protected TabLayout transportationSelectionTab;
 
@@ -84,10 +93,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
    double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-   LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
+    List<Results> results = new ArrayList<Results>();
 
     //this is the listener method that constantly updates the user's location for usage in other methods
     @Override
@@ -399,8 +409,19 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         setIntent(intent);
         Bundle b = intent.getExtras();
         shuttle_active = b.getBoolean("active");
-        mMap.clear();
-        onMapReady(mMap);
+        test = b.getBoolean("Poi_fragment_bool");
+        //Shuttle code
+        if (shuttle_active==true) {
+            mMap.clear();
+            onMapReady(mMap);
+        }
+        if(test == true){
+            mMap.clear();
+            //listPoints.clear();
+            results = PlacesResult.results;
+            poiChosen(mMap);
+            //onMapReady(mMap);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -593,6 +614,29 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
      * installed Google Play services and returned to the app.
      */
 
+    public void poiChosen(GoogleMap googleMap) {
+        for (int i = 0; i < results.size(); i++) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            Results googlePlace = results.get(i);
+            double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
+            double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
+            String placeName = googlePlace.getName();
+            String vicinity = googlePlace.getVicinity();
+            LatLng latLng = new LatLng(lat, lng);
+            markerOptions.position(latLng);
+            markerOptions.title(placeName);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            // add marker to map
+            googleMap.addMarker(markerOptions).showInfoWindow();;
+            // move camera
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+            googleMap.getUiSettings().setCompassEnabled(true);
+            // googleMap.getUiSettings().setZoomControlsEnabled(true);
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -642,6 +686,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         }
 
+        //test onNewIntent
+        if(test == true){
+            Intent intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
+            startActivity(intent);
+        }
+
         Building building;
 
         try {
@@ -655,7 +705,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             @Override
             public void onMapLongClick(LatLng latLng) {
 
-                if (listPoints.size() > 0) {
+                if (listPoints.size() > 0 || results.size()>0) {
                     listPoints.clear();
                     mMap.clear();
                     sgw = cb.buildSGW();
@@ -735,4 +785,64 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             }
         }
     }
+
+    public double latitude,longitude;
+    private String placeType = "";
+    private GoogleApiService googleApiService;
+    private MyPlaces myPlaces;
+
+    private FusedLocationProviderClient flc;
+    LocationManager lm;
+
+    private Spinner spinner_nearby_choices;
+    private void locationService(){
+
+        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+
+            Log.d("locationservice", "locationService: Fetching data from gps");
+
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+            final LocationListener locationListener = this;
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }//if the permissions don't match, do nothing
+
+            flc = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+
+            flc.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    if (location != null) {
+
+                        lat = location.getLatitude();
+                        lng = location.getLongitude();
+
+                    } else {//show users location
+                        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+                            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+                        } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+                        }
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "GPS off", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.concordiaguide.MainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -145,8 +146,16 @@ public class PoiFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 PlacesResult.results = myPlaces.getResults();
-                Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
+                //startActivity(intent);
+
+                final Bundle bundle = new Bundle();
+                bundle.putBoolean("Poi_fragment_bool", true);
+
+                Intent intent2 = new Intent(getContext(), MainActivity.class).putExtras(bundle);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent2);
             }
         });
 
@@ -154,7 +163,7 @@ public class PoiFragment extends Fragment {
 
     }
 
-    private class MyLocationListener implements LocationListener {
+    public class MyLocationListener implements LocationListener {
 
         @Override //breaks down location coordinates and maps them to lattitude/longitude variables
         public void onLocationChanged(Location lc) {
