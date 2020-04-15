@@ -4,7 +4,7 @@ package Models;
 import java.io.Serializable;
 import java.util.List;
 
-public class MyPlaces implements Serializable{
+public class MyPlaces implements Serializable {
     //stores all nearby places result in list format
     private String next_page_token;
 

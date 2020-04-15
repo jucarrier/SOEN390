@@ -23,7 +23,7 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createChannels(){
+    public void createChannels() {
         NotificationChannel channel1 = new NotificationChannel(CHANNEL_1_ID, CHANNEL_1_NAME, NotificationManager.IMPORTANCE_DEFAULT);
         channel1.enableVibration(true);
         channel1.enableLights(true);
@@ -32,14 +32,14 @@ public class NotificationHelper extends ContextWrapper {
         getManager().createNotificationChannel(channel1);
     }
 
-    public NotificationManager getManager(){
-        if(manager==null){
+    public NotificationManager getManager() {
+        if (manager == null) {
             manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         return manager;
     }
 
-    public NotificationCompat.Builder getChannel1Notification (String title, String message){
+    public NotificationCompat.Builder getChannel1Notification(String title, String message) {
         return new NotificationCompat.Builder(getApplicationContext(), CHANNEL_1_ID)
                 .setContentTitle(title)
                 .setContentText(message)

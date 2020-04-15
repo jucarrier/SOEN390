@@ -1,9 +1,9 @@
 package Models;
 
 
-import java.io.Serializable;
-
 import androidx.annotation.NonNull;
+
+import java.io.Serializable;
 //to store photo references, then pass onto results to later display
 
 public class Photos implements Serializable {

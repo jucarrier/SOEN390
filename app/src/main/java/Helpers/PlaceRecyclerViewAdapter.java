@@ -3,8 +3,8 @@ package Helpers;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,11 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.concordiaguide.PlaceDetailsActivity;
+import com.example.concordiaguide.R;
 
 import Models.MyPlaces;
 import Models.Results;
-import com.example.concordiaguide.R;
 
+/**
+ * Custom view adapter that uses the RecyclerView to display locations
+ */
 public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
 
     private Context context;

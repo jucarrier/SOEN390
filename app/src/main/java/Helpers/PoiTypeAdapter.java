@@ -10,15 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import Models.PoiType;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.concordiaguide.NearByPoiActivity;
 import com.example.concordiaguide.R;
 
-
 import java.util.List;
 
-import androidx.recyclerview.widget.RecyclerView;
+import Models.PoiType;
 
 
 public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeHolder> {
@@ -27,25 +27,10 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
     private List<PoiType> mPlaceTypes;
     private Context mContext;
 
-    // Provide a reference to the views for each data item
-    public static class PoiTypeHolder extends RecyclerView.ViewHolder {
-
-        ImageView icon;
-        TextView name;
-        RelativeLayout parentLayout;
-
-        public PoiTypeHolder(View itemView) {
-            super(itemView);
-            icon = itemView.findViewById(R.id.type_icon);
-            name = itemView.findViewById(R.id.type_name);
-            parentLayout = itemView.findViewById(R.id.singleTypeItemLayout);
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public PoiTypeAdapter(Context context, List<PoiType> placeTypes) {
         mContext = context;
-        mPlaceTypes= placeTypes;
+        mPlaceTypes = placeTypes;
     }
 
     // Create new views (invoked by the layout manager)
@@ -76,7 +61,7 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
                 Bundle bundle = new Bundle();
                 bundle.putBinder("poitype", new ObjectWrapperForBinder(mPlaceTypes.get(position).getPoiType()));
 
-                Intent intent= new Intent(mContext, NearByPoiActivity.class);
+                Intent intent = new Intent(mContext, NearByPoiActivity.class);
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
@@ -88,6 +73,21 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
     @Override
     public int getItemCount() {
         return mPlaceTypes.size();
+    }
+
+    // Provide a reference to the views for each data item
+    public static class PoiTypeHolder extends RecyclerView.ViewHolder {
+
+        ImageView icon;
+        TextView name;
+        RelativeLayout parentLayout;
+
+        public PoiTypeHolder(View itemView) {
+            super(itemView);
+            icon = itemView.findViewById(R.id.type_icon);
+            name = itemView.findViewById(R.id.type_name);
+            parentLayout = itemView.findViewById(R.id.singleTypeItemLayout);
+        }
     }
 
 }
