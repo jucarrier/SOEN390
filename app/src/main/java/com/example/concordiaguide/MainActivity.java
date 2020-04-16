@@ -432,6 +432,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         trd.execute(reqUrl);
     }
 
+    /**
+     * This method gives the direction of the shuttle from one campus to another
+     *
+     * @param from The campus the user is leaving from
+     * @param to The campus the user is going to
+     */
     public void shuttleDirection(LatLng from, LatLng to) {
         TaskRequestDirections trd = new TaskRequestDirections();
         listPoints.add(to);
