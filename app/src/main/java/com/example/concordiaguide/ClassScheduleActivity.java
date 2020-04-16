@@ -41,16 +41,20 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String NOTIFICATIONS_ACTIVE = "notificationsActive";
     public ArrayList<Integer> activeAlarmIds = new ArrayList<>();
-    public Cursor cursor;
+
+    public Cursor cursor;   //cursor is needed to access events from google calendar
     public ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
     public boolean notificationsActive = false;
+
+    //recyclerview to display calendar events to the user
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
+
     public String eventsRead = ""; //used for testing to make sure readEvents has run
     public FloatingActionButton buttonToggleNotifications;
     public TextView notificationsOnOrOff;
     public FloatingActionButton refreshButton;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
-        //toggle notifications on or off
+        /**
+         * This onclickListener is used to toggle notifications on or off. When toggling notifications on,
+         * it iterates through the list of calendar events and sets a new alarm for each one. When toggling
+         * them off, it calls the cancelAllAlarms method.
+         */
         buttonToggleNotifications.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -104,6 +112,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                 if (notificationsActive) {
                     notificationsActive = false;
                     savePreference(false);
+
+                    //all alarms are cancelled when the notifications are toggled off
                     cancelAllAlarms();
 
                     notificationsOnOrOff.setText("Notifications are OFF");
@@ -111,7 +121,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     notificationsActive = true;
                     savePreference(true);
 
-                    for (CalendarEvent c : schedule.getEvents()) {
+                    //when the nofifications are toggled on, we must iterate through the class schedule and set a new alarm for each event
+                    for(CalendarEvent c : schedule.getEvents()){
                         Date now = new Date(System.currentTimeMillis());
                         Date date = c.getStartDate();
                         int hour = date.getHours();
@@ -159,11 +170,13 @@ public class ClassScheduleActivity extends AppCompatActivity {
             }
         });
 
+        //create a list of events that must be displayed, which will be used by the recyclerview
         ArrayList<CalendarEventDisplayCard> eventsToDisplay = new ArrayList<>();
         for (CalendarEvent ce : schedule.getEvents()) {
             eventsToDisplay.add(new CalendarEventDisplayCard(R.drawable.ic_event_black_24dp, ce.getTitle(), ce.getLocation(), (HashMap<String, Boolean>) ce.getDays()));
         }
 
+        //set up the recyclerview
         recyclerView = findViewById(R.id.classScheduleRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerViewLayoutManager = new LinearLayoutManager(this);
@@ -175,6 +188,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method reads calendar events - it uses the cursor to get values from each column to be assembled
+     * and displayed to the user. Events are filtered for classes that follow a standard naming format, containing
+     * 3 numbers and a concordia class code, or the word "lecture" or "tutorial"
+     * @throws NullPointerException
+     */
     public void readEvents() throws NullPointerException {
 //        if (cursor!=null){
         while (cursor != null && cursor.moveToNext()) {
@@ -257,8 +276,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
         System.out.println("id: " + alarmId + ", size: " + activeAlarmIds.size());
     }
 
-    public void cancelAllAlarms() {
-        for (int i = 0; i < activeAlarmIds.size(); i++) {
+    /**
+     * Uses the AlarmManager to clear all active alarms.
+     * Clears the active alarm IDs from activeAlarmIds.
+     */
+    public void cancelAllAlarms(){
+        for(int i = 0;i<activeAlarmIds.size(); i++){
             int alarmId = activeAlarmIds.get(i);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
@@ -271,7 +294,11 @@ public class ClassScheduleActivity extends AppCompatActivity {
         System.out.println("All alarms cancelled");
     }
 
-    public void savePreference(boolean active) {
+    /**
+     * This method uses android's SharedPreferences to save the user's preference for whether notifications are active or not.
+     * @param active - boolean, whether the user wants notifications to be active.
+     */
+    public void savePreference(boolean active){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -281,7 +308,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
         updateViewsForNotificationPreference();
     }
 
-    public void loadPreference() {
+    /**
+     * Loads the user's saved preference for whether notifications should be active ore not.
+     */
+    public void loadPreference(){
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
         notificationsActive = sharedPreferences.getBoolean(NOTIFICATIONS_ACTIVE, false);
@@ -289,9 +319,12 @@ public class ClassScheduleActivity extends AppCompatActivity {
         updateViewsForNotificationPreference();
     }
 
-    public void updateViewsForNotificationPreference() {
-        TextView tv = findViewById(R.id.textViewNotificationsOnOrOff);
-        FloatingActionButton b = findViewById(R.id.buttonToggleNotifications);
+    /**
+     * Updates the icon for the alarm toggle button and the textview specifying whether notifications are active.
+     */
+    public void updateViewsForNotificationPreference(){
+        TextView tv = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton b = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
 
         if (notificationsActive) {
             tv.setText("Notifications are ON");
@@ -302,18 +335,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
             b.setImageResource(R.drawable.ic_alarm_off_black_24dp);
             b.setTag(R.drawable.ic_alarm_off_black_24dp);
         }
-    }
-
-    public FloatingActionButton getToggleNotifications() {
-        return this.buttonToggleNotifications;
-    }
-
-    public TextView getNotificationsOnOrOff() {
-        return this.notificationsOnOrOff;
-    }
-
-    public FloatingActionButton getRefreshButton() {
-        return this.refreshButton;
     }
 
 }
