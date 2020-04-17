@@ -324,6 +324,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
+        Button nextButton = (Button) findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDirections();
+            }
+        });
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
@@ -396,7 +404,12 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 edges = gb.getShortestPath(sourceRoom, sourceFloor.getGatewayNodes().getOutside());
                 colorMap(edges, vector, sourceFloor.getGatewayNodes().getOutside());
                 if(sourceFloor.isMainFloor()) {
-                    //TODO: GOT TO OUTDOOR NAVIGATION
+                    nextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //TODO: GOT TO OUTDOOR NAVIGATION
+                        }
+                    });
                 }
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
