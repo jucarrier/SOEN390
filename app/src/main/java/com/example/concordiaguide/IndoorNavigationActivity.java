@@ -17,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,14 +53,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Spinner roomSpinnerTo;
     private AutoCompleteTextView roomInput;
 
-    private Boolean isHandicapped = false;
-
     private Building sourceBuilding;
     private Floor sourceFloor;
     private String sourceRoom;
     private Building targetBuilding;
     private Floor targetFloor;
     private String targetRoom;
+
+    private boolean isHandicapped = false;
 
 
     public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
@@ -76,7 +78,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         return room;
     }
 
-    public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, boolean isHandicapped, Building building) {
+    public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, Building building) {
         int floorMap = floor.getFloorMap();
         VectorDrawableCompat.VFullPath edge = null;
 
@@ -305,55 +307,96 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDirections(false);
+                Button fromToButton = (Button) findViewById(R.id.from_to_button);
+                fromToButton.setVisibility(View.GONE);
+
+                Spinner[] spinners = {(Spinner) findViewById(R.id.campus_spinner_from), (Spinner) findViewById(R.id.building_spinner_from), (Spinner) findViewById(R.id.floor_spinner_from), (Spinner) findViewById(R.id.room_spinner_from),
+                        (Spinner) findViewById(R.id.campus_spinner_to), (Spinner) findViewById(R.id.building_spinner_to), (Spinner) findViewById(R.id.floor_spinner_to), (Spinner) findViewById(R.id.room_spinner_to)};
+
+                for(Spinner s : spinners) {
+                    s.setEnabled(false);
+                }
+
+                Button nextButton = (Button) findViewById(R.id.next_button);
+                nextButton.setVisibility(View.VISIBLE);
+
+                showDirections();
             }
         });
-        
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    public void showDirections(boolean isHandicapped) {
+    //recursive function to show directions
+    public void showDirections() {
         int floorMap = sourceFloor.getFloorMap();
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
         VectorDrawableCompat.VFullPath edge = null;
 
+        if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+            sourceRoom = sourceRoom.substring(1);
+        }
+
+        if(targetRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+            targetRoom = targetRoom.substring(1);
+        }
+
         try {
+            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
+
             //is source and target are in the same building
             if(sourceBuilding.getName().equals(targetBuilding.getName())) {
+                String localDestination;
+
                 //if its on the same floor
                 if(sourceFloor.getFloorLevel() == targetFloor.getFloorLevel()) {
                     //get edges to room
                     edges = gb.getShortestPath(sourceRoom, targetRoom);
-                }
+                    colorMap(edges, vector);
 
-                //if its on a lower floor
-                if(sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
-                    //get edges to stairs/elevator doing down
-                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
-                }
-
-                //if its on a higher floor
-                if(sourceFloor.getFloorLevel() < targetFloor.getFloorLevel()) {
-                    //get edges to stairs/elevator doing up
-                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
-                }
-
-                //draw edges onto map
-                VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
-
-                for(Edge e : edges) {
-                    edge = vector.findPathByName(e.getEdgeName());
+                    targetRoom = sourceBuilding.getInitials() + targetRoom;
+                    targetRoom = targetRoom.toUpperCase();
+                    edge = vector.findPathByName(targetRoom);
                     if (edge != null) {
-                        edge.setStrokeColor(Color.BLUE);
+                        edge.setFillColor(Color.YELLOW);
                     }
                 }
 
-                String roomNumber = sourceBuilding.getInitials() + sourceRoom;
-                roomNumber = roomNumber.toUpperCase();
-                edge = vector.findPathByName(roomNumber);
-                if (edge != null) {
-                    edge.setFillColor(Color.BLUE);
+                //if its on a lower floor
+                else if(sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
+                    //get edges to stairs/elevator doing down
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
+                    colorMap(edges, vector);
+
+                    if(isHandicapped) {
+                        localDestination = sourceFloor.getGatewayNodes().getHandicappedDown();
+                    } else {
+                        localDestination = sourceFloor.getGatewayNodes().getNonHandicappedDown();
+                    }
+
+                    edge = vector.findPathByName(localDestination);
+                    if (edge != null) {
+                        edge.setFillColor(Color.YELLOW);
+                    }
+                }
+
+                //if its on a higher floor
+                else {
+                    //get edges to stairs/elevator doing up
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
+                    colorMap(edges, vector);
+
+                    if(isHandicapped) {
+                        localDestination = sourceFloor.getGatewayNodes().getHandicappedUp();
+                    } else {
+                        localDestination = sourceFloor.getGatewayNodes().getNonHandicappedUp();
+                    }
+
+                    edge = vector.findPathByName(localDestination);
+                    if (edge != null) {
+                        edge.setFillColor(Color.YELLOW);
+                    }
                 }
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
@@ -361,9 +404,28 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         }
     }
 
-    public void setCampuses(Campus sgw, Campus layola) {
+    private void colorMap(List<Edge> edges, VectorChildFinder vector) {
+        VectorDrawableCompat.VFullPath edge;
+        //draw edges onto map
+        for(Edge e : edges) {
+            edge = vector.findPathByName(e.getEdgeName());
+            if (edge != null) {
+                edge.setStrokeColor(Color.BLUE);
+            }
+        }
+
+        //fill room color
+        String room = sourceBuilding.getInitials() + sourceRoom;
+        room = room.toUpperCase();
+        edge = vector.findPathByName(room);
+        if (edge != null) {
+            edge.setFillColor(Color.BLUE);
+        }
+    }
+
+    public void setCampuses(Campus sgw, Campus loyola) {
         this.sgw = sgw;
-        this.loyola = layola;
+        this.loyola = loyola;
         setUp(this);
     }
 

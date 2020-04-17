@@ -10,7 +10,7 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -120,15 +120,24 @@
 
         <Button
             android:id="@+id/from_to_button"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignTop="@id/building_spinner_to"
             android:layout_marginTop="50dp"
             android:text="Go" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@id/building_spinner_to"
+            android:layout_marginTop="50dp"
+            android:text="Next" />
     </RelativeLayout>
-
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
