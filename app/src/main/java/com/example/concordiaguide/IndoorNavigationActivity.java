@@ -390,6 +390,15 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     colorMap(edges, vector, localDestination);
                 }
             }
+
+            //if not in the same building
+            else {
+                edges = gb.getShortestPath(sourceRoom, sourceFloor.getGatewayNodes().getOutside());
+                colorMap(edges, vector, sourceFloor.getGatewayNodes().getOutside());
+                if(sourceFloor.isMainFloor()) {
+                    //TODO: GOT TO OUTDOOR NAVIGATION
+                }
+            }
         } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
         }
