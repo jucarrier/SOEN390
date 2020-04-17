@@ -333,6 +333,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
         VectorDrawableCompat.VFullPath edge = null;
+        Button nextButton = (Button) findViewById(R.id.next_button);
 
         if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
             sourceRoom = sourceRoom.substring(1);
@@ -353,21 +354,18 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 if(sourceFloor.getFloorLevel() == targetFloor.getFloorLevel()) {
                     //get edges to room
                     edges = gb.getShortestPath(sourceRoom, targetRoom);
-                    colorMap(edges, vector);
 
-                    targetRoom = sourceBuilding.getInitials() + targetRoom;
-                    targetRoom = targetRoom.toUpperCase();
-                    edge = vector.findPathByName(targetRoom);
-                    if (edge != null) {
-                        edge.setFillColor(Color.YELLOW);
-                    }
+                    localDestination = sourceBuilding.getInitials() + targetRoom;
+                    localDestination = localDestination.toUpperCase();
+                    colorMap(edges, vector, localDestination);
+
+                    nextButton.setEnabled(false);
                 }
 
                 //if its on a lower floor
                 else if(sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
                     //get edges to stairs/elevator doing down
                     edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
-                    colorMap(edges, vector);
 
                     if(isHandicapped) {
                         localDestination = sourceFloor.getGatewayNodes().getHandicappedDown();
@@ -375,17 +373,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         localDestination = sourceFloor.getGatewayNodes().getNonHandicappedDown();
                     }
 
-                    edge = vector.findPathByName(localDestination);
-                    if (edge != null) {
-                        edge.setFillColor(Color.YELLOW);
-                    }
+                    colorMap(edges, vector, localDestination);
                 }
 
                 //if its on a higher floor
                 else {
                     //get edges to stairs/elevator doing up
                     edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
-                    colorMap(edges, vector);
 
                     if(isHandicapped) {
                         localDestination = sourceFloor.getGatewayNodes().getHandicappedUp();
@@ -393,10 +387,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         localDestination = sourceFloor.getGatewayNodes().getNonHandicappedUp();
                     }
 
-                    edge = vector.findPathByName(localDestination);
-                    if (edge != null) {
-                        edge.setFillColor(Color.YELLOW);
-                    }
+                    colorMap(edges, vector, localDestination);
                 }
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
@@ -404,7 +395,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         }
     }
 
-    private void colorMap(List<Edge> edges, VectorChildFinder vector) {
+    private void colorMap(List<Edge> edges, VectorChildFinder vector, String end) {
         VectorDrawableCompat.VFullPath edge;
         //draw edges onto map
         for(Edge e : edges) {
@@ -420,6 +411,11 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         edge = vector.findPathByName(room);
         if (edge != null) {
             edge.setFillColor(Color.BLUE);
+        }
+
+        edge = vector.findPathByName(end);
+        if (edge != null) {
+            edge.setFillColor(Color.YELLOW);
         }
     }
 
