@@ -1,22 +1,14 @@
 package com.example.concordiaguide;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import Helpers.ObjectWrapperForBinder;
 import Helpers.PoiFragment;
-import Helpers.PoiTypeAdapter;
-import Models.PoiType;
 
 public class NearByPoiActivity extends AppCompatActivity {
     public PoiFragment poiFragment;

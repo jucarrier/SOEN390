@@ -62,11 +62,7 @@
             android:name=".BuildingInfoPopup"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
-        <activity
-            android:name=".PoiTypesActivity"
-            android:label="Points of Interest"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"/>
+
         <activity
             android:name=".PlaceDetailsActivity"
             android:label="PlaceDetailsActivity">
