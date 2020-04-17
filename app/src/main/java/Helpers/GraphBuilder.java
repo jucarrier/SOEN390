@@ -33,6 +33,12 @@ public class GraphBuilder {
         this.gatewayNodes = floor.getGatewayNodes();
     }
 
+    //return the list of edges from source room to target room
+    public List<Edge> getShortestPath(String sourceRoom, String targetRoom) throws RoomNotExistsException {
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = getShortestPathsGraph(sourceRoom);
+        return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
+    }
+
     //returns the list of edges of the shortest path to the targetRoom with considerations if handicapped
     public List<Edge> getShortestPathTo(String targetRoom, boolean handicapped, Direction direction) throws RoomNotExistsException {
         ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths;

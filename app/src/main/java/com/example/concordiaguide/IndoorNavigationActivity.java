@@ -187,6 +187,55 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
+    public void showDirections(Building sourceBuilding, Building targetBuilding, Floor sourceFloor, Floor targetFloor, String sourceRoom, String targetRoom, boolean isHandicapped) {
+        int floorMap = sourceFloor.getFloorMap();
+        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
+        List<Edge> edges = null;
+        VectorDrawableCompat.VFullPath edge = null;
+
+        try {
+            //is source and target are in the same building
+            if(sourceBuilding.getName().equals(targetBuilding.getName())) {
+                //if its on the same floor
+                if(sourceFloor.getFloorLevel() == targetFloor.getFloorLevel()) {
+                    //get edges to room
+                    edges = gb.getShortestPath(sourceRoom, targetRoom);
+                }
+
+                //if its on a lower floor
+                if(sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
+                    //get edges to stairs/elevator doing down
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
+                }
+
+                //if its on a higher floor
+                if(sourceFloor.getFloorLevel() < targetFloor.getFloorLevel()) {
+                    //get edges to stairs/elevator doing up
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
+                }
+
+                //draw edges onto map
+                VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
+
+                for(Edge e : edges) {
+                    edge = vector.findPathByName(e.getEdgeName());
+                    if (edge != null) {
+                        edge.setStrokeColor(Color.BLUE);
+                    }
+                }
+
+                String roomNumber = sourceBuilding.getInitials() + sourceRoom;
+                roomNumber = roomNumber.toUpperCase();
+                edge = vector.findPathByName(roomNumber);
+                if (edge != null) {
+                    edge.setFillColor(Color.BLUE);
+                }
+            }
+        } catch (GraphBuilder.RoomNotExistsException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setCampuses(Campus sgw, Campus layola) {
         this.sgw = sgw;
         this.layola = layola;
