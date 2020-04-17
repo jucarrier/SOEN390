@@ -38,8 +38,8 @@ import Models.Node;
 public class IndoorNavigationActivity extends AppCompatActivity {
     private ImageView imageView;
     private Campus sgw;
-    private Campus layola;
-    private String[] campusLabels = {"SGW - Downtown", "Layola"};
+    private Campus loyola;
+    private String[] campusLabels = {"SGW - Downtown", "Loyola"};
     private Spinner campusSpinnerFrom;
     private Spinner buildingSpinnerFrom;
     private Spinner floorSpinnerFrom;
@@ -113,7 +113,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         imageView = findViewById(R.id.floor_view);
         try {
             sgw = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("sgw")).getData();
-            layola = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("loyola")).getData();
+            loyola = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("loyola")).getData();
         } catch (Exception e) {
             return;
         }
@@ -130,7 +130,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 buildingSpinnerFrom = (Spinner) findViewById(R.id.building_spinner_from);
                 ArrayList<String> buildingLabels = new ArrayList<>();
-                final Campus selectedCampus = position == 0 ? sgw : layola;
+                final Campus selectedCampus = position == 0 ? sgw : loyola;
                 for (Building b : selectedCampus.getBuildings()) {
                     buildingLabels.add(b.getName());
                 }
@@ -144,16 +144,25 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
 
                         ArrayList<String> floorLabels = new ArrayList<>();
-                        for (Floor f : selectedBuilding.getFloors()) {
-                            floorLabels.add(f.getFloorName());
+
+                        if(selectedBuilding.getFloors().length != 0) {
+                            for (Floor f : selectedBuilding.getFloors()) {
+                                floorLabels.add(f.getFloorName());
+                            }
+                            ArrayAdapter<String> floorSpinnerAdapter = new ArrayAdapter<>(self, android.R.layout.simple_spinner_item, floorLabels.toArray(new String[0]));
+                            floorSpinnerFrom.setAdapter(floorSpinnerAdapter);
+                        } else {
+                            floorSpinnerFrom.setAdapter(null);
+
+                            roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
+                            roomSpinnerFrom.setAdapter(null);
                         }
-                        ArrayAdapter<String> floorSpinnerAdapter = new ArrayAdapter<>(self, android.R.layout.simple_spinner_item, floorLabels.toArray(new String[0]));
-                        floorSpinnerFrom.setAdapter(floorSpinnerAdapter);
 
                         floorSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
+
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
 
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
@@ -191,7 +200,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 buildingSpinnerTo = (Spinner) findViewById(R.id.building_spinner_to);
                 ArrayList<String> buildingLabels = new ArrayList<>();
-                final Campus selectedCampus = position == 0 ? sgw : layola;
+                final Campus selectedCampus = position == 0 ? sgw : loyola;
                 for (Building b : selectedCampus.getBuildings()) {
                     buildingLabels.add(b.getName());
                 }
@@ -205,22 +214,29 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
 
                         ArrayList<String> floorLabels = new ArrayList<>();
-                        for (Floor f : selectedBuilding.getFloors()) {
-                            floorLabels.add(f.getFloorName());
+
+                        if(selectedBuilding.getFloors().length != 0) {
+                            for (Floor f : selectedBuilding.getFloors()) {
+                                floorLabels.add(f.getFloorName());
+                            }
+                            ArrayAdapter<String> floorSpinnerAdapter = new ArrayAdapter<>(self, android.R.layout.simple_spinner_item, floorLabels.toArray(new String[0]));
+                            floorSpinnerTo.setAdapter(floorSpinnerAdapter);
+                        } else {
+                            floorSpinnerTo.setAdapter(null);
+
+                            roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
+                            roomSpinnerTo.setAdapter(null);
                         }
-                        ArrayAdapter<String> floorSpinnerAdapter = new ArrayAdapter<>(self, android.R.layout.simple_spinner_item, floorLabels.toArray(new String[0]));
-                        floorSpinnerTo.setAdapter(floorSpinnerAdapter);
 
                         floorSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
+
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
 
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
                                 roomSpinnerTo.setAdapter(roomNameAdapter);
-
-                                imageView.setImageResource(selectedFloor.getFloorMap());
                             }
 
                             @Override
@@ -296,7 +312,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     public void setCampuses(Campus sgw, Campus layola) {
         this.sgw = sgw;
-        this.layola = layola;
+        this.loyola = layola;
         setUp(this);
     }
 
