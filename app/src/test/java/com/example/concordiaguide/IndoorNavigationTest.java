@@ -64,13 +64,15 @@ public class IndoorNavigationTest {
     @Test
     public void verifyRoomHighlight() {
         Building hall = sgw.getBuilding("Hall");
+        final String FIRST_ROOM = "H820";
+        final String SECOND_ROOM = "H801";
         Floor eightFloor = hall.getFloor(8);
         VectorDrawableCompat.VFullPath room;
 
-        room = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
-        assertEquals(room.getFillColor(), Color.BLUE);
-        room = indoorNavigationActivity.highlightPathToRoom("801", eightFloor, false, hall);
-        assertEquals(room.getFillColor(), Color.BLUE);
+        room = indoorNavigationActivity.highlightRoom("H820", eightFloor.getFloorMap(), hall);
+        assertEquals(room.getPathName(), FIRST_ROOM);
+        room = indoorNavigationActivity.highlightRoom("801", eightFloor.getFloorMap(), hall);
+        assertEquals(room.getPathName(), SECOND_ROOM);
     }
 
     @Test
