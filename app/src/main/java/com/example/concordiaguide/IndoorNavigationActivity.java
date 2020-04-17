@@ -43,6 +43,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Spinner campusSpinner;
     private Spinner buildingSpinner;
     private Spinner floorSpinner;
+    private Spinner roomSpinner;
     private AutoCompleteTextView roomInput;
 
     private Boolean isHandicapped = false;
@@ -116,14 +117,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     }
 
     public void setUp(final AppCompatActivity self) {
-        campusSpinner = (Spinner) findViewById(R.id.campus_spinner);
+        campusSpinner = (Spinner) findViewById(R.id.campus_spinner_to);
         ArrayAdapter<String> campusSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);
         campusSpinner.setAdapter(campusSpinnerAdapter);
 
         campusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                buildingSpinner = (Spinner) findViewById(R.id.building_spinner);
+                buildingSpinner = (Spinner) findViewById(R.id.building_spinner_to);
                 ArrayList<String> buildingLabels = new ArrayList<>();
                 final Campus selectedCampus = position == 0 ? sgw : layola;
                 for (Building b : selectedCampus.getBuildings()) {
@@ -135,7 +136,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 buildingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        floorSpinner = (Spinner) findViewById(R.id.floor_spinner);
+                        floorSpinner = (Spinner) findViewById(R.id.floor_spinner_to);
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
 
                         ArrayList<String> floorLabels = new ArrayList<>();
@@ -148,21 +149,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         floorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                roomSpinner = (Spinner) findViewById(R.id.room_spinner_to);
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
-                                ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
-                                roomInput = (AutoCompleteTextView) findViewById(R.id.search_room_name);
-                                roomInput.setAdapter(roomNameAdapter);
-                                imageView.setImageResource(selectedFloor.getFloorMap());
 
-                                roomInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                                    @Override
-                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        String room = roomInput.getEditableText().toString();
-                                        //highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
-                                        highlightPathToRoom(room, selectedFloor, isHandicapped, selectedBuilding);
-                                        return true;
-                                    }
-                                });
+                                ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
+                                roomSpinner.setAdapter(roomNameAdapter);
+
+                                imageView.setImageResource(selectedFloor.getFloorMap());
                             }
 
                             @Override

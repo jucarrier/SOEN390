@@ -7,60 +7,121 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".IndoorNavigationActivity"
     tools:showIn="@layout/activity_indoor_navigation">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="-16dp">
 
         <ImageView
             android:id="@+id/floor_view"
             android:layout_width="wrap_content"
             android:layout_height="386dp"
-            android:contentDescription="@string/floor_view"
-             />
+            android:contentDescription="@string/floor_view" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/campus_spinner"
-            android:layout_width="100dp"
+            android:id="@+id/campus_spinner_from"
+            android:layout_width="90dp"
             android:layout_height="20dp"
             android:layout_alignBottom="@+id/floor_view"
-            android:layout_marginBottom="-25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-60dp"
             android:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/building_spinner"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/floor_view"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="173dp"
-            android:layout_marginBottom="-25dp"
-            android:visibility="visible" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/floor_spinner"
-            android:layout_width="100dp"
+            android:id="@+id/building_spinner_from"
+            android:layout_width="90dp"
             android:layout_height="20dp"
             android:layout_alignBottom="@+id/floor_view"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="34dp"
-            android:layout_marginBottom="-25dp"
+            android:layout_marginEnd="210dp"
+            android:layout_marginBottom="-60dp"
             android:visibility="visible" />
 
-        <AutoCompleteTextView
-            android:id="@+id/search_room_name"
-            android:layout_width="369dp"
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/floor_spinner_from"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="-60dp"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/room_spinner_from"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="-60dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/textView_from"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_marginBottom="-25dp"
+            android:text="From" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/campus_spinner_to"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="-120dp"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/building_spinner_to"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="210dp"
+            android:layout_marginBottom="-120dp"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/floor_spinner_to"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="-120dp"
+            android:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/room_spinner_to"
+            android:layout_width="90dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="-120dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/textView_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/floor_view"
+            android:layout_marginBottom="-90dp"
+            android:text="To" />
+
+        <Button
+            android:id="@+id/from_to_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="26dp"
-            android:layout_marginBottom="23dp"
-            android:dropDownVerticalOffset="100dp"
-            android:hint="@string/room_name"
-            android:imeOptions="actionSend"
-            android:inputType="text" />
-
+            android:layout_marginStart="150dp"
+            android:text="Go" />
     </RelativeLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
