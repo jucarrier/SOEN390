@@ -250,6 +250,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
 
         // Here is where the menu elements are handled, change as you need
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            /**
+             * Going to different activities depending on the option chosen
+             * @param item
+             * @return
+             */
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -380,6 +385,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
+
+    /**
+     * When the app is going to another activity needs to call back the main, it will go through this method instead of creating a new activity of the Main.
+     *
+     * @param intent captured from the activity from which the new intent is coming from
+     *
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
