@@ -117,7 +117,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private DrawerLayout drawer;
 
     private boolean shuttle_active = false;
-    private boolean test = false;
+    private boolean showPOI = false;
     ArrayList<LatLng> listPoints;
     List<Results> results = new ArrayList<Results>();
 
@@ -386,7 +386,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
 
-    /**
+    /**---------------ADD THIS--------------
      * When the app is going to another activity needs to call back the main, it will go through this method instead of creating a new activity of the Main.
      *
      * @param intent captured from the activity from which the new intent is coming from
@@ -398,13 +398,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         setIntent(intent);
         Bundle b = intent.getExtras();
         shuttle_active = b.getBoolean("active");
-        test = b.getBoolean("Poi_fragment_bool");
+        showPOI = b.getBoolean("Poi_fragment_bool");
         //Shuttle code
         if (shuttle_active==true) {
             mMap.clear();
             onMapReady(mMap);
         }
-        if(test == true){
+        if(showPOI == true){
             mMap.clear();
             //listPoints.clear();
             results = PlacesResult.results;
@@ -594,6 +594,13 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
      * @param googleMap The map that is ready
      */
 
+
+    /**---------------ADD THIS--------------
+     *
+     *
+     *
+     * @param googleMap
+     */
     public void poiChosen(GoogleMap googleMap) {
         for (int i = 0; i < results.size(); i++) {
             MarkerOptions markerOptions = new MarkerOptions();
@@ -664,12 +671,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 //shuttle_active = false;
             } catch (Exception e) {
             }
-        }
-
-        //test onNewIntent
-        if(test == true){
-            Intent intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
-            startActivity(intent);
         }
 
         Building building;
