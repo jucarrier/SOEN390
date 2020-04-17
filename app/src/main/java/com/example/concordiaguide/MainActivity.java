@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,6 +93,11 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private LocationManager locationManager;    //this is needed to find the user's current location
     private GoogleMap mMap;
     private DrawerLayout drawer;
+
+   /* private Button walkButton;
+    private Button publicTransportation;
+    private Button carButton;*/
+
 
     /**
      * this is the listener method that constantly updates the user's location for usage in other methods

@@ -20,7 +20,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{
+        debug {
             testCoverageEnabled = true
         }
     }
@@ -70,15 +70,14 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
     implementation 'com.github.devsideal:VectorChildFinder:1.0.0'
     implementation 'org.jgrapht:jgrapht-io:1.4.0'
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 }
 
 apply plugin: 'jacoco'
-
 
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
