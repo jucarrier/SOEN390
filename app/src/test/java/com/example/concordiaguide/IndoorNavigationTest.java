@@ -1,24 +1,18 @@
 package com.example.concordiaguide;
 
 import android.graphics.Color;
-import android.os.Bundle;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.devs.vectorchildfinder.VectorDrawableCompat;
-import com.google.android.gms.maps.GoogleMap;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import Helpers.CampusBuilder;
-import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
 import Models.Floor;
@@ -50,13 +44,13 @@ public class IndoorNavigationTest {
 
     @Test
     public void verifyCampusOptions() {
-        Spinner campusSpinner = indoorNavigationActivity.getCampusSpinner();
+        Spinner campusSpinner = indoorNavigationActivity.getCampusSpinnerFrom();
         assertEquals(campusSpinner.getAdapter().getCount(), 2);
         campusSpinner.setSelection(0);
-        Spinner buildingSinner = indoorNavigationActivity.getBuildingSpinner();
+        Spinner buildingSinner = indoorNavigationActivity.getBuildingSpinnerFrom();
         assertEquals(buildingSinner.getAdapter().getCount(), 9);
         buildingSinner.setSelection(0);
-        Spinner floorSpinner = indoorNavigationActivity.getFloorSpinner();
+        Spinner floorSpinner = indoorNavigationActivity.getFloorSpinnerFrom();
         assertTrue(floorSpinner.getAdapter().getCount() >= 2);
         floorSpinner.setSelection(0);
         AutoCompleteTextView roomInput = indoorNavigationActivity.getRoomInput();
