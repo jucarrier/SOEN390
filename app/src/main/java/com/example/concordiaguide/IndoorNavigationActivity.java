@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,6 +52,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private AutoCompleteTextView roomInput;
 
     private Boolean isHandicapped = false;
+
+    private Building sourceBuilding;
+    private Floor sourceFloor;
+    private String sourceRoom;
+    private Building targetBuilding;
+    private Floor targetFloor;
+    private String targetRoom;
 
 
     public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
@@ -142,6 +150,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         floorSpinnerFrom = (Spinner) findViewById(R.id.floor_spinner_from);
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
+                        sourceBuilding = selectedBuilding;
 
                         ArrayList<String> floorLabels = new ArrayList<>();
 
@@ -156,6 +165,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                             roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
                             roomSpinnerFrom.setAdapter(null);
+
+                            sourceFloor = null;
+                            sourceRoom = null;
                         }
 
                         floorSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -164,11 +176,24 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                 roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
 
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
+                                sourceFloor = selectedFloor;
 
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
                                 roomSpinnerFrom.setAdapter(roomNameAdapter);
 
                                 imageView.setImageResource(selectedFloor.getFloorMap());
+
+                                roomSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                                        sourceRoom = selectedFloor.getRoomNames()[position];
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
                             }
 
                             @Override
@@ -212,6 +237,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         floorSpinnerTo = (Spinner) findViewById(R.id.floor_spinner_to);
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
+                        targetBuilding = selectedBuilding;
 
                         ArrayList<String> floorLabels = new ArrayList<>();
 
@@ -226,6 +252,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                             roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
                             roomSpinnerTo.setAdapter(null);
+
+                            targetFloor = null;
+                            targetRoom = null;
                         }
 
                         floorSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -234,9 +263,22 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                 roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
 
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
+                                targetFloor = selectedFloor;
 
                                 ArrayAdapter<String> roomNameAdapter = new ArrayAdapter<>(self, android.R.layout.simple_dropdown_item_1line, selectedFloor.getRoomNames());
                                 roomSpinnerTo.setAdapter(roomNameAdapter);
+
+                                roomSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                                        targetRoom = selectedFloor.getRoomNames()[position];
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
                             }
 
                             @Override
@@ -258,10 +300,19 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
             }
         });
+
+        Button goButton = (Button) findViewById(R.id.from_to_button);
+        goButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDirections(false);
+            }
+        });
+        
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    public void showDirections(Building sourceBuilding, Building targetBuilding, Floor sourceFloor, Floor targetFloor, String sourceRoom, String targetRoom, boolean isHandicapped) {
+    public void showDirections(boolean isHandicapped) {
         int floorMap = sourceFloor.getFloorMap();
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
