@@ -306,4 +306,50 @@
       android:strokeWidth="2"
       android:fillColor="#00000000"
       android:strokeColor="#000000"/>
+
+
+
+  <!-- EGDES STARTS HERE -->
+
+
+  <path
+      android:name="edge_1_937+966_960+x1_150"
+      android:fillAlpha="1"
+      android:pathData="M 40, 500 l 435,-42"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#000000" />
+
+  <path
+      android:name="edge_2_937+966_985+932+928+999-51_210"
+      android:fillAlpha="1"
+      android:pathData="M 470, 460 l 0,-200"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#0000FF" />
+
+  <path
+      android:name="edge_3_960+x1_x2_90"
+      android:fillAlpha="1"
+      android:pathData="M 530, 500 l 0,-90"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </vector>
