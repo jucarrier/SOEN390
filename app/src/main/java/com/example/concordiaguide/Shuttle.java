@@ -17,6 +17,11 @@ import Helpers.ObjectWrapperForBinder;
 public class Shuttle extends Activity {
     String shuttle_from, shuttle_to;
 
+    /**
+     * Create a new activity that will show the options and directions of the shuttle
+     *
+     * @param savedInstanceState get the bundle of the stated of saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

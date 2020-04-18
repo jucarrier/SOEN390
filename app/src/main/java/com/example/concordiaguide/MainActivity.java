@@ -404,13 +404,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             mMap.clear();
             onMapReady(mMap);
         }
-        if(showPOI == true){
+        else if(showPOI == true){
             mMap.clear();
             //listPoints.clear();
             results = PlacesResult.results;
             poiChosen(mMap);
             //onMapReady(mMap);
         }
+        else
+            onMapReady(mMap);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -668,7 +671,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
                 to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
                 shuttleDirection(from, to);
-                //shuttle_active = false;
+                shuttle_active = false;
             } catch (Exception e) {
             }
         }
@@ -698,7 +701,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
                 mMap.addMarker(markerOptions);

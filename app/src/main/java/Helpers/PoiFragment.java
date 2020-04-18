@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.concordiaguide.MainActivity;
+import com.example.concordiaguide.NearByPoiActivity;
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -140,8 +141,8 @@ public class PoiFragment extends Fragment {
                 bundle.putBoolean("Poi_fragment_bool", true);
 
                 Intent intent2 = new Intent(getContext(), MainActivity.class).putExtras(bundle);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               // intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent2);
             }
         });
@@ -149,6 +150,7 @@ public class PoiFragment extends Fragment {
         return view;
 
     }
+
 
     private void locationService() {
 

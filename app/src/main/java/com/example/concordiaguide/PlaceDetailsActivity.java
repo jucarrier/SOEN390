@@ -110,6 +110,12 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             }
         });
     }
+/*
+    public void onBackPressed() {
+        Intent intent2 = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent2);
+    }*/
 
     private void init() {
         // linearLayoutRating = findViewById(R.id.linearLayoutRating);

@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.Button;
 
 public class Shuttle_schedule extends Activity {
+    /**
+     * This will display the schedule of the shuttle in the Shuttle display
+     *
+     * @param savedInstanceState get the bundle of the stated of saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
