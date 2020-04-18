@@ -1,6 +1,7 @@
 package com.example.concordiaguide;
 
 import android.content.Intent;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -64,57 +65,6 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private boolean isHandicapped = false;
 
     private final String TAG = "IndoorNavigationActivity";
-
-
-    public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
-        VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
-        VectorDrawableCompat.VFullPath room = vector.findPathByName(roomName);
-        if (room != null) {
-            room.setFillColor(Color.BLUE);
-            return room;
-        }
-        roomName = building.getInitials().toUpperCase() + roomName.replaceAll("\\D+", "");
-        room = vector.findPathByName(roomName);
-        if (room != null) {
-            room.setFillColor(Color.BLUE);
-        }
-        return room;
-    }
-
-    public VectorDrawableCompat.VFullPath highlightPathToRoom(String roomNumber, Floor floor, Building building) {
-        int floorMap = floor.getFloorMap();
-        VectorDrawableCompat.VFullPath edge = null;
-
-        if(roomNumber.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
-            roomNumber = roomNumber.substring(1);
-        }
-
-        GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), floor);
-
-        try {
-            List<Edge> edges = gb.getShortestPathTo(roomNumber, isHandicapped, GraphBuilder.Direction.DOWN);
-
-            VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
-
-            for(Edge e : edges) {
-                edge = vector.findPathByName(e.getEdgeName());
-                if (edge != null) {
-                    edge.setStrokeColor(Color.BLUE);
-                }
-            }
-
-            roomNumber = building.getInitials() + roomNumber;
-            roomNumber = roomNumber.toUpperCase();
-            edge = vector.findPathByName(roomNumber);
-            if (edge != null) {
-                edge.setFillColor(Color.BLUE);
-            }
-        } catch (GraphBuilder.RoomNotExistsException e) {
-            e.printStackTrace();
-        }
-
-        return edge;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -349,7 +299,6 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         imageView.setImageResource(floorMap);
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
-        VectorDrawableCompat.VFullPath edge = null;
         Button nextButton = (Button) findViewById(R.id.next_button);
 
         if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
@@ -495,4 +444,26 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     public AutoCompleteTextView getRoomInput() {
         return roomInput;
     }
+
+    //for testing purposes
+    public void setSource(Building building, Floor floor, String room) {
+        this.sourceBuilding = building;
+        this.sourceFloor = floor;
+        this.sourceRoom = room;
+    }
+
+    //for testing purposes
+    public void setTarget(Building building, Floor floor, String room) {
+        this.targetBuilding = building;
+        this.targetFloor = floor;
+        this.targetRoom = room;
+    }
+
+    //for testing purposes
+    public void setHandicapped(boolean handicapped) {
+        this.isHandicapped = handicapped;
+    }
+
+    //for testing purposes
+    public ImageView getImageView() { return imageView; }
 }
