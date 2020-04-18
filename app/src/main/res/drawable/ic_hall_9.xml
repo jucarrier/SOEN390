@@ -859,7 +859,7 @@
       android:fillAlpha="1"/>
 
   <path
-      android:name="edge_1_937+966_960+x1_150"
+      android:name="edge_1_937+966_Stairs+960+x1_150"
       android:fillAlpha="1"
       android:pathData="M 530, 650 l 0,-150"
       android:strokeWidth="10"
@@ -867,7 +867,7 @@
       android:strokeColor="#f7d6d6" />
 
   <path
-      android:name="edge_2_937+966_985+932+928+999-51_210"
+      android:name="edge_2_937+966_927-4+927-3+927-1_210"
       android:fillAlpha="1"
       android:pathData="M 530, 650 l 210,0"
       android:strokeWidth="10"
@@ -875,7 +875,7 @@
       android:strokeColor="#f7d6d6" />
 
   <path
-      android:name="edge_3_960+x1_x2_90"
+      android:name="edge_3_Stairs+960+x1_x2_90"
       android:fillAlpha="1"
       android:pathData="M 530, 500 l 0,-90"
       android:strokeWidth="10"
