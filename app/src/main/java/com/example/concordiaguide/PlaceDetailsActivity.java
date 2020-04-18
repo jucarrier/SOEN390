@@ -17,6 +17,11 @@ import com.squareup.picasso.Picasso;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * this activity displays the card view of the chosen place from the nearbyPoiActivity
+ * where the user can see additional informations regarding that place and choose between
+ * displaying the location on map or seeing the distance between the user and the Point of interest
+ */
 public class PlaceDetailsActivity extends AppCompatActivity {
     private ImageView imageView;
     private Photos photos;
@@ -25,7 +30,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     private TextView textViewAddress;
   //private TextView textViewAvailability;
   //private RatingBar ratingBar;
- //   private LinearLayout linearLayoutRating;
+  //private LinearLayout linearLayoutRating;
     private LinearLayout linearLayoutShowOnMap;
     private LinearLayout linearLayoutShowDistanceOnMap;
     // variable
@@ -37,7 +42,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
 
-        // init UI
+        // initializes the layout/UI
         init();
 
         Bundle bundle = getIntent().getExtras();
@@ -56,7 +61,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
 
         try {
-            // get photo
+            // gets photo
             photos = results.getPhotos()[0];
             String photoUrl = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%s&photoreference=%s&key=%s", 400, photos.getPhoto_reference(), getResources().getString(R.string.api_key));
             Log.d("photoUrl", photoUrl);
@@ -68,26 +73,32 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Picasso
                     .get()
-                    .load(R.drawable.ic_error_image)
+                    .load(R.drawable.ic_error_image)//if image is not found
                     .into(imageView);
         }
 
         textViewName.setText(results.getName());
         textViewAddress.setText(results.getVicinity());
+        /*
         // check if ratings is available for the place
-       // if (results.getRating() != null) {
-          //  linearLayoutRating.setVisibility(View.VISIBLE);
-           // textViewRating.setText(results.getRating());
-          //  ratingBar.setRating(Float.valueOf(results.getRating()));
-       //}
+       if (results.getRating() != null) {
+            linearLayoutRating.setVisibility(View.VISIBLE);
+            textViewRating.setText(results.getRating());
+            ratingBar.setRating(Float.valueOf(results.getRating()));
+       }
         // check if opening hours is available
-      //  if (results.getOpeningHours() != null) {
-     //       textViewAvailability.setText(!results.getOpeningHours().getOpenNow() ? "Close now" : "Open now");
-     //   } else {
-      //      textViewAvailability.setText("Not found!");
-     //   }
+        if (results.getOpeningHours() != null) {
+            textViewAvailability.setText(!results.getOpeningHours().getOpenNow() ? "Close now" : "Open now");
+        } else {
+            textViewAvailability.setText("Not found!");
+        }
+        */
 
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
+            /**
+             * @param view
+             * on click of the show on map button, it will redirect to placeOnMapActivity in order to display the desired POI
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
@@ -100,6 +111,11 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         });
 
         linearLayoutShowDistanceOnMap.setOnClickListener(new View.OnClickListener() {
+            /**
+             * @param view
+             * on click of the Show directions on Map, it will redirect to placeOnMapActivity and show the polyline
+             * between the users location and the POI location
+             */
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
@@ -111,6 +127,10 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * initializes the layout and lets user choose between showing place location or distance to that location
+     */
     private void init() {
        // linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);

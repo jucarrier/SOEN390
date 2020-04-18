@@ -1,6 +1,9 @@
 package com.example.concordiaguide;
 
+import Helpers.DirectionsJSONParser;
+import Helpers.PlacesResult;
 import Models.Building;
+import Models.Results;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -66,6 +69,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.transform.Result;
+
 import Helpers.CampusBuilder;
 import Models.Campus;
 
@@ -76,15 +81,17 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected Cursor cursor;
 
     private boolean shuttle_active = false;
-
+    private boolean showPOI = false;
+    public boolean checkBack= true;
+    List<Results> results= new ArrayList<Results>();
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
    //LatLng currentLocation; //to be filled in later by onLocationChanged
-   double lat, lng;
+    double lat, lng;
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
-   LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -399,9 +406,43 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         setIntent(intent);
         Bundle b = intent.getExtras();
         shuttle_active = b.getBoolean("active");
-        mMap.clear();
-        onMapReady(mMap);
+        showPOI= b.getBoolean("Poi_fragment_bool");
+        //Shuttle code
+        if(shuttle_active==true){
+            mMap.clear();
+            onMapReady(mMap);
+        }
+        /*if(showPOI==true){
+            mMap.clear();
+            results= PlacesResult.results;
+            onMapReady(mMap);
+            poiChosen(mMap);
+            }*/
+        /*
+        * if the launcher mode on singleTask/SingleInstance on the main activity manifest,
+        * it will show all the location on the main activity
+        */
+
     }
+    /*public void poiChosen(GoogleMap googleMap) {
+        for (int i = 0; i < results.size(); i++) {
+            MarkerOptions markerOptions = new MarkerOptions();
+            Results googlePlace = results.get(i);
+            double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
+            double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
+            String placeName = googlePlace.getName();
+            String vicinity = googlePlace.getVicinity();
+            LatLng latLng = new LatLng(lat, lng);
+            markerOptions.position(latLng);
+            markerOptions.title(placeName);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            // add marker to map
+            googleMap.addMarker(markerOptions).showInfoWindow();;
+            // move camera
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
+        }
+    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void startAlarm(int hours, int minutes){
@@ -701,7 +742,8 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jsonObject = new JSONObject(strings[0]);
-                DirectionsParser directionsParser = new DirectionsParser();
+                //DirectionsParser directionsParser = new DirectionsParser();
+                DirectionsJSONParser directionsParser= new DirectionsJSONParser();
                 routes = directionsParser.parse(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();

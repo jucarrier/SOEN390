@@ -34,9 +34,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ *comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
+ */
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
-//comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
-    // variable
     private Results results;
     private LatLng pos;
     private Location location1, location2;
@@ -71,29 +72,39 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * @param googleMap
+     * depending on the choice of the user from placeDetailsActivity, this method will choose between
+     * showing the distance of user to POI location or showing only the POI location
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         if (type.equals("distance")) {
-            showDistance();//
+            showDistance();
         } else {
             showOnMap();
         }
     }
 
-    private void showOnMap() {//adds marker to the desired POI location
+    /**
+     * This method adds marker to the desired POI location
+     */
+    private void showOnMap() {
         LatLng currentPosition = new LatLng(lat, lng); // user location
         pos = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
         //Toast.makeText(this, String.valueOf(pos), Toast.LENGTH_SHORT).show();
         //marker.remove();
 
-        googleMap.addMarker(new MarkerOptions().position(currentPosition)//to check users location
+        //to check users location [remove if necessary]
+        googleMap.addMarker(new MarkerOptions().position(currentPosition)
                 .title("Your Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 .alpha(1f))
                 .showInfoWindow();
-        this.googleMap.addMarker(new MarkerOptions().position(pos)//to check POI's location
+        //to check POI's location
+        this.googleMap.addMarker(new MarkerOptions().position(pos)
                 .title(results.getName())
                 .snippet(results.getVicinity())
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
@@ -105,7 +116,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(16.5f));
     }
 
-    private void showDistance() {//draws polylines between user and POI destination
+    /**
+     * This method draws the polylines between user and POI destination to show the distance
+     */
+    private void showDistance() {
         LatLng currentPosition = new LatLng(lat, lng); // user location
         LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
@@ -144,6 +158,12 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
     }
 
+    /**
+     * @param origin
+     * @param dest
+     * @return
+     * this method takes the coordinates of both user and POI location and returns a result string
+     */
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
         // Start of route
@@ -168,6 +188,12 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
     }
 
+    /**
+     * @param strUrl
+     * @return
+     * @throws IOException
+     * this method retrieves the requested string url of location of user/POI, parses it and returns the data as string
+     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -206,9 +232,16 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         return data;
     }
 
-    // Fetches data from url passed
+    /**
+     *
+     */
     private class FetchUrl extends AsyncTask<String, Void, String> {
 
+        /**
+         * @param url
+         * @return
+         *
+         */
         @Override
         protected String doInBackground(String... url) {
 
@@ -225,13 +258,16 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             return data;
         }
 
+        /**
+         * @param result
+         * Invokes the thread for parsing the JSON data
+         */
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
 
-            // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
 
         }
@@ -239,7 +275,11 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
+        /**
+         * @param jsonData
+         * @return
+         * This method parses the data in non-ui thread
+         */
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -264,7 +304,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
+        /**
+         * @param result
+         * Executes in UI thread, after the parsing process
+         */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points;

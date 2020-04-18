@@ -47,7 +47,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             markerOptions.title(placeName);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             // add marker to map
-            googleMap.addMarker(markerOptions).showInfoWindow();;
+            googleMap.addMarker(markerOptions).showInfoWindow();
             // move camera
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
