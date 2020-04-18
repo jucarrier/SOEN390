@@ -123,7 +123,6 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
                     //when the nofifications are toggled on, we must iterate through the class schedule and set a new alarm for each event
                     for(CalendarEvent c : schedule.getEvents()){
-                        Date now = new Date(System.currentTimeMillis());
                         Date date = c.getStartDate();
                         int hour = date.getHours();
                         int minute = date.getMinutes();
@@ -195,9 +194,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
      * @throws NullPointerException
      */
     public void readEvents() throws NullPointerException {
-//        if (cursor!=null){
         while (cursor != null && cursor.moveToNext()) {
-//                if(cursor!=null){
             //get the column ids of the calendar attributes
             int id1 = cursor.getColumnIndex(BaseColumns._ID);
             int id2 = cursor.getColumnIndex(CalendarContract.Events.TITLE);
@@ -243,13 +240,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     schedule.addEvent(new CalendarEvent(idInt, idValue, titleValue, locationValue, startTime, endTime, repetitionRule));
                 }
             }
-
-//                }else{
-//                    System.out.println("no events found");
-//                }
         }
-//        }
-
         eventsRead = "eventsRead";
     }
 
@@ -257,7 +248,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public void startAlarm(int day, int hours, int minutes) {
         //automatically set alarm id after other alarms that are in the system
         int alarmId;
-        if (activeAlarmIds.size() == 0) alarmId = 0;
+        if (activeAlarmIds.isEmpty()) alarmId = 0;
         else alarmId = activeAlarmIds.get(activeAlarmIds.size() - 1) + 1;
 
         Calendar c = Calendar.getInstance();

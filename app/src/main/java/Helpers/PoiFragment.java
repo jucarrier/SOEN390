@@ -29,7 +29,6 @@ import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import Models.MyPlaces;
 import retrofit2.Call;
@@ -70,57 +69,50 @@ public class PoiFragment extends Fragment {
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
 
         locationService();
-        /*Bundle bundle= getArguments();
-        String type_PoiType= bundle.getString("poitype");
-*/
-        imageViewSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = spinner_nearby_choices.getSelectedItemPosition();
-                if (position == 0) {
-                    Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
-                    placeType = spinner_nearby_choices.getSelectedItem().toString();
-                    switch (placeType) {
-                        case "Coffee Shop": {
-                            placeType = TYPE_CAFE;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Bank": {
-                            placeType = TYPE_BANK;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Restaurant": {
-                            placeType = TYPE_RESTAURANT;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Pharmacy": {
-                            placeType = TYPE_PHARMACY;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Bar": {
-                            placeType = TYPE_BAR;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Metro": {
-                            placeType = TYPE_METRO;
-                            getNearByPlaces();
-                            break;
-                        }
-                        case "Gym": {
-                            placeType = TYPE_GYM;
-                            getNearByPlaces();
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
+        imageViewSearch.setOnClickListener(view1 -> {
+            int position = spinner_nearby_choices.getSelectedItemPosition();
+            if (position == 0) {
+                Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
+            } else {
+                placeType = spinner_nearby_choices.getSelectedItem().toString();
+                switch (placeType) {
+                    case "Coffee Shop": {
+                        placeType = TYPE_CAFE;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Bank": {
+                        placeType = TYPE_BANK;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Restaurant": {
+                        placeType = TYPE_RESTAURANT;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Pharmacy": {
+                        placeType = TYPE_PHARMACY;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Bar": {
+                        placeType = TYPE_BAR;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Metro": {
+                        placeType = TYPE_METRO;
+                        getNearByPlaces();
+                        break;
+                    }
+                    case "Gym": {
+                        placeType = TYPE_GYM;
+                        getNearByPlaces();
+                        break;
+                    }
+                    default: {
+                        break;
                     }
                 }
             }
@@ -137,7 +129,6 @@ public class PoiFragment extends Fragment {
         });
 
         return view;
-
     }
 
     private void locationService() {
@@ -161,27 +152,24 @@ public class PoiFragment extends Fragment {
 
             flc = LocationServices.getFusedLocationProviderClient(getContext());
 
-            flc.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
+            flc.getLastLocation().addOnSuccessListener(getActivity(), location -> {
 
-                    if (location != null) {
+                if (location != null) {
 
-                        lat = location.getLatitude();
-                        lng = location.getLongitude();
+                    lat = location.getLatitude();
+                    lng = location.getLongitude();
 
-                    } else {//show users location
-                        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                } else {//show users location
+                    if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                return;
-                            }
-
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-                        } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-
-                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
+                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            return;
                         }
+
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+                    } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+
+                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, locationListener);
                     }
                 }
             });
@@ -222,7 +210,6 @@ public class PoiFragment extends Fragment {
             public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
-                //  Log.d("MyPlaces", myPlaces.getResults().get(0).toString());
 
                 PlaceRecyclerViewAdapter adapter = new PlaceRecyclerViewAdapter(getContext(), myPlaces, lat, lng);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

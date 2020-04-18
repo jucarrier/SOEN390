@@ -106,17 +106,6 @@ public class NearbyPoiTest {
                         isDisplayed()));
         frameLayout.check(matches(isDisplayed()));
 
-//        ViewInteraction textView = onView(
-//                allOf(withId(R.id.textViewPlaceName), withText("Riventino"),
-//                        childAtPosition(
-//                                allOf(withId(R.id.linearLayoutDetails),
-//                                        childAtPosition(
-//                                                IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-//                                                1)),
-//                                0),
-//                        isDisplayed()));
-//        textView.check(matches(withText("Riventino")));
-
         ViewInteraction linearLayout = onView(
                 allOf(withId(R.id.linearLayoutShowOnMap),
                         childAtPosition(

@@ -6,5 +6,5 @@ import java.util.List;
 import Models.Results;
 
 public class PlacesResult {
-    public static List<Results> results = new ArrayList<Results>();
+    public static List<Results> results = new ArrayList<>();
 }

@@ -3,7 +3,6 @@ package com.example.concordiaguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import Models.Building;
 public class BuildingInfoActivity extends AppCompatActivity {
     private static final String TAG = "BuildingInfoActivity";
     Building building;
-    private Button directions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +36,15 @@ public class BuildingInfoActivity extends AppCompatActivity {
         address.setText(building.getAddress());
         description.setText(building.getDescription());
 
-        directions = findViewById(R.id.directions_button);
+        Button directions = findViewById(R.id.directions_button);
 
-        directions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                directionsButtonClicked(building);
-            }
-        });
+        directions.setOnClickListener(v -> directionsButtonClicked(building));
     }
 
     private void directionsButtonClicked(Building b) {
         final Bundle bundle = new Bundle();
         bundle.putBinder("building", new ObjectWrapperForBinder(b));
         Intent openMainActivity = new Intent(this, MainActivity.class).putExtras(bundle);
-        /*
-        openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityIfNeeded(openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        */
         this.startActivity(openMainActivity);
     }
 }

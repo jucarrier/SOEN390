@@ -37,7 +37,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
                 RecyclerView recyclerViewSgw = findViewById(R.id.building_list_sgw);
                 RecyclerView recyclerViewLoyola = findViewById(R.id.building_list_loyola);
 
-                if (b == false) {
+                if (!b) {
                     title.setText("SGW");
                     currentCampus = Campuses.SGW;
                     recyclerViewSgw.setVisibility(View.VISIBLE);

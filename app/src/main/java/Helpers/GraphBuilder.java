@@ -7,6 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.Collections;
 import java.util.List;
 
 import Models.Edge;
@@ -57,7 +58,7 @@ public class GraphBuilder {
         if (path != null) {
             return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -78,7 +79,7 @@ public class GraphBuilder {
         } else if (direction == Direction.OUTSIDE) {
             return paths.getPath(getRoomNode(gatewayNodes.getOutside())).getEdgeList();
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 

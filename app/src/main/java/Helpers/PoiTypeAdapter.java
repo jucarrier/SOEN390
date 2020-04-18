@@ -40,8 +40,7 @@ public class PoiTypeAdapter extends RecyclerView.Adapter<PoiTypeAdapter.PoiTypeH
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.poi_single_category, parent, false);
 
-        PoiTypeAdapter.PoiTypeHolder vh = new PoiTypeAdapter.PoiTypeHolder(v);
-        return vh;
+        return new PoiTypeHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
