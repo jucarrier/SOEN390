@@ -1,5 +1,6 @@
 package com.example.concordiaguide;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -407,7 +408,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     nextButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            //TODO: GOT TO OUTDOOR NAVIGATION
+                            final Bundle bundle = new Bundle();
+                            bundle.putBinder("building", new ObjectWrapperForBinder(targetBuilding));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtras(bundle));
                         }
                     });
                 }

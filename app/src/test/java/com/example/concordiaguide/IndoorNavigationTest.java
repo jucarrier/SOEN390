@@ -65,9 +65,9 @@ public class IndoorNavigationTest {
         Floor eightFloor = hall.getFloor(8);
         VectorDrawableCompat.VFullPath room;
 
-        room = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
+        room = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, hall);
         assertEquals(room.getFillColor(), Color.BLUE);
-        room = indoorNavigationActivity.highlightPathToRoom("801", eightFloor, false, hall);
+        room = indoorNavigationActivity.highlightPathToRoom("801", eightFloor, hall);
         assertEquals(room.getFillColor(), Color.BLUE);
     }
 }
