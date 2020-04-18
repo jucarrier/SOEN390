@@ -78,8 +78,7 @@
       android:fillColor="#da3636"
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
-  <path
-      android:name="MB1.301"
+  <path android:name="MB1.301"
       android:pathData="M735,664.71h116.56v100h-116.56z"
       android:strokeAlpha="1"
       android:strokeWidth="2"
@@ -357,4 +356,25 @@
       android:fillColor="#da3636"
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
+  <path
+      android:name="edge_1_1.924_Tables 2_100"
+      android:fillAlpha="1"
+      android:pathData="M 475, 220 l 100,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_2_Tables 2_Tables 1_350"
+      android:fillAlpha="1"
+      android:pathData="M 475, 220 l 0,350"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_2_Tables 1_1.210_350"
+      android:fillAlpha="1"
+      android:pathData="M 475, 570 l 100,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#000000" />
 </vector>
