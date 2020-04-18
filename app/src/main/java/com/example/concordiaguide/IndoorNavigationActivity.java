@@ -83,6 +83,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         setUp(self);
     }
 
+    /**
+     * This function is a supplementary function to the onCreate function. It helps set up the activity.
+     * @param self
+     */
     public void setUp(final AppCompatActivity self) {
         campusSpinnerFrom = (Spinner) findViewById(R.id.campus_spinner_from);
         ArrayAdapter<String> campusSpinnerAdapterFrom = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);
@@ -293,7 +297,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    //recursive function to show directions
+    /**
+     * This function is the inter floor logic for the directions from the selected source room to the selected target room in steps (each floor is a step).
+     * Steps can be navigated with the help of the Next button.
+     */
     public void showDirections() {
         int floorMap = sourceFloor.getFloorMap();
         imageView.setImageResource(floorMap);
@@ -399,6 +406,12 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This function changes the color of the vector elements to display the path from source room to target room.
+     * @param edges
+     * @param vector
+     * @param end
+     */
     private void colorMap(List<Edge> edges, VectorChildFinder vector, String end) {
         VectorDrawableCompat.VFullPath edge;
         //draw edges onto map
@@ -429,41 +442,65 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         setUp(this);
     }
 
+    /**
+     * This function is used for test purposes.
+     * @return
+     */
     public Spinner getCampusSpinnerFrom() {
         return campusSpinnerFrom;
     }
 
+    /**
+     * This function is used for test purposes.
+     * @return
+     */
     public Spinner getBuildingSpinnerFrom() {
         return buildingSpinnerFrom;
     }
 
+    /**
+     * This function is used for test purposes.
+     * @return
+     */
     public Spinner getFloorSpinnerFrom() {
         return floorSpinnerFrom;
     }
 
-    public AutoCompleteTextView getRoomInput() {
-        return roomInput;
-    }
-
-    //for testing purposes
+    /**
+     * This function is used for test purposes.
+     * @param building
+     * @param floor
+     * @param room
+     */
     public void setSource(Building building, Floor floor, String room) {
         this.sourceBuilding = building;
         this.sourceFloor = floor;
         this.sourceRoom = room;
     }
 
-    //for testing purposes
+    /**
+     * This function is used for test purposes.
+     * @param building
+     * @param floor
+     * @param room
+     */
     public void setTarget(Building building, Floor floor, String room) {
         this.targetBuilding = building;
         this.targetFloor = floor;
         this.targetRoom = room;
     }
 
-    //for testing purposes
+    /**
+     * This function is used for test purposes.
+     * @param handicapped
+     */
     public void setHandicapped(boolean handicapped) {
         this.isHandicapped = handicapped;
     }
 
-    //for testing purposes
+    /**
+     * This function is used for test purposes.
+     * @return
+     */
     public ImageView getImageView() { return imageView; }
 }
