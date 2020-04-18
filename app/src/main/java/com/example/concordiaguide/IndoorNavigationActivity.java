@@ -63,6 +63,8 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     private boolean isHandicapped = false;
 
+    private final String TAG = "IndoorNavigationActivity";
+
 
     public VectorDrawableCompat.VFullPath highlightRoom(String roomName, int floorMap, Building building) {
         VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
@@ -308,6 +310,11 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(sourceFloor == null || sourceRoom == null || targetFloor == null || targetRoom == null) {
+                    Log.d(TAG, "Target/Source Floor/Room was not selected");
+                    return;
+                }
+
                 Button fromToButton = (Button) findViewById(R.id.from_to_button);
                 fromToButton.setVisibility(View.GONE);
 
@@ -339,6 +346,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     //recursive function to show directions
     public void showDirections() {
         int floorMap = sourceFloor.getFloorMap();
+        imageView.setImageResource(floorMap);
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
         VectorDrawableCompat.VFullPath edge = null;
@@ -383,6 +391,17 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     }
 
                     colorMap(edges, vector, localDestination);
+
+                    try {
+                        sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() - 1);
+                        if(isHandicapped) {
+                            sourceRoom = sourceFloor.getGatewayNodes().getHandicappedDown();
+                        } else {
+                            sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedDown();
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "No file for Floor below found");
+                    }
                 }
 
                 //if its on a higher floor
@@ -397,6 +416,17 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     }
 
                     colorMap(edges, vector, localDestination);
+
+                    try {
+                        sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() + 1);
+                        if(isHandicapped) {
+                            sourceRoom = sourceFloor.getGatewayNodes().getHandicappedUp();
+                        } else {
+                            sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedUp();
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "No file for Floor above found");
+                    }
                 }
             }
 
