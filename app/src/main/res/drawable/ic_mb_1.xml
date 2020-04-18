@@ -441,14 +441,14 @@
       android:strokeAlpha="1"
       android:strokeColor="#f7d6d6" />
   <path
-      android:name="edge_12_x4_1.434+1.410+1.424+1.426+1.434+1.430_10"
+      android:name="edge_13_x4_1.434+1.410+1.424+1.426+1.434+1.430_10"
       android:fillAlpha="1"
       android:pathData="M 750, 860 l 0,-10"
       android:strokeWidth="10"
       android:strokeAlpha="1"
       android:strokeColor="#f7d6d6" />
   <path
-      android:name="edge_12_1.434+1.410+1.424+1.426+1.434+1.430_1.437+1.436+1.494+1.115_20"
+      android:name="edge_14_1.434+1.410+1.424+1.426+1.434+1.430_1.437+1.436+1.494+1.115_20"
       android:fillAlpha="1"
       android:pathData="M 750, 850 l 120,0"
       android:strokeWidth="10"
