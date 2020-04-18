@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import Helpers.ObjectWrapperForBinder;
-
 import Models.Building;
 
 public class BuildingInfoPopup extends Activity {
@@ -18,7 +17,7 @@ public class BuildingInfoPopup extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Building building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        final Building building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
 
         setContentView(R.layout.popup_building_info);
 
@@ -28,17 +27,17 @@ public class BuildingInfoPopup extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
-        getWindow().setLayout((int)(width * 0.8), (int)(height * 0.35));
+        getWindow().setLayout((int) (width * 0.8), (int) (height * 0.35));
 
         //set listener for buttons
-        Button buttonClose = (Button)findViewById(R.id.popup_button_close);
+        Button buttonClose = findViewById(R.id.popup_button_close);
         buttonClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 BuildingInfoPopup.super.onBackPressed();
             }
         });
 
-        Button buttonInfo = (Button)findViewById(R.id.popup_button_info);
+        Button buttonInfo = findViewById(R.id.popup_button_info);
         buttonInfo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
                 final Bundle bundle = new Bundle();
@@ -48,8 +47,8 @@ public class BuildingInfoPopup extends Activity {
         });
 
         //get views
-        TextView name = (TextView)findViewById(R.id.popup_name);
-        TextView address = (TextView)findViewById(R.id.popup_address);
+        TextView name = findViewById(R.id.popup_name);
+        TextView address = findViewById(R.id.popup_address);
 
         //set view content
         name.setText(building.getName());

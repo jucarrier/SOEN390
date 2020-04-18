@@ -4,9 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
-import androidx.core.app.ActivityCompat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -25,7 +25,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.example.concordiaguide.R;
+import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,43 +36,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-import Helpers.PlaceRecyclerViewAdapter;
-import Helpers.RtfBuilder;
-import Helpers.GoogleApiService;
-
-import com.example.concordiaguide.R;
-import Helpers.PlacesResult;
-import com.example.concordiaguide.ShowPlacesOnMapActivity;
-
 public class PoiFragment extends Fragment {
+    public static final String TYPE_METRO = "subway_station";
+    public static final String TYPE_BANK = "bank";
+    public static final String TYPE_PHARMACY = "pharmacy";
+    public static final String TYPE_GYM = "gym";
+    public static final String TYPE_CAFE = "cafe";
+    public static final String TYPE_BAR = "bar";
+    public static final String TYPE_RESTAURANT = "restaurant";
+    private static final String TAG = "locationservice";
+    public double latitude, longitude;
+    double lat = 0;
+    double lng = 0;
+    LocationManager lm;
+    LocationManager locationManager;
     private ImageView imageViewSearch;
     private RecyclerView recyclerViewPlaces;
     private LinearLayout linearLayoutShowOnMap;
-
-    public double latitude,longitude;
-    double lat = 0;
-    double lng = 0;
     private String placeType = "";
     private GoogleApiService googleApiService;
     private MyPlaces myPlaces;
-
     private FusedLocationProviderClient flc;
-    LocationManager lm;
-    LocationManager locationManager;
-
     private Spinner spinner_nearby_choices;
-
-    public static final String TYPE_METRO="subway_station";
-    public static final String TYPE_BANK="bank";
-    public static final String TYPE_PHARMACY="pharmacy";
-    public static final String TYPE_GYM="gym";
-    public static final String TYPE_CAFE="cafe";
-    public static final String TYPE_BAR="bar";
-    public static final String TYPE_RESTAURANT="restaurant";
-
-
-    private static final String TAG="locationservice";
 
     @Nullable
     @Override
@@ -79,7 +65,7 @@ public class PoiFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_near_by, container, false);
         //all these references can be found on fragment_near_by.xml
         spinner_nearby_choices = view.findViewById(R.id.spinner_nearby_choices);
-       imageViewSearch = view.findViewById(R.id.imageViewSearch);
+        imageViewSearch = view.findViewById(R.id.imageViewSearch);
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
 
@@ -154,33 +140,7 @@ public class PoiFragment extends Fragment {
 
     }
 
-    private class MyLocationListener implements LocationListener {
-
-        @Override //breaks down location coordinates and maps them to lattitude/longitude variables
-        public void onLocationChanged(Location lc) {
-            longitude = lc.getLongitude();
-            latitude = lc.getLatitude();
-
-            lat = lc.getLatitude();
-            lng = lc.getLongitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-    }
-    private void locationService(){
+    private void locationService() {
 
         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -229,22 +189,24 @@ public class PoiFragment extends Fragment {
             Toast.makeText(getContext(), "GPS off", Toast.LENGTH_SHORT).show();
         }
     }
+
     //this method helps to build the url that would be passed for HTTP requests
-    private String buildUrl(double latitude, double longitude, String API_KEY){
+    private String buildUrl(double latitude, double longitude, String API_KEY) {
 
         StringBuilder urlStr = new StringBuilder("api/place/search/json?");
 
         urlStr.append("&location=");
-        urlStr.append(Double.toString(latitude));
+        urlStr.append(latitude);
         urlStr.append(",");
-        urlStr.append(Double.toString(longitude));
+        urlStr.append(longitude);
         urlStr.append("&radius=500"); // places between 5 kilometer
         urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
         urlStr.append("&sensor=false&key=" + API_KEY);
 
         return urlStr.toString();
     }
-    private void getNearByPlaces(){
+
+    private void getNearByPlaces() {
         String apiKey = getContext().getResources().getString(R.string.api_key);
         String url = buildUrl(lat, lng, apiKey);
         Log.d("finalUrl", url);
@@ -260,7 +222,7 @@ public class PoiFragment extends Fragment {
             public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
-              //  Log.d("MyPlaces", myPlaces.getResults().get(0).toString());
+                //  Log.d("MyPlaces", myPlaces.getResults().get(0).toString());
 
                 PlaceRecyclerViewAdapter adapter = new PlaceRecyclerViewAdapter(getContext(), myPlaces, lat, lng);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -277,5 +239,32 @@ public class PoiFragment extends Fragment {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private class MyLocationListener implements LocationListener {
+
+        @Override //breaks down location coordinates and maps them to lattitude/longitude variables
+        public void onLocationChanged(Location lc) {
+            longitude = lc.getLongitude();
+            latitude = lc.getLatitude();
+
+            lat = lc.getLatitude();
+            lng = lc.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
     }
 }

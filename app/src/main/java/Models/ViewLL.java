@@ -15,6 +15,7 @@ public class ViewLL implements Serializable {
     public void setNortheast(LatLongNE northeast) {
         this.northeast = northeast;
     }
+
     public LatLongSW getSouthwest() {
         return southwest;
     }
