@@ -20,6 +20,7 @@ public class PoiTypesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poi_types);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         PoiType[] types = new PoiType[]{ //displays the three options so far
                 new PoiType(R.drawable.ic_coffee, "Coffee Shop"),

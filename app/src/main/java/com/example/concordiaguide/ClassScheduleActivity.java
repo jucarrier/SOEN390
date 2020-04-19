@@ -62,6 +62,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_class_schedule);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         buttonToggleNotifications = findViewById(R.id.buttonToggleNotifications);
         notificationsOnOrOff = findViewById(R.id.textViewNotificationsOnOrOff);
