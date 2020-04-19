@@ -28,6 +28,18 @@ public class GraphBuilder {
     }
 
     /**
+     *
+     * @param sourceRoom
+     * @param targetRoom
+     * @return return the list of edges from source room to target room
+     * @throws RoomNotExistsException
+     */
+    public List<Edge> getShortestPath(String sourceRoom, String targetRoom) throws RoomNotExistsException {
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = getShortestPathsGraph(sourceRoom);
+        return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
+    }
+
+    /**
      * @param targetRoom Room to navigate to
      * @param handicapped Should the path be handicap accessible
      * @param direction Direction to head initially
