@@ -741,7 +741,7 @@
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
   <path
-      android:name="H960"
+      android:name="Stairs"
       android:pathData="M456.35,509.01l-38.73,-0l-0,-86.21l38.73,-0z"
       android:strokeAlpha="1"
       android:strokeWidth="2.01184581"
