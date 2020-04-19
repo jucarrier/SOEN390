@@ -16,7 +16,7 @@ import Helpers.ObjectWrapperForBinder;
 
 public class Shuttle extends Activity {
     String shuttle_from, shuttle_to;
-
+    final LatLng[] latlng = new LatLng[2];
     /**
      * Create a new activity that will show the options and directions of the shuttle
      *
@@ -26,7 +26,6 @@ public class Shuttle extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shuttle);
-        final LatLng[] latlng = new LatLng[2];
 
         //Size of the popup window
         DisplayMetrics dm = new DisplayMetrics();
@@ -121,8 +120,8 @@ public class Shuttle extends Activity {
      * @param from the
      * @param to
      */
-    private void goToCampus(LatLng from, LatLng to) {
-        final Bundle bundle = new Bundle();
+    final Bundle bundle = new Bundle();
+    public void goToCampus(LatLng from, LatLng to) {
         bundle.putBinder("From", new ObjectWrapperForBinder(from));
         bundle.putBinder("To", new ObjectWrapperForBinder(to));
         bundle.putBoolean("active", true);

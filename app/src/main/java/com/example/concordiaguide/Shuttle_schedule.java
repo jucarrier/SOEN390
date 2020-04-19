@@ -12,6 +12,8 @@ public class Shuttle_schedule extends Activity {
      *
      * @param savedInstanceState get the bundle of the stated of saved instance
      */
+
+    Boolean test = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +25,7 @@ public class Shuttle_schedule extends Activity {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         getWindow().setLayout(width * 1, (int) (height * 0.6));
-
+        test = true;
         //set listener for buttons
         Button buttonClose = findViewById(R.id.shuttle_close);
         buttonClose.setOnClickListener(new View.OnClickListener() {
