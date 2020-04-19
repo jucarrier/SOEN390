@@ -26,14 +26,10 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     private ImageView imageView;
     private Photos photos;
     private TextView textViewName;
-  //private TextView textViewRating;
     private TextView textViewAddress;
-  //private TextView textViewAvailability;
-  //private RatingBar ratingBar;
-  //private LinearLayout linearLayoutRating;
     private LinearLayout linearLayoutShowOnMap;
     private LinearLayout linearLayoutShowDistanceOnMap;
-    // variable
+
     private Results results;
     private double lat, lng;
     private String result = "result";
@@ -78,21 +74,6 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         }
 
         textViewName.setText(results.getName());
-        textViewAddress.setText(results.getVicinity());
-        /*
-        // check if ratings is available for the place
-       if (results.getRating() != null) {
-            linearLayoutRating.setVisibility(View.VISIBLE);
-            textViewRating.setText(results.getRating());
-            ratingBar.setRating(Float.valueOf(results.getRating()));
-       }
-        // check if opening hours is available
-        if (results.getOpeningHours() != null) {
-            textViewAvailability.setText(!results.getOpeningHours().getOpenNow() ? "Close now" : "Open now");
-        } else {
-            textViewAvailability.setText("Not found!");
-        }
-        */
 
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             /**
@@ -132,14 +113,10 @@ public class PlaceDetailsActivity extends AppCompatActivity {
      * initializes the layout and lets user choose between showing place location or distance to that location
      */
     private void init() {
-       // linearLayoutRating = findViewById(R.id.linearLayoutRating);
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);
         linearLayoutShowDistanceOnMap = findViewById(R.id.linearLayoutShowDistanceOnMap);
         textViewName = findViewById(R.id.textViewName);
-       // textViewRatPling = findViewById(R.id.textViewRating);
         textViewAddress = findViewById(R.id.textViewAddress);
-       // textViewAvailability = findViewById(R.id.textViewAvailability);
-      //  ratingBar = findViewById(R.id.ratingBar);
     }
 
 }

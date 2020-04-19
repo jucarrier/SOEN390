@@ -48,7 +48,6 @@ import com.example.concordiaguide.ShowPlacesOnMapActivity;
 /**
  * this fragment is loaded upon call from the NearbyPoiActivity.
  * it sets up the spinner view to display the type of places we want to see
- *
  */
 public class PoiFragment extends Fragment {
     private ImageView imageViewSearch;
@@ -100,7 +99,7 @@ public class PoiFragment extends Fragment {
                 if (position == 0) {
                     Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
                 } else {
-                    //when a Poi type is chosen and the search button is pressed, execute getNearbyPlaces function
+                    //when a Poi type is chosen and the search button is pressed, it executes getNearbyPlaces function
                     placeType = spinner_nearby_choices.getSelectedItem().toString();
                     switch (placeType) {
                         case "Coffee Shop": {
@@ -153,12 +152,6 @@ public class PoiFragment extends Fragment {
                 PlacesResult.results = myPlaces.getResults();
                 Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
                 startActivity(intent);
-                /*final Bundle bundle= new Bundle();
-                bundle.putBoolean("Poi_fragment_bool", true);
-                Intent intent2= new Intent(getContext(), MainActivity.class).putExtras(bundle);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent2);*/
             }
         });
 
@@ -254,7 +247,7 @@ public class PoiFragment extends Fragment {
      * @param latitude
      * @param longitude
      * @param API_KEY
-     * @return
+     * @return string containing location data (ie. Lat/lng , radius, placetype, sensor)
      * this method helps to build the url that would be passed for HTTP requests
      */
 
@@ -274,7 +267,8 @@ public class PoiFragment extends Fragment {
     }
 
     /**
-     * This method plugs the location url into the RTFbuilder function in order to parse them
+     * This method plugs the location data String into the RTFbuilder function in order to parse them
+     *
      * and show them in a list/recycler view
      */
     private void getNearByPlaces(){

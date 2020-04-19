@@ -18,6 +18,10 @@ import Models.MyPlaces;
 import Models.Results;
 import com.example.concordiaguide.R;
 
+/**
+ * This adapter class displays the Point of interests appearing upon search and handles its onclick functionality
+ * which is calling the PlaceDetailsActivty
+ */
 public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
@@ -45,7 +49,7 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
         holder.linearLayoutDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PlaceDetailsActivity.class);
+                Intent intent = new Intent(context, PlaceDetailsActivity.class);//passes data to the PlaceDetailsActivity
                 intent.putExtra("result", results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
