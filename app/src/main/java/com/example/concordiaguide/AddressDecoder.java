@@ -53,7 +53,7 @@ public class AddressDecoder extends AppCompatActivity {
             position = new LatLng(location.getLatitude(), location.getLongitude());
 
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
         return position;

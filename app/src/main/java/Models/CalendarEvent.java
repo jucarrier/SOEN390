@@ -51,23 +51,16 @@ public class CalendarEvent {
             System.out.println(third + " <- third");
 
 
-            days = new HashMap<String, Boolean>();
+            days = new HashMap<>();
 
 
-            if (third.contains("SU")) days.put("Sunday", true);
-            else days.put("Sunday", false);
-            if (third.contains("MO")) days.put("Monday", true);
-            else days.put("Monday", false);
-            if (third.contains("TU")) days.put("Tuesday", true);
-            else days.put("Tuesday", false);
-            if (third.contains("WE")) days.put("Wednesday", true);
-            else days.put("Wednesday", false);
-            if (third.contains("TH")) days.put("Thursday", true);
-            else days.put("Thursday", false);
-            if (third.contains("FR")) days.put("Friday", true);
-            else days.put("Friday", false);
-            if (third.contains("SA")) days.put("Saturday", true);
-            else days.put("Saturday", false);
+            days.put("Sunday", third.contains("SU"));
+            days.put("Monday", third.contains("MO"));
+            days.put("Tuesday", third.contains("TU"));
+            days.put("Wednesday", third.contains("WE"));
+            days.put("Thursday", third.contains("TH"));
+            days.put("Friday", third.contains("FR"));
+            days.put("Saturday", third.contains("SA"));
 
         } else System.out.println("repRule null");
     }

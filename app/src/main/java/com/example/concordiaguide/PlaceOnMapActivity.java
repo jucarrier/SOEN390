@@ -67,7 +67,6 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Got Nothing!!", Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 
@@ -146,17 +145,17 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
         // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        String strOrigin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String strDest = "destination=" + dest.latitude + "," + dest.longitude;
 
 
         // Sensor enabled
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&key=" + this.getResources().getString(R.string.api_key);
+        String parameters = strOrigin + "&" + strDest + "&" + sensor + "&key=" + this.getResources().getString(R.string.api_key);
 
         // Output format
         String output = "json";

@@ -21,7 +21,7 @@ import Models.Results;
 
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    List<Results> results = new ArrayList<Results>();
+    List<Results> results = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,6 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
             double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
             String placeName = googlePlace.getName();
-            String vicinity = googlePlace.getVicinity();
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName);
@@ -52,10 +51,8 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             googleMap.addMarker(markerOptions).showInfoWindow();
             // move camera
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             googleMap.getUiSettings().setCompassEnabled(true);
-            // googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
     }
 }
