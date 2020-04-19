@@ -81,9 +81,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     protected Cursor cursor;
 
     private boolean shuttle_active = false;
-    private boolean showPOI = false;
-    public boolean checkBack= true;
-    List<Results> results= new ArrayList<Results>();
+
     protected TabLayout transportationSelectionTab;
 
     //for finding current location
@@ -406,43 +404,12 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         setIntent(intent);
         Bundle b = intent.getExtras();
         shuttle_active = b.getBoolean("active");
-        showPOI= b.getBoolean("Poi_fragment_bool");
         //Shuttle code
         if(shuttle_active==true){
             mMap.clear();
             onMapReady(mMap);
         }
-        /*if(showPOI==true){
-            mMap.clear();
-            results= PlacesResult.results;
-            onMapReady(mMap);
-            poiChosen(mMap);
-            }*/
-        /*
-        * if the launcher mode on singleTask/SingleInstance on the main activity manifest,
-        * it will show all the location on the main activity
-        */
-
     }
-    /*public void poiChosen(GoogleMap googleMap) {
-        for (int i = 0; i < results.size(); i++) {
-            MarkerOptions markerOptions = new MarkerOptions();
-            Results googlePlace = results.get(i);
-            double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
-            double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
-            String placeName = googlePlace.getName();
-            String vicinity = googlePlace.getVicinity();
-            LatLng latLng = new LatLng(lat, lng);
-            markerOptions.position(latLng);
-            markerOptions.title(placeName);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            // add marker to map
-            googleMap.addMarker(markerOptions).showInfoWindow();;
-            // move camera
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
-        }
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void startAlarm(int hours, int minutes){
