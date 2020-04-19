@@ -2,14 +2,12 @@ package com.example.concordiaguide;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -177,14 +175,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                                 roomInput.setAdapter(roomNameAdapter);
                                 imageView.setImageResource(selectedFloor.getFloorMap());
 
-                                roomInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                                    @Override
-                                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                                        String room = roomInput.getEditableText().toString();
-                                        //highlightRoom(room, selectedFloor.getFloorMap(), selectedBuilding);
-                                        highlightPathToRoom(room, selectedFloor, isHandicapped, selectedBuilding);
-                                        return true;
-                                    }
+                                roomInput.setOnEditorActionListener((v, actionId, event) -> {
+                                    String room = roomInput.getEditableText().toString();
+                                    highlightPathToRoom(room, selectedFloor, isHandicapped, selectedBuilding);
+                                    return true;
                                 });
                             }
 

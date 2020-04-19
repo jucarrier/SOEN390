@@ -46,8 +46,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_building_list_item, parent, false);
 
-        BuildingListViewHolder vh = new BuildingListViewHolder(v);
-        return vh;
+        return new BuildingListViewHolder(v);
     }
 
     /**
@@ -62,15 +61,12 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
         holder.initials.setText(mBuildings.get(position).getInitials());
         holder.name.setText(mBuildings.get(position).getName());
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClickEvent: caught");
+        holder.parentLayout.setOnClickListener(view -> {
+            Log.d(TAG, "onClickEvent: caught");
 
-                final Bundle bundle = new Bundle();
-                bundle.putBinder("building", new ObjectWrapperForBinder(mBuildings.get(position)));
-                mContext.startActivity(new Intent(mContext, BuildingInfoActivity.class).putExtras(bundle));
-            }
+            final Bundle bundle = new Bundle();
+            bundle.putBinder("building", new ObjectWrapperForBinder(mBuildings.get(position)));
+            mContext.startActivity(new Intent(mContext, BuildingInfoActivity.class).putExtras(bundle));
         });
 
     }

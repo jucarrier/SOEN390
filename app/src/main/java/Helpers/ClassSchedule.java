@@ -9,7 +9,7 @@ public class ClassSchedule {
 
     //TODO: add all concordia class codes here
     protected static String[] validClasses = new String[]{"soen", "engr", "comp", "math", "lecture", "tutorial"};
-    protected static HashMap<String, Long> importantDates = new HashMap<String, Long>();
+    protected static HashMap<String, Long> importantDates = new HashMap<>();
 
     static {
         importantDates.put("startDate", 1577768400000L);
