@@ -1,22 +1,29 @@
 package com.example.concordiaguide;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-import com.devs.vectorchildfinder.VectorChildFinder;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.devs.vectorchildfinder.VectorDrawableCompat;
+import com.google.android.gms.maps.GoogleMap;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import java.util.List;
+
 import Helpers.CampusBuilder;
-import Helpers.GraphBuilder;
+import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
-import Models.Edge;
 import Models.Floor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -29,80 +36,58 @@ public class IndoorNavigationTest {
 
     private CampusBuilder cb;
     private Campus sgw;
-    private Campus loyola;
+    private Campus layola;
     private IndoorNavigationActivity indoorNavigationActivity;
-
-    private final String TAG = "IndoorNavigationTest";
 
     @Before
     public void setUp() throws Exception {
         cb = new CampusBuilder(null);
         sgw = cb.buildSGW();
-        loyola = cb.buildLoyola();
+        layola = cb.buildLoyola();
         indoorNavigationActivity = Robolectric.buildActivity(IndoorNavigationActivity.class).create().resume().get();
-        indoorNavigationActivity.setCampuses(sgw, loyola);
+        indoorNavigationActivity.setCampuses(sgw, layola);
     }
 
     @Test
     public void verifyCampusOptions() {
-        Spinner campusSpinner = indoorNavigationActivity.getCampusSpinnerFrom();
+        Spinner campusSpinner = indoorNavigationActivity.getCampusSpinner();
         assertEquals(campusSpinner.getAdapter().getCount(), 2);
         campusSpinner.setSelection(0);
-        Spinner buildingSinner = indoorNavigationActivity.getBuildingSpinnerFrom();
+        Spinner buildingSinner = indoorNavigationActivity.getBuildingSpinner();
         assertEquals(buildingSinner.getAdapter().getCount(), 9);
         buildingSinner.setSelection(0);
-        Spinner floorSpinner = indoorNavigationActivity.getFloorSpinnerFrom();
+        Spinner floorSpinner = indoorNavigationActivity.getFloorSpinner();
         assertTrue(floorSpinner.getAdapter().getCount() >= 2);
         floorSpinner.setSelection(0);
+        AutoCompleteTextView roomInput = indoorNavigationActivity.getRoomInput();
+        assertTrue(roomInput.getAdapter().getCount() >= 2);
+        roomInput.setText(roomInput.getAdapter().getItem(0).toString());
+        assertTrue(roomInput.getText().toString().startsWith(buildingSinner.getSelectedItem().toString().substring(0, 1)));
     }
 
     @Test
-    public void verifyIndoorNavigationAlgorithm() {
-        Building sourceBuilding = sgw.getBuilding("Hall");
-        Floor sourceFloor = sourceBuilding.getFloor(8);
-        String sourceRoom = "H807";
+    public void verifyRoomHighlight() {
+        Building hall = sgw.getBuilding("Hall");
+        Floor eightFloor = hall.getFloor(8);
+        VectorDrawableCompat.VFullPath room;
 
-        //Building targetBuilding = sgw.getBuilding("Hall");
-        //Floor targetFloor = targetBuilding.getFloor(8);
-        String targetRoom = "H847";
+        room = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
+        assertEquals(room.getFillColor(), Color.BLUE);
+        room = indoorNavigationActivity.highlightPathToRoom("801", eightFloor, false, hall);
+        assertEquals(room.getFillColor(), Color.BLUE);
+    }
 
-        indoorNavigationActivity.setSource(sourceBuilding, sourceFloor, sourceRoom);
-        indoorNavigationActivity.setTarget(sourceBuilding, sourceFloor, targetRoom);
-        indoorNavigationActivity.setHandicapped(false);
-
-        indoorNavigationActivity.showDirections();
-
-        VectorChildFinder vector = new VectorChildFinder(indoorNavigationActivity, sourceFloor.getFloorMap(), indoorNavigationActivity.getImageView());
-        GraphBuilder gb = new GraphBuilder(indoorNavigationActivity.getResources().getXml(sourceFloor.getFloorMap()), sourceFloor);
-        VectorDrawableCompat.VFullPath edge;
-
-        try {
-            List<Edge> edges = gb.getShortestPath(sourceRoom.substring(1), targetRoom.substring(1));
-
-            //check edges from map
-            String room = sourceRoom;
-            for(Edge e : edges) {
-                edge = vector.findPathByName(e.getEdgeName());
-                if (edge != null) {
-                    room = e.getEdgeName();
-                }
-            }
-            assertTrue(room.contains(targetRoom.substring(1)));
-
-            //fill room color
-            edge = vector.findPathByName(sourceRoom);
-            if (edge != null) {
-                assertTrue(edge.getPathName().contains(sourceRoom));
-            }
-
-            edge = vector.findPathByName(targetRoom);
-            if (edge != null) {
-                assertTrue(edge.getPathName().contains(targetRoom));
-            }
-        } catch (GraphBuilder.RoomNotExistsException e) {
-            e.printStackTrace();
-            assertTrue(false);
-
-        }
+    @Test
+    public void verifyRoomPathing() {
+        Building hall = sgw.getBuilding("Hall");
+        Floor eightFloor = hall.getFloor(8);
+        VectorDrawableCompat.VFullPath edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, false, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("820", eightFloor, false, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("H820", eightFloor, true, hall);
+        assertEquals(edge.getFillColor(), Color.BLUE);
+        edge = indoorNavigationActivity.highlightPathToRoom("tree", eightFloor, true, hall);
+        assertNull(edge);
     }
 }

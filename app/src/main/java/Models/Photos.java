@@ -1,26 +1,26 @@
 package Models;
 
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
+
+import androidx.annotation.NonNull;
 //to store photo references, then pass onto results to later display
 
 public class Photos implements Serializable {
-    private String photoReference;
+    private String photo_reference;
 
     private String height;
 
-    private String[] htmlAttributions;
+    private String[] html_attributions;
 
     private String width;
 
-    public String getPhotoReference() {
-        return photoReference;
+    public String getPhoto_reference() {
+        return photo_reference;
     }
 
-    public void setPhotoReference(String photoReference) {
-        this.photoReference = photoReference;
+    public void setPhoto_reference(String photo_reference) {
+        this.photo_reference = photo_reference;
     }
 
     public String getHeight() {
@@ -31,12 +31,12 @@ public class Photos implements Serializable {
         this.height = height;
     }
 
-    public String[] getHtmlAttributions() {
-        return htmlAttributions;
+    public String[] getHtml_attributions() {
+        return html_attributions;
     }
 
-    public void setHtmlAttributions(String[] htmlAttributions) {
-        this.htmlAttributions = htmlAttributions;
+    public void setHtml_attributions(String[] html_attributions) {
+        this.html_attributions = html_attributions;
     }
 
     public String getWidth() {
@@ -50,6 +50,6 @@ public class Photos implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Results [photo_reference = " + photoReference + ", height = " + height + ", html_attributions = " + htmlAttributions + ", width = " + width + "]";
+        return "Results [photo_reference = " + photo_reference + ", height = " + height + ", html_attributions = " + html_attributions + ", width = " + width + "]";
     }
 }

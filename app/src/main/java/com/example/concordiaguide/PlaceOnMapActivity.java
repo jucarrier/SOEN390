@@ -3,11 +3,9 @@ package com.example.concordiaguide;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 import android.widget.Toast;
-
-import Models.Results;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +16,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import Helpers.DirectionsJSONParser;
+
+import Models.Results;
+import Models.Location;
 
 import org.json.JSONObject;
 
@@ -65,6 +68,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Got Nothing!!", Toast.LENGTH_SHORT).show();
+            return;
         }
     }
 
@@ -142,7 +146,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 13.0f));
         googleMap.getUiSettings().setCompassEnabled(true);
-        // googleMap.getUiSettings().setZoomControlsEnabled(true);
+       // googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         String url = getDirectionsUrl(currentPosition, destinationPosition);
 
@@ -173,7 +177,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         String sensor = "sensor=false";
 
         // Building the parameters to the web service
-        String parameters = strOrigin + "&" + strDest + "&" + sensor + "&key=" + this.getResources().getString(R.string.api_key);
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&key=" + this.getResources().getString(R.string.api_key);
 
         // Output format
         String output = "json";
@@ -216,7 +220,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             }
 
             data = sb.toString();
-            Log.d("downloadUrl", data);
+            Log.d("downloadUrl", data.toString());
             br.close();
 
         } catch (Exception e) {
@@ -247,7 +251,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             try {
                 // Fetching the data from web service
                 data = downloadUrl(url[0]);
-                Log.d("Background Task data", data);
+                Log.d("Background Task data", data.toString());
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
             }
@@ -284,7 +288,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Log.d(parserTask, jsonData[0]);
+                Log.d(parserTask, jsonData[0].toString());
                 DirectionsJSONParser parser = new DirectionsJSONParser();
                 Log.d(parserTask, parser.toString());
 

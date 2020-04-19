@@ -9,7 +9,7 @@ public class CalendarEventDisplayCard {
     private String description;
     private HashMap<String, Boolean> days;
 
-    public CalendarEventDisplayCard(int imageResource, String title, String description, HashMap<String, Boolean> days) {
+    public CalendarEventDisplayCard(int imageResource, String title, String description, HashMap<String, Boolean> days){
         this.imageResource = imageResource;
         this.title = title;
         this.description = description;

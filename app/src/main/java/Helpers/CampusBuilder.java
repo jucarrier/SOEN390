@@ -12,27 +12,21 @@ import Models.Campus;
 import Models.Floor;
 import Models.GatewayNodes;
 
-/**
- * This class handles creating the campus object that are used throughout the project to
- * represent the campuses that are part of concordia as well as the buildings that are part of
- * the campuses.
- */
 public class CampusBuilder {
-    private final String defaultDescription = "Description";
-    private GoogleMap mMap;
-    private GatewayNodes basicGatewayNode;
+    GoogleMap mMap;
+    GatewayNodes basicGatewayNode;
     private String stairNode = "Stairs";
     private String elevatorOneNode = "Elevator 1";
+    private final String defaultDescription = "Description";
+    private final String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
 
     public CampusBuilder(GoogleMap mMap) {
-        basicGatewayNode = new GatewayNodes(elevatorOneNode, elevatorOneNode, stairNode, stairNode, stairNode);
+        basicGatewayNode = new GatewayNodes(elevatorOneNode, elevatorOneNode, stairNode, stairNode, null);
         this.mMap = mMap;
     }
 
-    /**
-     * @return Returns a Campus object representing the downtown campus
-     */
     public Campus buildSGW() {
+
         Building h = new Building(mMap, "Hall", "1455 Boulevard de Maisonneuve O, Montréal, QC H3G 1M8", defaultDescription, "H",
                 new Floor[]{
                         new Floor("8th", 8, R.drawable.ic_hall_8, basicGatewayNode,
@@ -46,7 +40,7 @@ public class CampusBuilder {
                                         "H860.04", "H860.06", "H860.03", "H860.01", "H860.05", "H854",
                                         "H842", "H852", "H881", "H838", "Washroom - Men", "H886", "H854",
                                         "H820", "H822", "H832.02", "H832.05", "H832.03", "H832.01",
-                                        "H832.06", "H802.01", "H898", "838.01"}, true),
+                                        "H832.06", "H802.01", "H898", "838.01"}),
                         new Floor("9th", 9, R.drawable.ic_hall_9, basicGatewayNode,
                                 new String[]{"H927-1", "H927-2", "H925", "H925-1", "H925-3", "H923",
                                         "H921", "H919", "H917", "H913", "H911", "H909", "H907", "H903",
@@ -57,13 +51,13 @@ public class CampusBuilder {
                                         "H981", "H977", "H961-28", "H961-30", "H943", "H961-33",
                                         "H929", "H931", "H933-1", "H933-11", "H933-2", "H929-25",
                                         "H941", "H933", "H937", "H937-1", "H937-3", "H983", "H928",
-                                        "H932", "H932-1", "H927-4", "H927", "H915", "H920",
+                                        "H932", "H985", "H932-1", "H927-4", "H927", "H915", "H920",
                                         "H920-1", "H980", "Washroom - Men", "H990", "H986",
                                         "H961-97", "H961-6", "H961-4", "H961-2", "H963", "H961-8",
                                         "H968", "H964-3", "H963-95", "H964-2", "H964-1", "H966",
                                         "H966-1", "H966-2", "H962-1", "H960", "H962", "H964", "H998",
-                                        elevatorOneNode, "Elevator 2", "H908",
-                                        "Washroom - Women", "H902-1", "H906", "H961-19"}, false)},
+                                        elevatorOneNode, "Elevator 2", "Washroom - Staff", "H908",
+                                        "Washroom - Women", "H902-1", "H906", "H961-19"})},
                 new LatLng(45.497711, -73.579035),
                 new LatLng(45.497373, -73.578311),
                 new LatLng(45.496829, -73.578850),
@@ -74,11 +68,11 @@ public class CampusBuilder {
                         new Floor("1st", 1, R.drawable.ic_mb_1, basicGatewayNode,
                                 new String[]{"MB1.294", "MB1.210", "MB1.338", "MB1.310", "MB1.437", "MB1.301", "MB1.309", "MB1.394", "MB1.335",
                                         "MB1.315", "MB1.424", "MB1.410", "MB1.426", "MB1.430", "MB1.436", "MB1.435", "MB1.494", "MB1.115",
-                                        "MB1.434", "MB1.132", "MB1.130", "MB1.134", "MB1.299"}, true),
+                                        "MB1.434", "MB1.132", "MB1.130", "MB1.134", "MB1.299"}),
                         new Floor("S2", -2, R.drawable.ic_mb_s2, basicGatewayNode,
                                 new String[]{"MBS2.245", "MBS2.294", "MBS2.273", "MBS2.275", "MBS2.279", "MBS2.285", "MBS2.330", "MBS2.210", "MBS2.345",
                                         "MBS2.230", "MBS2.310", "MBS2.394", "MBS2.438", "MBS2.440", "MBS2.418", "MBS2.420", "MBS2.410", "MBS2.437", "MBS2.435",
-                                        "MBS2.428", "MBS2.445", "MBS2.455", "MBS2.465", "MBS2.470", "MBS2.401", "MBS2.105", "MBS2.115", "MBS2.135", "MBS2.145"}, false)
+                                        "MBS2.428", "MBS2.445", "MBS2.455", "MBS2.465", "MBS2.470", "MBS2.401", "MBS2.105", "MBS2.115", "MBS2.135", "MBS2.145"})
                 },
                 new LatLng(45.495166, -73.579171),
                 new LatLng(45.495222, -73.579113),
@@ -199,9 +193,6 @@ public class CampusBuilder {
 
     }
 
-    /**
-     * @return Returns Returns a Campus object representing the Layola campus
-     */
     public Campus buildLoyola() {
 
         Building ad = new Building(mMap, "Administration building", "Refectory, Montreal, QC H4B", defaultDescription, "AD",
@@ -224,7 +215,6 @@ public class CampusBuilder {
                 new LatLng(45.457800, -73.639828),
                 new LatLng(45.457912, -73.640122));
 
-        String deafultLayolaAddress = "7141 Sherbrooke St W, Montreal, Quebec H4B 1R6";
         Building cc = new Building(mMap, "Central Building", deafultLayolaAddress, defaultDescription, "CC",
                 new Floor[]{},
                 new LatLng(45.458379, -73.640792),

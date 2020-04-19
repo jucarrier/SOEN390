@@ -20,9 +20,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug{
-            testCoverageEnabled = true
-        }
     }
     testOptions {
         unitTests {
@@ -42,11 +39,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    lintOptions {
-        checkReleaseBuilds false
-        //If you want to continue even if errors found use following line
-        abortOnError false
     }
 }
 android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
@@ -73,7 +65,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.devsideal:VectorChildFinder:1.0.0'
     implementation 'org.jgrapht:jgrapht-io:1.4.0'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 }
 
 apply plugin: 'jacoco'

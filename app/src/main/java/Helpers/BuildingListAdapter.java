@@ -25,63 +25,6 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     private List<Building> mBuildings;
     private Context mContext;
 
-    /**
-     * Provide a suitable constructor (depends on the kind of dataset)
-     *
-     * @param context Android context
-     * @param buildings list of buildings
-     */
-    public BuildingListAdapter(Context context, List<Building> buildings) {
-        mContext = context;
-        mBuildings = buildings;
-    }
-
-    /**
-     * Create new views (invoked by the layout manager)
-     */
-    @Override
-    public BuildingListAdapter.BuildingListViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                         int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_building_list_item, parent, false);
-
-        return new BuildingListViewHolder(v);
-    }
-
-    /**
-     * Replace the contents of a view (invoked by the layout manager)
-     */
-    @Override
-    public void onBindViewHolder(BuildingListViewHolder holder, final int position) {
-        Log.d(TAG, "onBindViewHolder: called");
-
-        //get element from your dataset at this position
-        //and replace the contents of the view with that element
-        holder.initials.setText(mBuildings.get(position).getInitials());
-        holder.name.setText(mBuildings.get(position).getName());
-
-        holder.parentLayout.setOnClickListener(view -> {
-            Log.d(TAG, "onClickEvent: caught");
-
-            final Bundle bundle = new Bundle();
-            bundle.putBinder("building", new ObjectWrapperForBinder(mBuildings.get(position)));
-            mContext.startActivity(new Intent(mContext, BuildingInfoActivity.class).putExtras(bundle));
-        });
-
-    }
-
-    /**
-     * Return the size of your dataset
-     *
-     * @return size of dataset
-     */
-    //
-    @Override
-    public int getItemCount() {
-        return mBuildings.size();
-    }
-
     // Provide a reference to the views for each data item
     public static class BuildingListViewHolder extends RecyclerView.ViewHolder {
 
@@ -95,6 +38,53 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
             name = itemView.findViewById(R.id.building_name);
             parentLayout = itemView.findViewById(R.id.building_list_item_parent_layout);
         }
+    }
+
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public BuildingListAdapter(Context context, List<Building> buildings) {
+        mContext = context;
+        mBuildings = buildings;
+    }
+
+    // Create new views (invoked by the layout manager)
+    @Override
+    public BuildingListAdapter.BuildingListViewHolder onCreateViewHolder(ViewGroup parent,
+                                                               int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.layout_building_list_item, parent, false);
+
+        BuildingListViewHolder vh = new BuildingListViewHolder(v);
+        return vh;
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(BuildingListViewHolder holder, final int position) {
+        Log.d(TAG, "onBindViewHolder: called");
+
+        //get element from your dataset at this position
+        //and replace the contents of the view with that element
+        holder.initials.setText(mBuildings.get(position).getInitials());
+        holder.name.setText(mBuildings.get(position).getName());
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClickEvent: caught");
+
+                final Bundle bundle = new Bundle();
+                bundle.putBinder("building", new ObjectWrapperForBinder(mBuildings.get(position)));
+                mContext.startActivity(new Intent(mContext, BuildingInfoActivity.class).putExtras(bundle));
+            }
+        });
+
+    }
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return mBuildings.size();
     }
 
 }

@@ -67,7 +67,7 @@ public class GraphBuilderTest {
         Boolean flag = false;
         try {
             List<Edge> edgeList = graphBuilder.getShortestPathTo("807", false, GraphBuilder.Direction.DOWN);
-            if(!edgeList.isEmpty()) {
+            if(edgeList != null) {
                 flag = true;
             }
         } catch(GraphBuilder.RoomNotExistsException e) {

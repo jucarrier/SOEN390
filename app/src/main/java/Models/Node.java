@@ -1,9 +1,8 @@
 package Models;
 
-/**
- * Represents one node that is used for indoor navigation. All navigation must be done from node
- * to node.
- */
+import java.util.Arrays;
+import java.util.List;
+
 public class Node {
     private final String[] rooms;
 
@@ -11,15 +10,13 @@ public class Node {
         this.rooms = rooms;
     }
 
-    public String[] getRooms() {
-        return rooms;
-    }
+    public String[] getRooms() { return rooms; }
 
     @Override
     public String toString() {
         String output = "";
 
-        for (String room : rooms) {
+        for(String room : rooms) {
             output += room + " ";
         }
 
@@ -27,12 +24,14 @@ public class Node {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return toString().hashCode();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         return (o instanceof Node) && (toString().equals(o.toString()));
     }
 }
