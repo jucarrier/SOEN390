@@ -47,7 +47,7 @@ public class CampusBuilder {
                                         "H842", "H852", "H881", "H838", "Washroom - Men", "H886", "H854",
                                         "H820", "H822", "H832.02", "H832.05", "H832.03", "H832.01",
                                         "H832.06", "H802.01", "H898", "838.01"}, true),
-                        new Floor("9th", 9, R.drawable.ic_hall_9, new GatewayNodes("elevator", "elevator", "stairs", "stairs", "door"),
+                        new Floor("9th", 9, R.drawable.ic_hall_9, basicGatewayNode,
                                 new String[]{"H927-1", "H927-2", "H925", "H925-1", "H925-3", "H923",
                                         "H921", "H919", "H917", "H913", "H911", "H909", "H907", "H903",
                                         "H967", "H965", "H961-1", "H961-3", "H961-7", "H961-9",
