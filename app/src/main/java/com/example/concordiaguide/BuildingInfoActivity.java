@@ -3,7 +3,6 @@ package com.example.concordiaguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,7 +14,6 @@ import Models.Building;
 
 public class BuildingInfoActivity extends AppCompatActivity {
     private static final String TAG = "BuildingInfoActivity";
-    private Button directions;
     Building building;
 
     @Override
@@ -26,9 +24,10 @@ public class BuildingInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         //set info
         Log.d(TAG, "onClickEvent: caught");
-        building = (Building) ((ObjectWrapperForBinder)getIntent().getExtras().getBinder("building")).getData();
+        building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
 
         TextView name = findViewById(R.id.building_info_name);
         TextView address = findViewById(R.id.building_info_address);
@@ -38,24 +37,15 @@ public class BuildingInfoActivity extends AppCompatActivity {
         address.setText(building.getAddress());
         description.setText(building.getDescription());
 
-        directions = (Button) findViewById(R.id.directions_button);
+        Button directions = findViewById(R.id.directions_button);
 
-        directions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                directionsButtonClicked(building);
-            }
-        });
+        directions.setOnClickListener(v -> directionsButtonClicked(building));
     }
 
-    private void directionsButtonClicked(Building b){
+    private void directionsButtonClicked(Building b) {
         final Bundle bundle = new Bundle();
         bundle.putBinder("building", new ObjectWrapperForBinder(b));
         Intent openMainActivity = new Intent(this, MainActivity.class).putExtras(bundle);
-        /*
-        openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityIfNeeded(openMainActivity.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        */
         this.startActivity(openMainActivity);
     }
 }

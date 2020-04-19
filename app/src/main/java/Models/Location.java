@@ -1,4 +1,5 @@
 package Models;
+
 import java.io.Serializable;
 
 public class Location implements Serializable {

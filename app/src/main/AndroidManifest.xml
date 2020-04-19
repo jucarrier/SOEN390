@@ -85,7 +85,7 @@
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
         <activity
-            android:name=".Shuttle_schedule"
+            android:name=".ShuttleSchedule"
             android:theme="@style/AppTheme.PopupBuildingInfo">
         </activity>
 

@@ -1,8 +1,9 @@
 package com.example.concordiaguide;
 
-import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,11 +12,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import Helpers.PlacesResult;
-import Models.Results;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Helpers.PlacesResult;
+import Models.Results;
 
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -41,7 +43,6 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
             double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
             String placeName = googlePlace.getName();
-            String vicinity = googlePlace.getVicinity();
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName);
@@ -50,10 +51,8 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             googleMap.addMarker(markerOptions).showInfoWindow();
             // move camera
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             googleMap.getUiSettings().setCompassEnabled(true);
-           // googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
     }
 }

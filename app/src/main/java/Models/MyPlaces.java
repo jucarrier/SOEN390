@@ -4,22 +4,22 @@ package Models;
 import java.io.Serializable;
 import java.util.List;
 
-public class MyPlaces implements Serializable{
+public class MyPlaces implements Serializable {
     //stores all nearby places result in list format
-    private String next_page_token;
+    private String nextPageToken;
 
     private List<Results> results;
 
-    private String[] html_attribute;
+    private String[] htmlAttribute;
 
     private String status;
 
-    public String getNext_page_token() {
-        return next_page_token;
+    public String getNextPageToken() {
+        return nextPageToken;
     }
 
-    public void setNext_page_token(String next_page_token) {
-        this.next_page_token = next_page_token;
+    public void setNextPageToken(String nextPageToken) {
+        this.nextPageToken = nextPageToken;
     }
 
     public List<Results> getResults() {
@@ -30,12 +30,12 @@ public class MyPlaces implements Serializable{
         this.results = results;
     }
 
-    public String[] getHtml_attribute() {
-        return html_attribute;
+    public String[] getHtmlAttribute() {
+        return htmlAttribute;
     }
 
-    public void setHtml_attribute(String[] html_attribute) {
-        this.html_attribute = html_attribute;
+    public void setHtmlAttribute(String[] htmlAttribute) {
+        this.htmlAttribute = htmlAttribute;
     }
 
     public String getStatus() {
@@ -48,6 +48,6 @@ public class MyPlaces implements Serializable{
 
     @Override
     public String toString() {
-        return "Results [next_page_token = " + next_page_token + ", results = " + results + ", html_attributions = " + html_attribute + ", status = " + status + "]";
+        return "Results [next_page_token = " + nextPageToken + ", results = " + results + ", html_attributions = " + htmlAttribute + ", status = " + status + "]";
     }
 }
