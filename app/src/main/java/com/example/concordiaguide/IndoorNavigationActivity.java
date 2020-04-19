@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -264,6 +266,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
+        CheckBox handicappedCheckbox = (CheckBox) findViewById(R.id.is_handicapped);
+        handicappedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isHandicapped = b;
+            }
+        });
+
         Button goButton = (Button) findViewById(R.id.from_to_button);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,6 +293,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     s.setEnabled(false);
                 }
 
+                CheckBox cb = (CheckBox) findViewById(R.id.is_handicapped);
+                cb.setEnabled(false);
+
                 Button nextButton = (Button) findViewById(R.id.next_button);
                 nextButton.setVisibility(View.VISIBLE);
 
@@ -297,6 +310,16 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 Log.d(TAG, "Source: " + sourceRoom);
                 Log.d(TAG, "Target: " + targetRoom);
                 showDirections();
+            }
+        });
+
+        Button newButton = (Button) findViewById(R.id.new_button);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
         });
 
