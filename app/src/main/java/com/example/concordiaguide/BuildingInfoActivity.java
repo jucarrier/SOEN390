@@ -26,6 +26,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         //set info
         Log.d(TAG, "onClickEvent: caught");
         building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();

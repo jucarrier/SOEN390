@@ -26,6 +26,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_campus_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //set event listener for switch button
