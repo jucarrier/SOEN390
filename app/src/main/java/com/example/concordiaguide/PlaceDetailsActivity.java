@@ -3,6 +3,7 @@ package com.example.concordiaguide;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,8 +54,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
 
         try {
             // gets photo
-            photos = results.getPhotos()[0];
-            String photoUrl = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%s&photoreference=%s&key=%s", 400, photos.getPhoto_reference(), getResources().getString(R.string.api_key));
+            Photos photos = results.getPhotos()[0];
+            String photoUrl = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%s&photoreference=%s&key=%s", 400, photos.getPhotoReference(), getResources().getString(R.string.api_key));
             Log.d("photoUrl", photoUrl);
             Picasso
                     .get()

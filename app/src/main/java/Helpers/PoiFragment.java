@@ -294,32 +294,5 @@ public class PoiFragment extends Fragment {
             }
         });
     }
-
-    private class MyLocationListener implements LocationListener {
-
-        @Override //breaks down location coordinates and maps them to lattitude/longitude variables
-        public void onLocationChanged(Location lc) {
-            longitude = lc.getLongitude();
-            latitude = lc.getLatitude();
-
-            lat = lc.getLatitude();
-            lng = lc.getLongitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-    }
 }
 

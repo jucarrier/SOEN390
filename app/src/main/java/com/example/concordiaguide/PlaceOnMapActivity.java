@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import Helpers.DirectionsJSONParser;
+import Models.Location;
 import Models.Results;
 import androidx.fragment.app.FragmentActivity;
 
@@ -163,10 +165,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
         // Start of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        String strOrigin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // End of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String strDest = "destination=" + dest.latitude + "," + dest.longitude;
 
 
         // Sensor enabled
