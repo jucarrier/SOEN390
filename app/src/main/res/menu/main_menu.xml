@@ -17,9 +17,15 @@
             android:icon="@drawable/ic_indoor_navigation_24dp"
             android:title="Indoor navigation" />
         <item
+            android:id="@+id/find_POI"
+            android:icon="@drawable/ic_poi_icon"
+            android:title="Point of Interests" />
+        <!--
+        <item 
             android:id="@+id/menu_Point_of_interest"
             android:icon="@drawable/ic_poi_icon"
             android:title="Point of interest" />
+            -->
         <item
             android:id="@+id/quick_campus_switch"
             android:icon="@drawable/ic_swap_horiz_black_24dp"

@@ -57,8 +57,6 @@
         android:text="Description"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black" />
-
-
     <Button
         android:id="@+id/directions_button"
         android:layout_width="wrap_content"

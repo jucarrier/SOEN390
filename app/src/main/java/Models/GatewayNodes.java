@@ -1,5 +1,8 @@
 package Models;
 
+/**
+ * Nodes that represent ways to go outside of the floor you are currently on
+ */
 public class GatewayNodes {
     private String handicappedUp;
     private String handicappedDown;
@@ -15,9 +18,23 @@ public class GatewayNodes {
         this.outside = outside;
     }
 
-    public String getHandicappedUp() { return handicappedUp; }
-    public String getHandicappedDown() { return handicappedDown; }
-    public String getNonHandicappedUp() { return nonHandicappedUp; }
-    public String getNonHandicappedDown() { return nonHandicappedDown; }
-    public String getOutside() { return outside; }
+    public String getHandicappedUp() {
+        return handicappedUp;
+    }
+
+    public String getHandicappedDown() {
+        return handicappedDown;
+    }
+
+    public String getNonHandicappedUp() {
+        return nonHandicappedUp;
+    }
+
+    public String getNonHandicappedDown() {
+        return nonHandicappedDown;
+    }
+
+    public String getOutside() {
+        return outside;
+    }
 }

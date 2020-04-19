@@ -1,22 +1,13 @@
 package com.example.concordiaguide;
-
-import android.content.res.XmlResourceParser;
-import android.graphics.Color;
-import android.util.Log;
-import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-
 import com.devs.vectorchildfinder.VectorChildFinder;
 import com.devs.vectorchildfinder.VectorDrawableCompat;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-
 import java.util.List;
-
 import Helpers.CampusBuilder;
 import Helpers.GraphBuilder;
 import Models.Building;
@@ -24,7 +15,8 @@ import Models.Campus;
 import Models.Edge;
 import Models.Floor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

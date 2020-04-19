@@ -1,17 +1,9 @@
 package Models;
 
 
-import android.util.Pair;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class CalendarEvent {
     protected int id;
@@ -29,25 +21,27 @@ public class CalendarEvent {
     protected HashMap<String, Boolean> days;
 
 
-    public CalendarEvent(int id, String stringId, String title, String location, long dtStart, long dtEnd, String repRule){
+    public CalendarEvent(int id, String stringId, String title, String location, long dtStart, long dtEnd, String repRule) {
         this.id = id;
         this.stringId = stringId;
+
         this.title = title;
         this.location = location;
         this.dtStart = dtStart;
         this.dtEnd = dtEnd;
+
         this.startDate = new Date(dtStart);
         this.endDate = new Date(dtEnd);
         this.rRule = repRule;
 
-        if (repRule!=null){
+        if (repRule != null) {
             System.out.println(repRule + " <- this is the rule");
 
             String third = "";
 
             String[] test = repRule.split(";");
-            for(String s : test) {
-                if(s.contains("BYDAY")) {
+            for (String s : test) {
+                if (s.contains("BYDAY")) {
                     System.out.println(s + " <- byday check");
                     third = s;
                 }
@@ -57,20 +51,16 @@ public class CalendarEvent {
             System.out.println(third + " <- third");
 
 
-            days = new HashMap<String, Boolean>();
+            days = new HashMap<>();
 
 
-            if(third.contains("SU")) days.put("Sunday", true); else days.put("Sunday", false);
-            if(third.contains("MO")) days.put("Monday", true); else days.put("Monday", false);
-            if(third.contains("TU")) days.put("Tuesday", true); else days.put("Tuesday", false);
-            if(third.contains("WE")) days.put("Wednesday", true); else days.put("Wednesday", false);
-            if(third.contains("TH")) days.put("Thursday", true); else days.put("Thursday", false);
-            if(third.contains("FR")) days.put("Friday", true); else days.put("Friday", false);
-            if(third.contains("SA")) days.put("Saturday", true); else days.put("Saturday", false);
-
-
-
-
+            days.put("Sunday", third.contains("SU"));
+            days.put("Monday", third.contains("MO"));
+            days.put("Tuesday", third.contains("TU"));
+            days.put("Wednesday", third.contains("WE"));
+            days.put("Thursday", third.contains("TH"));
+            days.put("Friday", third.contains("FR"));
+            days.put("Saturday", third.contains("SA"));
 
         } else System.out.println("repRule null");
     }
@@ -97,6 +87,7 @@ public class CalendarEvent {
 
     public void setStringId(String stringId) {
         this.stringId = stringId;
+
     }
 
     public String getTitle() {
@@ -115,6 +106,7 @@ public class CalendarEvent {
         this.location = location;
     }
 
+
     public long getDtStart() {
         return dtStart;
     }
@@ -122,6 +114,7 @@ public class CalendarEvent {
     public void setDtStart(int dtStart) {
         this.dtStart = dtStart;
     }
+
 
     public long getDtEnd() {
         return dtEnd;

@@ -4,15 +4,7 @@ import android.content.Intent;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.devs.vectorchildfinder.VectorChildFinder;
-import com.devs.vectorchildfinder.VectorDrawableCompat;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.devs.vectorchildfinder.VectorChildFinder;
+import com.devs.vectorchildfinder.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +32,13 @@ import Models.Building;
 import Models.Campus;
 import Models.Edge;
 import Models.Floor;
-import Models.Node;
 
+
+/**
+ * The IndoorNavigationActivity describes how the indoor navigation is handled.
+ * It contains the methods to find the optimal path between rooms in a floor as well as
+ * highlight that path.
+ */
 public class IndoorNavigationActivity extends AppCompatActivity {
     private ImageView imageView;
     private Campus sgw;
@@ -73,6 +72,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_indoor_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         imageView = findViewById(R.id.floor_view);
         try {
             sgw = (Campus) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("sgw")).getData();
@@ -84,7 +84,9 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     }
 
     /**
-     * This function is a supplementary function to the onCreate function. It helps set up the activity.
+     * This method is called on creation. It gets the campus building and floor data it needs
+     * to present to the user so they can select the room they want to navigate to.
+     * Also sets up the spinners displayed in the activity.
      * @param self
      */
     public void setUp(final AppCompatActivity self) {
@@ -96,6 +98,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 buildingSpinnerFrom = (Spinner) findViewById(R.id.building_spinner_from);
+
                 ArrayList<String> buildingLabels = new ArrayList<>();
                 final Campus selectedCampus = position == 0 ? sgw : loyola;
                 for (Building b : selectedCampus.getBuildings()) {
@@ -108,6 +111,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         floorSpinnerFrom = (Spinner) findViewById(R.id.floor_spinner_from);
+
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
                         sourceBuilding = selectedBuilding;
 
@@ -242,21 +246,21 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
-
+                                // Purposely do nothing
                             }
                         });
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
+                        // Purposely do nothing
                     }
                 });
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Purposely do nothing
             }
         });
 
@@ -290,6 +294,8 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d(TAG, "Source: " + sourceRoom);
+                Log.d(TAG, "Target: " + targetRoom);
                 showDirections();
             }
         });
@@ -308,13 +314,35 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         List<Edge> edges = null;
         Button nextButton = (Button) findViewById(R.id.next_button);
 
-        if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+//        if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+//            sourceRoom = sourceRoom.substring(1);
+//        }
+//
+//        if(targetRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+//            targetRoom = targetRoom.substring(1);
+//        }
+
+        Log.d(TAG, "Source: " + sourceRoom);
+        Log.d(TAG, "Target: " + targetRoom);
+
+        if(sourceRoom.matches("^[a-zA-Z]\\d.*")) {
             sourceRoom = sourceRoom.substring(1);
+        } else if(sourceRoom.matches("^[a-zA-Z]{2}\\d.*")) {
+            sourceRoom = sourceRoom.substring(2);
+        } else if(sourceRoom.matches("^[a-zA-Z]{3}\\d.*")) {
+            sourceRoom = sourceRoom.substring(3);
         }
 
-        if(targetRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
+        if(targetRoom.matches("^[a-zA-Z]\\d.*")) {
             targetRoom = targetRoom.substring(1);
+        } else if(targetRoom.matches("^[a-zA-Z]{2}\\d.*")) {
+            targetRoom = targetRoom.substring(2);
+        } else if(targetRoom.matches("^[a-zA-Z]{3}\\d.*")) {
+            targetRoom = targetRoom.substring(3);
         }
+
+        Log.d(TAG, "Source: " + sourceRoom);
+        Log.d(TAG, "Target: " + targetRoom);
 
         try {
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
@@ -328,8 +356,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     //get edges to room
                     edges = gb.getShortestPath(sourceRoom, targetRoom);
 
-                    localDestination = sourceBuilding.getInitials() + targetRoom;
-                    localDestination = localDestination.toUpperCase();
+                    if(targetRoom.matches("^\\d+.*")) {
+                        localDestination = sourceBuilding.getInitials() + targetRoom;
+                        localDestination = localDestination.toUpperCase();
+                    } else { localDestination = targetRoom; }
                     colorMap(edges, vector, localDestination);
 
                     nextButton.setEnabled(false);
@@ -423,8 +453,11 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         }
 
         //fill room color
-        String room = sourceBuilding.getInitials() + sourceRoom;
-        room = room.toUpperCase();
+        String room;
+        if(sourceRoom.matches("^\\d+.*")) {
+            room = sourceBuilding.getInitials() + sourceRoom;
+            room = room.toUpperCase();
+        } else { room = sourceRoom; }
         edge = vector.findPathByName(room);
         if (edge != null) {
             edge.setFillColor(Color.BLUE);
