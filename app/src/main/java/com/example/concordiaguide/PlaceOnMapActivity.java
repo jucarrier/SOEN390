@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import Helpers.DirectionsJSONParser;
+import Models.Location;
+import Models.Results;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,13 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import Helpers.DirectionsJSONParser;
-import Models.Location;
-import Models.Results;
-
+/**
+ *comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
+ */
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
-
-    // variable
     private Results results;
     private LatLng pos;
     private Location location1, location2;
@@ -50,13 +50,13 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);//use activity_maps
-
+        setContentView(R.layout.poi_maps);//use activity_maps
+        //sets up the map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
         mapFragment.getMapAsync(this);
 
         Bundle bundle = getIntent().getExtras();
-
+        //gets all the necessary info from previous activity (NearbyPOIactivity->POIfragment)
         if (bundle != null) {
             //assigns data fetched from previous activty and maps them to following variables
             results = (Results) bundle.getSerializable("result");
@@ -70,6 +70,11 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * @param googleMap
+     * depending on the choice of the user from placeDetailsActivity, this method will choose between
+     * showing the distance of user to POI location or showing only the POI location
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -80,17 +85,23 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    /**
+     * This method adds marker to the desired POI location
+     */
     private void showOnMap() {
         LatLng currentPosition = new LatLng(lat, lng); // user location
         pos = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
 
         //Toast.makeText(this, String.valueOf(pos), Toast.LENGTH_SHORT).show();
         //marker.remove();
+
+        //to check users location [remove if necessary]
         googleMap.addMarker(new MarkerOptions().position(currentPosition)
                 .title("Your Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                 .alpha(1f))
                 .showInfoWindow();
+        //to check POI's location
         this.googleMap.addMarker(new MarkerOptions().position(pos)
                 .title(results.getName())
                 .snippet(results.getVicinity())
@@ -103,6 +114,9 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(16.5f));
     }
 
+    /**
+     * This method draws the polylines between user and POI destination to show the distance
+     */
     private void showDistance() {
         LatLng currentPosition = new LatLng(lat, lng); // user location
         LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
@@ -118,9 +132,9 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(destinationPosition));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destinationPosition, 13.0f));
         googleMap.getUiSettings().setCompassEnabled(true);
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
+        //googleMap.getUiSettings().setZoomControlsEnabled(true);
 
-        // for current
+        // for current/user location
         googleMap.addMarker(new MarkerOptions().position(currentPosition)
                 .title("Your Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
@@ -142,12 +156,18 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
     }
 
+    /**
+     * @param origin
+     * @param dest
+     * @return
+     * this method takes the coordinates of both user and POI location and returns a result string
+     */
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
-        // Origin of route
+        // Start of route
         String strOrigin = "origin=" + origin.latitude + "," + origin.longitude;
 
-        // Destination of route
+        // End of route
         String strDest = "destination=" + dest.latitude + "," + dest.longitude;
 
 
@@ -166,6 +186,12 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
     }
 
+    /**
+     * @param strUrl
+     * @return
+     * @throws IOException
+     * this method retrieves the requested string url of location of user/POI, parses it and returns the data as string
+     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -204,9 +230,16 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         return data;
     }
 
-    // Fetches data from url passed
+    /**
+     *
+     */
     private class FetchUrl extends AsyncTask<String, Void, String> {
 
+        /**
+         * @param url
+         * @return
+         *
+         */
         @Override
         protected String doInBackground(String... url) {
 
@@ -223,13 +256,16 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             return data;
         }
 
+        /**
+         * @param result
+         * Invokes the thread for parsing the JSON data
+         */
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
             ParserTask parserTask = new ParserTask();
 
-            // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
 
         }
@@ -237,7 +273,11 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
+        /**
+         * @param jsonData
+         * @return
+         * This method parses the data in non-ui thread
+         */
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -262,7 +302,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             return routes;
         }
 
-        // Executes in UI thread, after the parsing process
+        /**
+         * @param result
+         * Executes in UI thread, after the parsing process
+         */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points;

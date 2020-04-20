@@ -26,8 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.concordiaguide.MainActivity;
-import com.example.concordiaguide.NearByPoiActivity;
+
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,6 +37,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+import Helpers.PlaceRecyclerViewAdapter;
+import Helpers.RtfBuilder;
+import Helpers.GoogleApiService;
+
+import com.example.concordiaguide.R;
+import Helpers.PlacesResult;
+import com.example.concordiaguide.ShowPlacesOnMapActivity;
+
+/**
+ * this fragment is loaded upon call from the NearbyPoiActivity.
+ * it sets up the spinner view to display the type of places we want to see
+ */
 public class PoiFragment extends Fragment {
     public static final String TYPE_METRO = "subway_station";
     public static final String TYPE_BANK = "bank";
@@ -71,57 +83,64 @@ public class PoiFragment extends Fragment {
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
 
-        locationService();
-        imageViewSearch.setOnClickListener(view1 -> {
-            int position = spinner_nearby_choices.getSelectedItemPosition();
-            if (position == 0) {
-                Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
-            } else {
-                placeType = spinner_nearby_choices.getSelectedItem().toString();
-                switch (placeType) {
-                    case "Coffee Shop": {
-                        placeType = TYPE_CAFE;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Bank": {
-                        placeType = TYPE_BANK;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Restaurant": {
-                        placeType = TYPE_RESTAURANT;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Pharmacy": {
-                        placeType = TYPE_PHARMACY;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Bar": {
-                        placeType = TYPE_BAR;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Metro": {
-                        placeType = TYPE_METRO;
-                        getNearByPlaces();
-                        break;
-                    }
-                    case "Gym": {
-                        placeType = TYPE_GYM;
-                        getNearByPlaces();
-                        break;
-                    }
-                    default: {
-                        break;
+        locationService();//checks for location of the user
+
+        //when the search button is pressed on the spinner
+        imageViewSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = spinner_nearby_choices.getSelectedItemPosition();
+                //if no POI was chosen, show the following toast message
+                if (position == 0) {
+                    Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
+                } else {
+                    //when a Poi type is chosen and the search button is pressed, it executes getNearbyPlaces function
+                    placeType = spinner_nearby_choices.getSelectedItem().toString();
+                    switch (placeType) {
+                        case "Coffee Shop": {
+                            placeType = TYPE_CAFE;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Bank": {
+                            placeType = TYPE_BANK;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Restaurant": {
+                            placeType = TYPE_RESTAURANT;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Pharmacy": {
+                            placeType = TYPE_PHARMACY;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Bar": {
+                            placeType = TYPE_BAR;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Metro": {
+                            placeType = TYPE_METRO;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Gym": {
+                            placeType = TYPE_GYM;
+                            getNearByPlaces();
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
                     }
                 }
             }
         });
 
-
+        //on press would show  showPlacesOnMap activity -> All places appeared on seach will be shown with a marker on the map
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +154,40 @@ public class PoiFragment extends Fragment {
     }
 
 
+
+    /**
+     * breaks down location coordinates and maps them to lattitude/longitude variables
+     */
+    private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location lc) {
+            longitude = lc.getLongitude();
+            latitude = lc.getLatitude();
+
+            lat = lc.getLatitude();
+            lng = lc.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+    }
+
+    /**
+     * checks for user's location acquired from the GPS data
+     */
     private void locationService() {
 
         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -182,8 +235,15 @@ public class PoiFragment extends Fragment {
         }
     }
 
-    //this method helps to build the url that would be passed for HTTP requests
-    private String buildUrl(double latitude, double longitude, String API_KEY) {
+    /**
+     * @param latitude
+     * @param longitude
+     * @param API_KEY
+     * @return string containing location data (ie. Lat/lng , radius, placetype, sensor)
+     * this method helps to build the url that would be passed for HTTP requests
+     */
+
+    private String buildUrl(double latitude, double longitude, String API_KEY){
 
         StringBuilder urlStr = new StringBuilder("api/place/search/json?");
 
@@ -198,7 +258,12 @@ public class PoiFragment extends Fragment {
         return urlStr.toString();
     }
 
-    private void getNearByPlaces() {
+    /**
+     * This method plugs the location data String into the RTFbuilder function in order to parse them
+     *
+     * and show them in a list/recycler view
+     */
+    private void getNearByPlaces(){
         String apiKey = getContext().getResources().getString(R.string.api_key);
         String url = buildUrl(lat, lng, apiKey);
         Log.d("finalUrl", url);
@@ -231,31 +296,5 @@ public class PoiFragment extends Fragment {
             }
         });
     }
-
-    private class MyLocationListener implements LocationListener {
-
-        @Override //breaks down location coordinates and maps them to lattitude/longitude variables
-        public void onLocationChanged(Location lc) {
-            longitude = lc.getLongitude();
-            latitude = lc.getLatitude();
-
-            lat = lc.getLatitude();
-            lng = lc.getLongitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-    }
 }
+
