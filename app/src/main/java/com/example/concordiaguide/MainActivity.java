@@ -32,9 +32,11 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +51,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -59,6 +62,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +85,9 @@ import Helpers.CampusBuilder;
 import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
+import Helpers.PlacesResult;
+import Models.MyPlaces;
+import Models.Results;
 
 /**
  * This is the class that displays the map to the user. It is the one that is active when the app
@@ -94,19 +101,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public Campus sgw;
     public Campus loyola;
     protected Cursor cursor;
+
+
     protected TabLayout transportationSelectionTab;
     //for finding current location
     //LatLng currentLocation; //to be filled in later by onLocationChanged
     double lat, lng;
     LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
-    ArrayList<LatLng> listPoints;
     SupportMapFragment mapFragment;
     SearchView searchView;
-    private boolean shuttleActive = false;
+
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
     private GoogleMap mMap;
     private DrawerLayout drawer;
+
+    private boolean shuttleactive = false;
+    private boolean showPOI = false;
+    ArrayList<LatLng> listPoints;
+    List<Results> results = new ArrayList<Results>();
 
     /**
      * this is the listener method that constantly updates the user's location for usage in other methods
@@ -237,6 +250,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Here is where the menu elements are handled, change as you need
         navigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            /**
+             * Going to different activities depending on the option chosen
+             * @param item
+             * @return
+             */
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -344,14 +362,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    /**
+     * When the app is going to another activity needs to call back the main, it will go through this method instead of creating a new activity of the Main.
+     *
+     * @param intent captured from the activity from which the new intent is coming from
+     *
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
         Bundle b = intent.getExtras();
-        shuttleActive = b.getBoolean("active");
-        mMap.clear();
-        onMapReady(mMap);
+        shuttleactive = b.getBoolean("active");
+
+        //Shuttle code
+        if (shuttleactive==true) {
+            mMap.clear();
+            onMapReady(mMap);
+        }
+        else
+            onMapReady(mMap);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -385,6 +417,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         trd.execute(reqUrl);
     }
 
+    /**
+     * This method gives the direction of the shuttle from one campus to another
+     *
+     * @param from The campus the user is leaving from
+     * @param to The campus the user is going to
+     */
     public void shuttleDirection(LatLng from, LatLng to) {
         TaskRequestDirections trd = new TaskRequestDirections();
         listPoints.add(to);
@@ -411,6 +449,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Move the camera to the current location when pressed
+     * @param v the view
+     */
     //@Override
     public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
@@ -443,6 +485,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    /**
+     * This method will create the necessary URL from the google APIs
+     * in order to create the direction
+     * and return it to the method that called it
+     *
+     * @param dest the destination the user chose
+     * @return returns the map URL back to the method
+     */
     private String getRequestUrl(LatLng dest) {
         //Value of origin
         String strOrg = "origin=" + this.currentLocation.latitude + "," + this.currentLocation.longitude;
@@ -462,6 +513,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
     }
 
+
+    /**
+     * Similarlar to the above method but for the shuttle direction
+     *
+     * @param dest the destination the user chose
+     * @return returns the map URL back to the method
+     */
     private String getRequestUrlShuttle(LatLng origin, LatLng dest) {
         //Value of origin
         String strOrg = "origin=" + origin.latitude + "," + origin.longitude;
@@ -480,6 +538,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
     }
 
+
+    /**
+     * Method to generate the response strings from the requested URL
+     *
+     * @param reqUrl the URL generated above
+     * @return returns the response strings
+     * @throws IOException
+     */
     private String requestDirection(String reqUrl) throws IOException {
         String responseString = "";
         InputStream inputStream = null;
@@ -555,12 +621,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
         });
 
-        if (shuttleActive) {
+        if (shuttleactive) {
             LatLng from, to;
             try {
                 from = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("From")).getData();
                 to = (LatLng) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("To")).getData();
                 shuttleDirection(from, to);
+                shuttleactive = false;
             } catch (Exception e) {
                 System.out.println(Arrays.toString(e.getStackTrace()));
             }
@@ -569,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Building building;
 
         try {
-            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("userToBuilding")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
             e.printStackTrace();
@@ -578,27 +645,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(latLng -> {
 
-            if (!listPoints.isEmpty()) {
-                listPoints.clear();
-                mMap.clear();
-                sgw = cb.buildSGW();
-                loyola = cb.buildLoyola();
-            }
-            //Save first point select
-            listPoints.add(latLng);
-            //Create marker
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
+                if (!listPoints.isEmpty()) {
+                    listPoints.clear();
+                    mMap.clear();
+                    sgw = cb.buildSGW();
+                    loyola = cb.buildLoyola();
+                }
+                //Save first point select
+                listPoints.add(latLng);
+                //Create marker
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
 
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-            mMap.addMarker(markerOptions);
+                mMap.addMarker(markerOptions);
 
-            //Create the URL to get request to marker
-            String url = getRequestUrl(listPoints.get(0));
-            TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-            taskRequestDirections.execute(url);
+                //Create the URL to get request to marker
+                String url = getRequestUrl(listPoints.get(0));
+                TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
+                taskRequestDirections.execute(url);
         });
 
 
@@ -684,6 +750,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Task parser class for the map
+     */
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>> {
 
         @Override
@@ -731,7 +800,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             } else {
                 Toast.makeText(getApplicationContext(), "Direction not found!", Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 }

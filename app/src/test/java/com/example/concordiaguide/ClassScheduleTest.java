@@ -31,9 +31,7 @@ public class ClassScheduleTest extends ClassScheduleActivity {
         assertNotNull(activity.findViewById(R.id.buttonToggleNotifications));
         assertNotNull(activity.findViewById(R.id.buttonRefreshCalendar));
         assertNotNull(activity.findViewById(R.id.textViewNotificationsOnOrOff));
-
     }
-
 
     @Test
     public void checkScheduleExists() {

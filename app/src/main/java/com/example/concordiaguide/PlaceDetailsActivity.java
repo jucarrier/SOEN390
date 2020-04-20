@@ -109,6 +109,12 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             }
         });
     }
+/*
+    public void onBackPressed() {
+        Intent intent2 = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent2);
+    }*/
 
     /**
      * initializes the layout and lets user choose between showing place location or distance to that location

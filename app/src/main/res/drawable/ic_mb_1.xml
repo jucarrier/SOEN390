@@ -78,8 +78,7 @@
       android:fillColor="#da3636"
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
-  <path
-      android:name="MB1.301"
+  <path android:name="MB1.301"
       android:pathData="M735,664.71h116.56v100h-116.56z"
       android:strokeAlpha="1"
       android:strokeWidth="2"
@@ -357,4 +356,124 @@
       android:fillColor="#da3636"
       android:strokeColor="#000000"
       android:fillAlpha="1"/>
+  <path
+      android:name="edge_1_1.924_Tables 2_100"
+      android:fillAlpha="1"
+      android:pathData="M 475, 220 l 100,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_2_Tables 2_x6_300"
+      android:fillAlpha="1"
+      android:pathData="M 475, 220 l 0,300"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+
+  <path
+      android:name="edge_3_Tables 1_x1_100"
+      android:fillAlpha="1"
+      android:pathData="M 475, 605 l 100,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_4_x1_1.210_40"
+      android:fillAlpha="1"
+      android:pathData="M 575, 605 l 0,-70"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_5_x1_Elevators_100"
+      android:fillAlpha="1"
+      android:pathData="M 575, 605 l 100,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_6_Elevators_1.301+1.309+1.315+1.335+1.338+1.394_70"
+      android:fillAlpha="1"
+      android:pathData="M 675, 605 l 70,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_7_x1_1.130+1.132+1.134_150"
+      android:fillAlpha="1"
+      android:pathData="M 575, 610 l 0,150"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_8_1.130+1.132+1.134_x5_50"
+      android:fillAlpha="1"
+      android:pathData="M 575, 760 l 0,50"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_9_x5_Escalator_50"
+        android:fillAlpha="1"
+        android:pathData="M 575, 810 l -80,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_10_x5_x2_100"
+        android:fillAlpha="1"
+        android:pathData="M 575, 810 l 0,50"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_11_x2_x3_80"
+      android:fillAlpha="1"
+      android:pathData="M 575, 860 l 0,80"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_12_x3_Doors_70"
+      android:fillAlpha="1"
+      android:pathData="M 575, 940 l -70,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_13_x3_Tables 3_80"
+      android:fillAlpha="1"
+      android:pathData="M 575, 940 l 80,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_14_x2_x4_175"
+      android:fillAlpha="1"
+      android:pathData="M 575, 860 l 175,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_15_x4_1.434+1.410+1.424+1.426+1.434+1.430_10"
+      android:fillAlpha="1"
+      android:pathData="M 750, 860 l 0,-10"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+      android:name="edge_16_1.434+1.410+1.424+1.426+1.434+1.430_1.437+1.436+1.494+1.115_20"
+      android:fillAlpha="1"
+      android:pathData="M 750, 850 l 120,0"
+      android:strokeWidth="10"
+      android:strokeAlpha="1"
+      android:strokeColor="#f7d6d6" />
+  <path
+    android:name="edge_17_x6_Tables 1_55"
+    android:fillAlpha="1"
+    android:pathData="M 475, 520 l 55,0"
+    android:strokeWidth="10"
+    android:strokeAlpha="1"
+    android:strokeColor="#f7d6d6" />
 </vector>

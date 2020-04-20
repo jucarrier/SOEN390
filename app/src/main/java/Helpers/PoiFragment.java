@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -153,6 +154,7 @@ public class PoiFragment extends Fragment {
     }
 
 
+
     /**
      * breaks down location coordinates and maps them to lattitude/longitude variables
      */
@@ -186,7 +188,7 @@ public class PoiFragment extends Fragment {
     /**
      * checks for user's location acquired from the GPS data
      */
-    private void locationService(){
+    private void locationService() {
 
         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 

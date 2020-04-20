@@ -15,6 +15,7 @@ import Helpers.PoiFragment;
  */
 public class NearByPoiActivity extends AppCompatActivity {
     public PoiFragment poiFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
