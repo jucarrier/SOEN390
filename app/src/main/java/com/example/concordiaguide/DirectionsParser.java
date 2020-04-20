@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,13 +15,13 @@ import java.util.List;
  * Created by NgocTri on 12/11/2017.
  */
 
-public class DirectionsParser {
+class DirectionsParser {
     /**
      * Returns a list of lists containing latitude and longitude from a JSONObject
      */
-    public List<List<HashMap<String, String>>> parse(JSONObject jObject) {
+    List<List<HashMap<String, String>>> parse(JSONObject jObject) {
 
-        List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String, String>>>();
+        List<List<HashMap<String, String>>> routes = new ArrayList<>();
         JSONArray jRoutes = null;
         JSONArray jLegs = null;
         JSONArray jSteps = null;
@@ -46,7 +47,7 @@ public class DirectionsParser {
 
                         //Loop for all points
                         for (int l = 0; l < list.size(); l++) {
-                            HashMap<String, String> hm = new HashMap<String, String>();
+                            HashMap<String, String> hm = new HashMap<>();
                             hm.put("lat", Double.toString(((LatLng) list.get(l)).latitude));
                             hm.put("lon", Double.toString(((LatLng) list.get(l)).longitude));
                             path.add(hm);
@@ -59,6 +60,8 @@ public class DirectionsParser {
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            System.err.println("Uncaught exception");
+            System.err.println(Arrays.toString(e.getStackTrace()));
         }
 
         return routes;
@@ -94,8 +97,8 @@ public class DirectionsParser {
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
-            LatLng p = new LatLng((((double) lat / 1E5)),
-                    (((double) lng / 1E5)));
+            LatLng p = new LatLng(((double) lat / 1E5),
+                    (double) lng / 1E5);
             poly.add(p);
         }
 

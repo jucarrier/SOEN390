@@ -55,50 +55,30 @@ public class Shuttle extends Activity {
         });
 
         Button goSGW = findViewById(R.id.shuttle_goSGW);
-        goSGW.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View pw) {
-                final CardView goCampus = findViewById(R.id.shuttle_goCampus);
-                campusText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
-                goCampus.setVisibility(View.VISIBLE);
-                goCampusClose.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View pw) {
-                        Shuttle.super.onBackPressed();
-                    }
-                });
-                latlng[0] = new LatLng(45.458372, -73.638267);
-                latlng[1] = new LatLng(45.497041, -73.578481);
-            }
+        goSGW.setOnClickListener(pw -> {
+            final CardView goCampus = findViewById(R.id.shuttle_goCampus);
+            campusText("Direction to SGW", "\nPlease go to GREEN Marker (7137 Sherbrooke St. W., Loyola Campus) using your preferred travel method and see schedule for the next Shuttle departure");
+            goCampus.setVisibility(View.VISIBLE);
+            goCampusClose.setOnClickListener(pw12 -> Shuttle.super.onBackPressed());
+            latlng[0] = new LatLng(45.458372, -73.638267);
+            latlng[1] = new LatLng(45.497041, -73.578481);
         });
 
         Button start = findViewById(R.id.shuttle_goCampusStart);
-        start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View pw) {
-                Shuttle.super.onBackPressed();
-                goToCampus(latlng[0], latlng[1]);
-            }
+        start.setOnClickListener(pw -> {
+            Shuttle.super.onBackPressed();
+            goToCampus(latlng[0], latlng[1]);
         });
 
         Button goCampusSchedule = findViewById(R.id.shuttle_goCampusSeeSchedule);
-        goCampusSchedule.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View pw) {
-                startActivity(new Intent(getApplicationContext(), Shuttle_schedule.class));
-            }
-        });
+        goCampusSchedule.setOnClickListener(pw -> startActivity(new Intent(getApplicationContext(), ShuttleSchedule.class)));
 
         //set listener for buttons
         Button buttonClose = findViewById(R.id.shuttle_close);
-        buttonClose.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View pw) {
-                Shuttle.super.onBackPressed();
-            }
-        });
+        buttonClose.setOnClickListener(pw -> Shuttle.super.onBackPressed());
 
         Button buttonInfo = findViewById(R.id.shuttle_schedule);
-        buttonInfo.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View pw) {
-                startActivity(new Intent(getApplicationContext(), Shuttle_schedule.class));
-            }
-        });
+        buttonInfo.setOnClickListener(pw -> startActivity(new Intent(getApplicationContext(), ShuttleSchedule.class)));
     }
 
     /**Called from the onClick button of SGW or Loyola in onCreate.

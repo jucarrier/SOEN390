@@ -7,6 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.xmlpull.v1.XmlPullParser;
 
+import java.util.Collections;
 import java.util.List;
 
 import Models.Edge;
@@ -24,6 +25,18 @@ public class GraphBuilder {
     public GraphBuilder(XmlPullParser parser, Floor floor) {
         this.floorGraph = createGraph(parser);
         this.gatewayNodes = floor.getGatewayNodes();
+    }
+
+    /**
+     *
+     * @param sourceRoom
+     * @param targetRoom
+     * @return return the list of edges from source room to target room
+     * @throws RoomNotExistsException
+     */
+    public List<Edge> getShortestPath(String sourceRoom, String targetRoom) throws RoomNotExistsException {
+        ShortestPathAlgorithm.SingleSourcePaths<Node, Edge> paths = getShortestPathsGraph(sourceRoom);
+        return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
     }
 
     /**
@@ -57,7 +70,7 @@ public class GraphBuilder {
         if (path != null) {
             return paths.getPath(getRoomNode(targetRoom)).getEdgeList();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -78,7 +91,7 @@ public class GraphBuilder {
         } else if (direction == Direction.OUTSIDE) {
             return paths.getPath(getRoomNode(gatewayNodes.getOutside())).getEdgeList();
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 

@@ -26,6 +26,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_campus_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //set event listener for switch button
@@ -37,7 +38,7 @@ public class CampusNavigationActivity extends AppCompatActivity {
                 RecyclerView recyclerViewSgw = findViewById(R.id.building_list_sgw);
                 RecyclerView recyclerViewLoyola = findViewById(R.id.building_list_loyola);
 
-                if (b == false) {
+                if (!b) {
                     title.setText("SGW");
                     currentCampus = Campuses.SGW;
                     recyclerViewSgw.setVisibility(View.VISIBLE);

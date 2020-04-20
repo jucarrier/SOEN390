@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 
-public class Shuttle_schedule extends Activity {
+public class ShuttleSchedule extends Activity {
     /**
      * This will display the schedule of the shuttle in the Shuttle display
      *
@@ -30,7 +30,7 @@ public class Shuttle_schedule extends Activity {
         Button buttonClose = findViewById(R.id.shuttle_close);
         buttonClose.setOnClickListener(new View.OnClickListener() {
             public void onClick(View pw) {
-                Shuttle_schedule.super.onBackPressed();
+                ShuttleSchedule.super.onBackPressed();
             }
         });
     }

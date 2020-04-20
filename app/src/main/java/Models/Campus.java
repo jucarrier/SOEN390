@@ -24,7 +24,7 @@ public class Campus {
 
     public Building getBuilding(String name) {
         for (Building b : buildings) {
-            if (b.name.toLowerCase().equals(name.toLowerCase())) {
+            if (b.name.equalsIgnoreCase(name)) {
                 return b;
             }
         }
