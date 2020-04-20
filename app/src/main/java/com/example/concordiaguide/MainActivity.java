@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    /**---------------ADD THIS--------------
+    /**
      * When the app is going to another activity needs to call back the main, it will go through this method instead of creating a new activity of the Main.
      *
      * @param intent captured from the activity from which the new intent is coming from
@@ -432,6 +432,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Move the camera to the current location when pressed
+     * @param v the view
+     */
     //@Override
     public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
@@ -463,6 +467,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    /**
+     * This method will create the necessary URL from the google APIs
+     * in order to create the direction
+     * and return it to the method that called it
+     *
+     * @param dest the destination the user chose
+     * @return returns the map URL back to the method
+     */
     private String getRequestUrl(LatLng dest) {
         //Value of origin
         String strOrg = "origin=" + this.currentLocation.latitude + "," + this.currentLocation.longitude;
@@ -482,6 +495,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
     }
 
+
+    /**
+     * Similarlar to the above method but for the shuttle direction
+     *
+     * @param dest the destination the user chose
+     * @return returns the map URL back to the method
+     */
     private String getRequestUrlShuttle(LatLng origin, LatLng dest) {
         //Value of origin
         String strOrg = "origin=" + origin.latitude + "," + origin.longitude;
@@ -500,6 +520,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
     }
 
+
+    /**
+     * Method to generate the response strings from the requested URL
+     *
+     * @param reqUrl the URL generated above
+     * @return returns the response strings
+     * @throws IOException
+     */
     private String requestDirection(String reqUrl) throws IOException {
         String responseString = "";
         InputStream inputStream = null;
@@ -699,6 +727,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * Task parser class for the map
+     */
     public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>> {
 
         @Override
