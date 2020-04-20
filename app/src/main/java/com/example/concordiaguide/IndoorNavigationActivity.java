@@ -1,7 +1,6 @@
 package com.example.concordiaguide;
 
 import android.content.Intent;
-import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +12,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -42,6 +38,7 @@ import Models.Floor;
  * highlight that path.
  */
 public class IndoorNavigationActivity extends AppCompatActivity {
+    private final String TAG = "IndoorNavigationActivity";
     private ImageView imageView;
     private Campus sgw;
     private Campus loyola;
@@ -55,17 +52,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private Spinner floorSpinnerTo;
     private Spinner roomSpinnerTo;
     private AutoCompleteTextView roomInput;
-
     private Building sourceBuilding;
     private Floor sourceFloor;
     private String sourceRoom;
     private Building targetBuilding;
     private Floor targetFloor;
     private String targetRoom;
-
     private boolean isHandicapped = false;
-
-    private final String TAG = "IndoorNavigationActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +82,18 @@ public class IndoorNavigationActivity extends AppCompatActivity {
      * This method is called on creation. It gets the campus building and floor data it needs
      * to present to the user so they can select the room they want to navigate to.
      * Also sets up the spinners displayed in the activity.
+     *
      * @param self
      */
     public void setUp(final AppCompatActivity self) {
-        campusSpinnerFrom = (Spinner) findViewById(R.id.campus_spinner_from);
+        campusSpinnerFrom = findViewById(R.id.campus_spinner_from);
         ArrayAdapter<String> campusSpinnerAdapterFrom = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);
         campusSpinnerFrom.setAdapter(campusSpinnerAdapterFrom);
 
         campusSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                buildingSpinnerFrom = (Spinner) findViewById(R.id.building_spinner_from);
+                buildingSpinnerFrom = findViewById(R.id.building_spinner_from);
 
                 ArrayList<String> buildingLabels = new ArrayList<>();
                 final Campus selectedCampus = position == 0 ? sgw : loyola;
@@ -112,14 +106,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 buildingSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        floorSpinnerFrom = (Spinner) findViewById(R.id.floor_spinner_from);
+                        floorSpinnerFrom = findViewById(R.id.floor_spinner_from);
 
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
                         sourceBuilding = selectedBuilding;
 
                         ArrayList<String> floorLabels = new ArrayList<>();
 
-                        if(selectedBuilding.getFloors().length != 0) {
+                        if (selectedBuilding.getFloors().length != 0) {
                             for (Floor f : selectedBuilding.getFloors()) {
                                 floorLabels.add(f.getFloorName());
                             }
@@ -128,7 +122,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         } else {
                             floorSpinnerFrom.setAdapter(null);
 
-                            roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
+                            roomSpinnerFrom = findViewById(R.id.room_spinner_from);
                             roomSpinnerFrom.setAdapter(null);
 
                             sourceFloor = null;
@@ -138,7 +132,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         floorSpinnerFrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                roomSpinnerFrom = (Spinner) findViewById(R.id.room_spinner_from);
+                                roomSpinnerFrom = findViewById(R.id.room_spinner_from);
 
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
                                 sourceFloor = selectedFloor;
@@ -181,14 +175,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
-        campusSpinnerTo = (Spinner) findViewById(R.id.campus_spinner_to);
+        campusSpinnerTo = findViewById(R.id.campus_spinner_to);
         ArrayAdapter<String> campusSpinnerAdapterTo = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, campusLabels);
         campusSpinnerTo.setAdapter(campusSpinnerAdapterTo);
 
         campusSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                buildingSpinnerTo = (Spinner) findViewById(R.id.building_spinner_to);
+                buildingSpinnerTo = findViewById(R.id.building_spinner_to);
                 ArrayList<String> buildingLabels = new ArrayList<>();
                 final Campus selectedCampus = position == 0 ? sgw : loyola;
                 for (Building b : selectedCampus.getBuildings()) {
@@ -200,13 +194,13 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 buildingSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        floorSpinnerTo = (Spinner) findViewById(R.id.floor_spinner_to);
+                        floorSpinnerTo = findViewById(R.id.floor_spinner_to);
                         final Building selectedBuilding = selectedCampus.getBuildings().get(position);
                         targetBuilding = selectedBuilding;
 
                         ArrayList<String> floorLabels = new ArrayList<>();
 
-                        if(selectedBuilding.getFloors().length != 0) {
+                        if (selectedBuilding.getFloors().length != 0) {
                             for (Floor f : selectedBuilding.getFloors()) {
                                 floorLabels.add(f.getFloorName());
                             }
@@ -215,7 +209,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         } else {
                             floorSpinnerTo.setAdapter(null);
 
-                            roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
+                            roomSpinnerTo = findViewById(R.id.room_spinner_to);
                             roomSpinnerTo.setAdapter(null);
 
                             targetFloor = null;
@@ -225,7 +219,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         floorSpinnerTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                roomSpinnerTo = (Spinner) findViewById(R.id.room_spinner_to);
+                                roomSpinnerTo = findViewById(R.id.room_spinner_to);
 
                                 final Floor selectedFloor = selectedBuilding.getFloors()[position];
                                 targetFloor = selectedFloor;
@@ -266,7 +260,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
-        CheckBox handicappedCheckbox = (CheckBox) findViewById(R.id.is_handicapped);
+        CheckBox handicappedCheckbox = findViewById(R.id.is_handicapped);
         handicappedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -274,16 +268,16 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
-        Button goButton = (Button) findViewById(R.id.from_to_button);
+        Button goButton = findViewById(R.id.from_to_button);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(sourceFloor == null || sourceRoom == null || targetFloor == null || targetRoom == null) {
+                if (sourceFloor == null || sourceRoom == null || targetFloor == null || targetRoom == null) {
                     Log.d(TAG, "Target/Source Floor/Room was not selected");
                     return;
                 }
 
-                Button fromToButton = (Button) findViewById(R.id.from_to_button);
+                Button fromToButton = findViewById(R.id.from_to_button);
                 fromToButton.setText("Next");
                 fromToButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -294,21 +288,21 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     }
                 });
 
-                Spinner[] spinners = {(Spinner) findViewById(R.id.campus_spinner_from), (Spinner) findViewById(R.id.building_spinner_from), (Spinner) findViewById(R.id.floor_spinner_from), (Spinner) findViewById(R.id.room_spinner_from),
-                        (Spinner) findViewById(R.id.campus_spinner_to), (Spinner) findViewById(R.id.building_spinner_to), (Spinner) findViewById(R.id.floor_spinner_to), (Spinner) findViewById(R.id.room_spinner_to)};
+                Spinner[] spinners = {findViewById(R.id.campus_spinner_from), findViewById(R.id.building_spinner_from), findViewById(R.id.floor_spinner_from), findViewById(R.id.room_spinner_from),
+                        findViewById(R.id.campus_spinner_to), findViewById(R.id.building_spinner_to), findViewById(R.id.floor_spinner_to), findViewById(R.id.room_spinner_to)};
 
-                for(Spinner s : spinners) {
+                for (Spinner s : spinners) {
                     s.setEnabled(false);
                 }
 
-                CheckBox cb = (CheckBox) findViewById(R.id.is_handicapped);
+                CheckBox cb = findViewById(R.id.is_handicapped);
                 cb.setEnabled(false);
 
                 showDirections();
             }
         });
 
-        Button newButton = (Button) findViewById(R.id.new_button);
+        Button newButton = findViewById(R.id.new_button);
         newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -330,21 +324,21 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         imageView.setImageResource(floorMap);
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
-        Button goButton = (Button) findViewById(R.id.from_to_button);
+        Button goButton = findViewById(R.id.from_to_button);
 
-        if(sourceRoom.matches("^[a-zA-Z]\\d.*")) {
+        if (sourceRoom.matches("^[a-zA-Z]\\d.*")) {
             sourceRoom = sourceRoom.substring(1);
-        } else if(sourceRoom.matches("^[a-zA-Z]{2}\\d.*")) {
+        } else if (sourceRoom.matches("^[a-zA-Z]{2}\\d.*")) {
             sourceRoom = sourceRoom.substring(2);
-        } else if(sourceRoom.matches("^[a-zA-Z]{3}\\d.*")) {
+        } else if (sourceRoom.matches("^[a-zA-Z]{3}\\d.*")) {
             sourceRoom = sourceRoom.substring(3);
         }
 
-        if(targetRoom.matches("^[a-zA-Z]\\d.*")) {
+        if (targetRoom.matches("^[a-zA-Z]\\d.*")) {
             targetRoom = targetRoom.substring(1);
-        } else if(targetRoom.matches("^[a-zA-Z]{2}\\d.*")) {
+        } else if (targetRoom.matches("^[a-zA-Z]{2}\\d.*")) {
             targetRoom = targetRoom.substring(2);
-        } else if(targetRoom.matches("^[a-zA-Z]{3}\\d.*")) {
+        } else if (targetRoom.matches("^[a-zA-Z]{3}\\d.*")) {
             targetRoom = targetRoom.substring(3);
         }
 
@@ -352,29 +346,31 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
 
             //is source and target are in the same building
-            if(sourceBuilding.getName().equals(targetBuilding.getName())) {
+            if (sourceBuilding.getName().equals(targetBuilding.getName())) {
                 String localDestination;
 
                 //if its on the same floor
-                if(sourceFloor.getFloorLevel() == targetFloor.getFloorLevel()) {
+                if (sourceFloor.getFloorLevel() == targetFloor.getFloorLevel()) {
                     //get edges to room
                     edges = gb.getShortestPath(sourceRoom, targetRoom);
 
-                    if(targetRoom.matches("^\\d+.*")) {
+                    if (targetRoom.matches("^\\d+.*")) {
                         localDestination = sourceBuilding.getInitials() + targetFloor.getInitials() + targetRoom;
                         localDestination = localDestination.toUpperCase();
-                    } else { localDestination = targetRoom; }
+                    } else {
+                        localDestination = targetRoom;
+                    }
                     colorMap(edges, vector, localDestination);
 
                     goButton.setEnabled(false);
                 }
 
                 //if its on a lower floor
-                else if(sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
+                else if (sourceFloor.getFloorLevel() > targetFloor.getFloorLevel()) {
                     //get edges to stairs/elevator doing down
                     edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
 
-                    if(isHandicapped) {
+                    if (isHandicapped) {
                         localDestination = sourceFloor.getGatewayNodes().getHandicappedDown();
                     } else {
                         localDestination = sourceFloor.getGatewayNodes().getNonHandicappedDown();
@@ -384,7 +380,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                     try {
                         sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() - 1);
-                        if(isHandicapped) {
+                        if (isHandicapped) {
                             sourceRoom = sourceFloor.getGatewayNodes().getHandicappedDown();
                         } else {
                             sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedDown();
@@ -399,7 +395,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     //get edges to stairs/elevator doing up
                     edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
 
-                    if(isHandicapped) {
+                    if (isHandicapped) {
                         localDestination = sourceFloor.getGatewayNodes().getHandicappedUp();
                     } else {
                         localDestination = sourceFloor.getGatewayNodes().getNonHandicappedUp();
@@ -409,7 +405,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
                     try {
                         sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() + 1);
-                        if(isHandicapped) {
+                        if (isHandicapped) {
                             sourceRoom = sourceFloor.getGatewayNodes().getHandicappedUp();
                         } else {
                             sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedUp();
@@ -422,9 +418,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
             //if not in the same building
             else {
+                String localDestination;
                 edges = gb.getShortestPath(sourceRoom, sourceFloor.getGatewayNodes().getOutside());
-                colorMap(edges, vector, sourceFloor.getGatewayNodes().getOutside());
-                if(sourceFloor.isMainFloor()) {
+
+                if (sourceFloor.isMainFloor()) {
                     goButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -434,6 +431,52 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+                if (sourceFloor.getFloorLevel() > 1) {
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.DOWN);
+
+                    if (isHandicapped) {
+                        localDestination = sourceFloor.getGatewayNodes().getHandicappedDown();
+                    } else {
+                        localDestination = sourceFloor.getGatewayNodes().getNonHandicappedDown();
+                    }
+
+                    try {
+                        sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() - 1);
+                        if (isHandicapped) {
+                            sourceRoom = sourceFloor.getGatewayNodes().getHandicappedUp();
+                        } else {
+                            sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedUp();
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "No file for Floor above found");
+                    }
+
+                    colorMap(edges, vector, localDestination);
+                } else if (sourceFloor.getFloorLevel() < 1) {
+                    edges = gb.getShortestPathFrom(sourceRoom, isHandicapped, GraphBuilder.Direction.UP);
+
+                    if (isHandicapped) {
+                        localDestination = sourceFloor.getGatewayNodes().getHandicappedUp();
+                    } else {
+                        localDestination = sourceFloor.getGatewayNodes().getNonHandicappedUp();
+                    }
+
+                    try {
+                        sourceFloor = sourceBuilding.getFloor(sourceFloor.getFloorLevel() + 1);
+                        if (isHandicapped) {
+                            sourceRoom = sourceFloor.getGatewayNodes().getHandicappedUp();
+                        } else {
+                            sourceRoom = sourceFloor.getGatewayNodes().getNonHandicappedUp();
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "No file for Floor above found");
+                    }
+
+                    colorMap(edges, vector, localDestination);
+                } else {
+                    colorMap(edges, vector, sourceFloor.getGatewayNodes().getOutside());
+                }
             }
         } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
@@ -442,6 +485,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function changes the color of the vector elements to display the path from source room to target room.
+     *
      * @param edges
      * @param vector
      * @param end
@@ -449,7 +493,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
     private void colorMap(List<Edge> edges, VectorChildFinder vector, String end) {
         VectorDrawableCompat.VFullPath edge;
         //draw edges onto map
-        for(Edge e : edges) {
+        for (Edge e : edges) {
             edge = vector.findPathByName(e.getEdgeName());
             if (edge != null) {
                 edge.setStrokeColor(Color.BLUE);
@@ -458,10 +502,12 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
         //fill room color
         String room;
-        if(sourceRoom.matches("^\\d+.*")) {
+        if (sourceRoom.matches("^\\d+.*")) {
             room = sourceBuilding.getInitials() + sourceFloor.getInitials() + sourceRoom;
             room = room.toUpperCase();
-        } else { room = sourceRoom; }
+        } else {
+            room = sourceRoom;
+        }
         edge = vector.findPathByName(room);
         if (edge != null) {
             edge.setFillColor(Color.BLUE);
@@ -481,6 +527,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @return
      */
     public Spinner getCampusSpinnerFrom() {
@@ -489,6 +536,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @return
      */
     public Spinner getBuildingSpinnerFrom() {
@@ -497,6 +545,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @return
      */
     public Spinner getFloorSpinnerFrom() {
@@ -505,6 +554,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @param building
      * @param floor
      * @param room
@@ -517,6 +567,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @param building
      * @param floor
      * @param room
@@ -529,6 +580,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @param handicapped
      */
     public void setHandicapped(boolean handicapped) {
@@ -537,7 +589,10 @@ public class IndoorNavigationActivity extends AppCompatActivity {
 
     /**
      * This function is used for test purposes.
+     *
      * @return
      */
-    public ImageView getImageView() { return imageView; }
+    public ImageView getImageView() {
+        return imageView;
+    }
 }

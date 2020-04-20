@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import Helpers.DirectionsJSONParser;
-import Models.Location;
-import Models.Results;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,8 +30,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Helpers.DirectionsJSONParser;
+import Models.Location;
+import Models.Results;
+
 /**
- *comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
+ * comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
  */
 public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
     private Results results;
@@ -71,9 +72,8 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     /**
-     * @param googleMap
-     * depending on the choice of the user from placeDetailsActivity, this method will choose between
-     * showing the distance of user to POI location or showing only the POI location
+     * @param googleMap depending on the choice of the user from placeDetailsActivity, this method will choose between
+     *                  showing the distance of user to POI location or showing only the POI location
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -159,8 +159,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     /**
      * @param origin
      * @param dest
-     * @return
-     * this method takes the coordinates of both user and POI location and returns a result string
+     * @return this method takes the coordinates of both user and POI location and returns a result string
      */
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
@@ -189,8 +188,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     /**
      * @param strUrl
      * @return
-     * @throws IOException
-     * this method retrieves the requested string url of location of user/POI, parses it and returns the data as string
+     * @throws IOException this method retrieves the requested string url of location of user/POI, parses it and returns the data as string
      */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
@@ -238,7 +236,6 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         /**
          * @param url
          * @return
-         *
          */
         @Override
         protected String doInBackground(String... url) {
@@ -257,8 +254,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         }
 
         /**
-         * @param result
-         * Invokes the thread for parsing the JSON data
+         * @param result Invokes the thread for parsing the JSON data
          */
         @Override
         protected void onPostExecute(String result) {
@@ -275,8 +271,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
 
         /**
          * @param jsonData
-         * @return
-         * This method parses the data in non-ui thread
+         * @return This method parses the data in non-ui thread
          */
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
@@ -303,8 +298,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         }
 
         /**
-         * @param result
-         * Executes in UI thread, after the parsing process
+         * @param result Executes in UI thread, after the parsing process
          */
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {

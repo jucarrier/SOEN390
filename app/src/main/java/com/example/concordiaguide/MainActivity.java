@@ -1,20 +1,5 @@
 package com.example.concordiaguide;
 
-import Helpers.DirectionsJSONParser;
-import Helpers.PlacesResult;
-import Models.Building;
-import Models.Results;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -32,11 +17,9 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +34,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -62,7 +44,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,14 +60,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.xml.transform.Result;
-
 import Helpers.CampusBuilder;
+import Helpers.DirectionsJSONParser;
 import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
-import Helpers.PlacesResult;
-import Models.MyPlaces;
 import Models.Results;
 
 /**
@@ -110,16 +88,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
     SupportMapFragment mapFragment;
     SearchView searchView;
-
+    ArrayList<LatLng> listPoints;
+    List<Results> results = new ArrayList<Results>();
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
     private GoogleMap mMap;
     private DrawerLayout drawer;
-
     private boolean shuttleactive = false;
     private boolean showPOI = false;
-    ArrayList<LatLng> listPoints;
-    List<Results> results = new ArrayList<Results>();
 
     /**
      * this is the listener method that constantly updates the user's location for usage in other methods
@@ -367,7 +343,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * When the app is going to another activity needs to call back the main, it will go through this method instead of creating a new activity of the Main.
      *
      * @param intent captured from the activity from which the new intent is coming from
-     *
      */
     @Override
     protected void onNewIntent(Intent intent) {
@@ -377,11 +352,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         shuttleactive = b.getBoolean("active");
 
         //Shuttle code
-        if (shuttleactive==true) {
+        if (shuttleactive == true) {
             mMap.clear();
             onMapReady(mMap);
-        }
-        else
+        } else
             onMapReady(mMap);
 
     }
@@ -421,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * This method gives the direction of the shuttle from one campus to another
      *
      * @param from The campus the user is leaving from
-     * @param to The campus the user is going to
+     * @param to   The campus the user is going to
      */
     public void shuttleDirection(LatLng from, LatLng to) {
         TaskRequestDirections trd = new TaskRequestDirections();
@@ -451,13 +425,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Move the camera to the current location when pressed
+     *
      * @param v the view
      */
     //@Override
     public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
-        if(currentLocation!= null)
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
+        if (currentLocation != null)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try {
             textViewAddressHere = findViewById(R.id.addressHere);
@@ -645,26 +620,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Add listener to polygons to show the building info popup
         mMap.setOnMapLongClickListener(latLng -> {
 
-                if (!listPoints.isEmpty()) {
-                    listPoints.clear();
-                    mMap.clear();
-                    sgw = cb.buildSGW();
-                    loyola = cb.buildLoyola();
-                }
-                //Save first point select
-                listPoints.add(latLng);
-                //Create marker
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
+            if (!listPoints.isEmpty()) {
+                listPoints.clear();
+                mMap.clear();
+                sgw = cb.buildSGW();
+                loyola = cb.buildLoyola();
+            }
+            //Save first point select
+            listPoints.add(latLng);
+            //Create marker
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
 
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
-                mMap.addMarker(markerOptions);
+            mMap.addMarker(markerOptions);
 
-                //Create the URL to get request to marker
-                String url = getRequestUrl(listPoints.get(0));
-                TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-                taskRequestDirections.execute(url);
+            //Create the URL to get request to marker
+            String url = getRequestUrl(listPoints.get(0));
+            TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
+            taskRequestDirections.execute(url);
         });
 
 
@@ -762,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             try {
                 jsonObject = new JSONObject(strings[0]);
                 //DirectionsParser directionsParser = new DirectionsParser();
-                DirectionsJSONParser directionsParser= new DirectionsJSONParser();
+                DirectionsJSONParser directionsParser = new DirectionsJSONParser();
                 routes = directionsParser.parse(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -21,19 +21,20 @@ public class NearByPoiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nearby_poi_activity);
 
-        poiFragment= new PoiFragment();
+        poiFragment = new PoiFragment();
 
         loadFragment(poiFragment);
     }
 
     /**
      * This method is for loading the nearby_poi_layout onto poiFragment for display
+     *
      * @param fragment
      */
-    public void loadFragment(Fragment fragment){
-        FragmentManager fm= getSupportFragmentManager();
-        FragmentTransaction fmt= fm.beginTransaction();
-        fmt.replace(R.id.nearby_poi_layout,fragment);
+    public void loadFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fmt = fm.beginTransaction();
+        fmt.replace(R.id.nearby_poi_layout, fragment);
         fmt.commit();
     }
 

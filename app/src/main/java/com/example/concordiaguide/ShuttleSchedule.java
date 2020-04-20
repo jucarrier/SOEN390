@@ -14,6 +14,7 @@ public class ShuttleSchedule extends Activity {
      */
 
     Boolean test = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

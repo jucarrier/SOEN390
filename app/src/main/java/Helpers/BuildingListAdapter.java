@@ -28,7 +28,7 @@ public class BuildingListAdapter extends RecyclerView.Adapter<BuildingListAdapte
     /**
      * Provide a suitable constructor (depends on the kind of dataset)
      *
-     * @param context Android context
+     * @param context   Android context
      * @param buildings list of buildings
      */
     public BuildingListAdapter(Context context, List<Building> buildings) {

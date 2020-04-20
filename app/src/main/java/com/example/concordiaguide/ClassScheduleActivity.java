@@ -45,16 +45,14 @@ public class ClassScheduleActivity extends AppCompatActivity {
     public Cursor cursor;   //cursor is needed to access events from google calendar
     public ClassSchedule schedule = new ClassSchedule(new ArrayList<CalendarEvent>()); //create an empty schedule to work with
     public boolean notificationsActive = false;
-
-    //recyclerview to display calendar events to the user
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
-
     public String eventsRead = ""; //used for testing to make sure readEvents has run
     public FloatingActionButton buttonToggleNotifications;
     public TextView notificationsOnOrOff;
     public FloatingActionButton refreshButton;
+    //recyclerview to display calendar events to the user
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +121,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
                     savePreference(true);
 
                     //when the nofifications are toggled on, we must iterate through the class schedule and set a new alarm for each event
-                    for(CalendarEvent c : schedule.getEvents()){
+                    for (CalendarEvent c : schedule.getEvents()) {
                         Date date = c.getStartDate();
                         int hour = date.getHours();
                         int minute = date.getMinutes();
@@ -192,6 +190,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
      * This method reads calendar events - it uses the cursor to get values from each column to be assembled
      * and displayed to the user. Events are filtered for classes that follow a standard naming format, containing
      * 3 numbers and a concordia class code, or the word "lecture" or "tutorial"
+     *
      * @throws NullPointerException
      */
     public void readEvents() throws NullPointerException {
@@ -272,8 +271,8 @@ public class ClassScheduleActivity extends AppCompatActivity {
      * Uses the AlarmManager to clear all active alarms.
      * Clears the active alarm IDs from activeAlarmIds.
      */
-    public void cancelAllAlarms(){
-        for(int i = 0;i<activeAlarmIds.size(); i++){
+    public void cancelAllAlarms() {
+        for (int i = 0; i < activeAlarmIds.size(); i++) {
             int alarmId = activeAlarmIds.get(i);
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(this, AlertReceiver.class);
@@ -288,9 +287,10 @@ public class ClassScheduleActivity extends AppCompatActivity {
 
     /**
      * This method uses android's SharedPreferences to save the user's preference for whether notifications are active or not.
+     *
      * @param active - boolean, whether the user wants notifications to be active.
      */
-    public void savePreference(boolean active){
+    public void savePreference(boolean active) {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -303,7 +303,7 @@ public class ClassScheduleActivity extends AppCompatActivity {
     /**
      * Loads the user's saved preference for whether notifications should be active ore not.
      */
-    public void loadPreference(){
+    public void loadPreference() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
         notificationsActive = sharedPreferences.getBoolean(NOTIFICATIONS_ACTIVE, false);
@@ -314,9 +314,9 @@ public class ClassScheduleActivity extends AppCompatActivity {
     /**
      * Updates the icon for the alarm toggle button and the textview specifying whether notifications are active.
      */
-    public void updateViewsForNotificationPreference(){
-        TextView tv = (TextView) findViewById(R.id.textViewNotificationsOnOrOff);
-        FloatingActionButton b = (FloatingActionButton) findViewById(R.id.buttonToggleNotifications);
+    public void updateViewsForNotificationPreference() {
+        TextView tv = findViewById(R.id.textViewNotificationsOnOrOff);
+        FloatingActionButton b = findViewById(R.id.buttonToggleNotifications);
 
         if (notificationsActive) {
             tv.setText("Notifications are ON");

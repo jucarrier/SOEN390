@@ -1,4 +1,5 @@
 package com.example.concordiaguide;
+
 import android.widget.Button;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -9,7 +10,8 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -23,7 +25,7 @@ public class ShuttleTest {
     }
 
     @Test
-    public void verifySGWclicked(){
+    public void verifySGWclicked() {
         assertNull(shuttle.latlng[0]);
         Button goSGW = shuttle.findViewById(R.id.shuttle_goSGW);
         goSGW.performClick();
@@ -31,7 +33,7 @@ public class ShuttleTest {
     }
 
     @Test
-    public void verifyLoyolaclicked(){
+    public void verifyLoyolaclicked() {
         assertNull(shuttle.latlng[0]);
         Button goSGW = shuttle.findViewById(R.id.shuttle_goLoyola);
         goSGW.performClick();
@@ -39,7 +41,7 @@ public class ShuttleTest {
     }
 
     @Test
-    public void VerifygoToCampus(){
+    public void VerifygoToCampus() {
         LatLng from = new LatLng(45.458372, 45.454642);
         LatLng to = new LatLng(45.453456, 45.445442);
         shuttle.goToCampus(from, to);

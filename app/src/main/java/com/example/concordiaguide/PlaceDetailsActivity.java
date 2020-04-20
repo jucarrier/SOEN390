@@ -1,8 +1,5 @@
 package com.example.concordiaguide;
 
-import Models.Photos;
-import Models.Results;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.squareup.picasso.Picasso;
 
-import androidx.appcompat.app.AppCompatActivity;
+import Models.Photos;
+import Models.Results;
 
 /**
  * this activity displays the card view of the chosen place from the nearbyPoiActivity
@@ -32,7 +32,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     private Results results;
     private double lat, lng;
 
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
 
@@ -52,7 +52,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         }
 
 
-         imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
         imageView = findViewById(R.id.imageView);
 

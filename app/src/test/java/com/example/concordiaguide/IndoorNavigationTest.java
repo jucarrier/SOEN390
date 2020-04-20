@@ -1,13 +1,18 @@
 package com.example.concordiaguide;
+
 import android.widget.Spinner;
+
 import com.devs.vectorchildfinder.VectorChildFinder;
 import com.devs.vectorchildfinder.VectorDrawableCompat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+
 import java.util.List;
+
 import Helpers.CampusBuilder;
 import Helpers.GraphBuilder;
 import Models.Building;
@@ -27,12 +32,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class IndoorNavigationTest {
 
+    private final String TAG = "IndoorNavigationTest";
     private CampusBuilder cb;
     private Campus sgw;
     private Campus loyola;
     private IndoorNavigationActivity indoorNavigationActivity;
-
-    private final String TAG = "IndoorNavigationTest";
 
     @Before
     public void setUp() throws Exception {
@@ -81,7 +85,7 @@ public class IndoorNavigationTest {
 
             //check edges from map
             String room = sourceRoom;
-            for(Edge e : edges) {
+            for (Edge e : edges) {
                 edge = vector.findPathByName(e.getEdgeName());
                 if (edge != null) {
                     room = e.getEdgeName();
