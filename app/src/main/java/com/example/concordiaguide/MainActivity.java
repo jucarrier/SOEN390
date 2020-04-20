@@ -551,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Building building;
 
         try {
-            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("building")).getData();
+            building = (Building) ((ObjectWrapperForBinder) getIntent().getExtras().getBinder("userToBuilding")).getData();
             directionsToBuilding(building);
         } catch (Exception e) {
             e.printStackTrace();
