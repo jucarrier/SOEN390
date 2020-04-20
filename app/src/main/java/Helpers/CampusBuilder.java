@@ -72,9 +72,9 @@ public class CampusBuilder {
         Building mb = new Building(mMap, "John Molson", "1450 Guy St, Montreal, Quebec H3H 0A1", defaultDescription, "JM",
                 new Floor[]{
                         new Floor("1st", 1, R.drawable.ic_mb_1, new GatewayNodes("Elevators", "Elevators", "Stairs", "Escalator", "Doors"),
-                                new String[]{"MB1.294", "MB1.210", "MB1.338", "MB1.310", "MB1.437", "MB1.301", "MB1.309", "MB1.394", "MB1.335",
-                                        "MB1.315", "MB1.424", "MB1.410", "MB1.426", "MB1.430", "MB1.436", "MB1.435", "MB1.494", "MB1.115",
-                                        "MB1.434", "MB1.132", "MB1.130", "MB1.134", "MB1.299"}, true),
+                                new String[]{"MB1.210", "MB1.338", "MB1.437", "MB1.301", "MB1.309", "MB1.394", "MB1.335",
+                                        "MB1.315", "MB1.424", "MB1.410", "MB1.426", "MB1.430", "MB1.436", "MB1.494", "MB1.115",
+                                        "MB1.434", "MB1.132", "MB1.130", "MB1.134"}, true),
                         new Floor("S2", -2, R.drawable.ic_mb_s2, basicGatewayNode,
                                 new String[]{"MBS2.245", "MBS2.294", "MBS2.273", "MBS2.275", "MBS2.279", "MBS2.285", "MBS2.330", "MBS2.210", "MBS2.345",
                                         "MBS2.230", "MBS2.310", "MBS2.394", "MBS2.438", "MBS2.440", "MBS2.418", "MBS2.420", "MBS2.410", "MBS2.437", "MBS2.435",
