@@ -1,6 +1,7 @@
 package com.example.concordiaguide;
 
 import Helpers.DirectionsJSONParser;
+import Helpers.DirectionsParser;
 import Helpers.PlacesResult;
 import Models.Building;
 import Models.Results;
@@ -761,8 +762,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jsonObject = new JSONObject(strings[0]);
-                //DirectionsParser directionsParser = new DirectionsParser();
-                DirectionsJSONParser directionsParser= new DirectionsJSONParser();
+                DirectionsParser directionsParser = new DirectionsParser();
                 routes = directionsParser.parse(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
