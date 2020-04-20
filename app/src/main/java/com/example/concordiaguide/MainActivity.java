@@ -1,5 +1,20 @@
 package com.example.concordiaguide;
 
+import Helpers.DirectionsJSONParser;
+import Helpers.PlacesResult;
+import Models.Building;
+import Models.Results;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -63,6 +78,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 import Helpers.CampusBuilder;
 import Helpers.ObjectWrapperForBinder;
@@ -439,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //@Override
     public void onLocateButtonPressed(View v) {
         AddressDecoder ad = new AddressDecoder();
+        if(currentLocation!= null)
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
         //test here
         try {
@@ -649,6 +667,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 taskRequestDirections.execute(url);
         });
 
+
+/*
+        if(currentLocation!= null)
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
+*/
         try {
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
         } catch (Exception e) {
@@ -738,7 +761,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jsonObject = new JSONObject(strings[0]);
-                DirectionsParser directionsParser = new DirectionsParser();
+                //DirectionsParser directionsParser = new DirectionsParser();
+                DirectionsJSONParser directionsParser= new DirectionsJSONParser();
                 routes = directionsParser.parse(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();

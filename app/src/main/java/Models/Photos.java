@@ -16,7 +16,7 @@ public class Photos implements Serializable {
     private String width;
 
     public String getPhotoReference() {
-        return photoReference;
+        return this.photoReference;
     }
 
     public void setPhotoReference(String photoReference) {
