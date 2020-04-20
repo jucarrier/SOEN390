@@ -25,6 +25,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.concordiaguide.MainActivity;
+import com.example.concordiaguide.NearByPoiActivity;
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -130,6 +133,7 @@ public class PoiFragment extends Fragment {
 
         return view;
     }
+
 
     private void locationService() {
 

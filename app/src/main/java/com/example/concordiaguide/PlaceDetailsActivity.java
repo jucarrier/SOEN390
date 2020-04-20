@@ -84,6 +84,12 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+/*
+    public void onBackPressed() {
+        Intent intent2 = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent2);
+    }*/
 
     private void init() {
         linearLayoutShowOnMap = findViewById(R.id.linearLayoutShowOnMap);

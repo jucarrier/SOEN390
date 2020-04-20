@@ -15,12 +15,17 @@ import com.google.android.gms.maps.model.LatLng;
 import Helpers.ObjectWrapperForBinder;
 
 public class Shuttle extends Activity {
-
+    String shuttle_from, shuttle_to;
+    final LatLng[] latlng = new LatLng[2];
+    /**
+     * Create a new activity that will show the options and directions of the shuttle
+     *
+     * @param savedInstanceState get the bundle of the stated of saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shuttle);
-        final LatLng[] latlng = new LatLng[2];
 
         //Size of the popup window
         DisplayMetrics dm = new DisplayMetrics();
@@ -34,13 +39,19 @@ public class Shuttle extends Activity {
         final Button goCampusClose = findViewById(R.id.shuttle_goCampusClose);
 
         Button goLoyola = findViewById(R.id.shuttle_goLoyola);
-        goLoyola.setOnClickListener(pw -> {
-            final CardView goCampus = findViewById(R.id.shuttle_goCampus);
-            campusText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
-            goCampus.setVisibility(View.VISIBLE);
-            goCampusClose.setOnClickListener(pw1 -> Shuttle.super.onBackPressed());
-            latlng[0] = new LatLng(45.497041, -73.578481);
-            latlng[1] = new LatLng(45.458372, -73.638267);
+        goLoyola.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View pw) {
+                final CardView goCampus = findViewById(R.id.shuttle_goCampus);
+                campusText("Direction to Loyola", "\nPlease go to the GREEN Marker (1455 Boulevard de Maisonneuve O) using your preferred travel method and see schedule for the next Shuttle departure");
+                goCampus.setVisibility(View.VISIBLE);
+                goCampusClose.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View pw) {
+                        Shuttle.super.onBackPressed();
+                    }
+                });
+                latlng[0] = new LatLng(45.497041, -73.578481);
+                latlng[1] = new LatLng(45.458372, -73.638267);
+            }
         });
 
         Button goSGW = findViewById(R.id.shuttle_goSGW);
@@ -70,6 +81,12 @@ public class Shuttle extends Activity {
         buttonInfo.setOnClickListener(pw -> startActivity(new Intent(getApplicationContext(), ShuttleSchedule.class)));
     }
 
+    /**Called from the onClick button of SGW or Loyola in onCreate.
+     * It will set the title and the description of the shuttle direction depending on the user's choice.
+     *
+     * @param title the title of the campus the user wish to go
+     * @param desc the description of the campus the user wish to go
+     */
     public void campusText(String title, String desc) {
         TextView campTitle = findViewById(R.id.shuttle_goCampusTitle);
         TextView campDesc = findViewById(R.id.shuttle_goCampusDesc);
@@ -77,8 +94,14 @@ public class Shuttle extends Activity {
         campDesc.setText(desc);
     }
 
-    private void goToCampus(LatLng from, LatLng to) {
-        final Bundle bundle = new Bundle();
+    /**Called from the onClick button 'start' in onCreate.
+     * It will assign the specific GPS location of the desired campus
+     *
+     * @param from the
+     * @param to
+     */
+    final Bundle bundle = new Bundle();
+    public void goToCampus(LatLng from, LatLng to) {
         bundle.putBinder("From", new ObjectWrapperForBinder(from));
         bundle.putBinder("To", new ObjectWrapperForBinder(to));
         bundle.putBoolean("active", true);
