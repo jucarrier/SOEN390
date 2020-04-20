@@ -12,11 +12,11 @@ import static org.junit.Assert.*;
 @RunWith(RobolectricTestRunner.class)
 public class ShuttleScheduleTest {
 
-    private Shuttle_schedule schedule;
+    private ShuttleSchedule schedule;
 
     @Before
     public void setUp(){
-        schedule = Robolectric.buildActivity(Shuttle_schedule.class).create().resume().get();
+        schedule = Robolectric.buildActivity(ShuttleSchedule.class).create().resume().get();
     }
 
     @Test
