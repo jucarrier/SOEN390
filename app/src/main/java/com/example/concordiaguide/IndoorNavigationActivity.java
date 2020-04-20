@@ -429,7 +429,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             final Bundle bundle = new Bundle();
-                            bundle.putBinder("building", new ObjectWrapperForBinder(targetBuilding));
+                            bundle.putBinder("userToBuilding", new ObjectWrapperForBinder(targetBuilding));
                             startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtras(bundle));
                         }
                     });

@@ -44,7 +44,7 @@ public class BuildingInfoActivity extends AppCompatActivity {
 
     private void directionsButtonClicked(Building b) {
         final Bundle bundle = new Bundle();
-        bundle.putBinder("building", new ObjectWrapperForBinder(b));
+        bundle.putBinder("userToBuilding", new ObjectWrapperForBinder(b));
         Intent openMainActivity = new Intent(this, MainActivity.class).putExtras(bundle);
         this.startActivity(openMainActivity);
     }
