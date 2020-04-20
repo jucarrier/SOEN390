@@ -1,5 +1,8 @@
 package com.example.concordiaguide;
 
+import Models.Photos;
+import Models.Results;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.squareup.picasso.Picasso;
 
-import Models.Photos;
-import Models.Results;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * this activity displays the card view of the chosen place from the nearbyPoiActivity
@@ -22,39 +22,43 @@ import Models.Results;
  * displaying the location on map or seeing the distance between the user and the Point of interest
  */
 public class PlaceDetailsActivity extends AppCompatActivity {
+    private ImageView imageView;
+    private Photos photos;
     private TextView textViewName;
     private TextView textViewAddress;
     private LinearLayout linearLayoutShowOnMap;
     private LinearLayout linearLayoutShowDistanceOnMap;
-
+    // variable
     private Results results;
     private double lat, lng;
-    private String result = "result";
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
 
-        // initializes the layout/UI
+        // init UI
         init();
 
         Bundle bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            results = (Results) bundle.getSerializable(result);
+            results = (Results) bundle.getSerializable("result");
             lat = bundle.getDouble("lat");
             lng = bundle.getDouble("lng");
+            //Toast.makeText(this, String.valueOf(results.getPhotos()[0].getPhoto_reference()), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Got Nothing!!", Toast.LENGTH_SHORT).show();
             return;
         }
 
 
-        ImageView imageView = findViewById(R.id.imageView);
+         imageView = findViewById(R.id.imageView);
+
+        imageView = findViewById(R.id.imageView);
 
         try {
-            // gets photo
-            Photos photos = results.getPhotos()[0];
+            // get photo
+            photos = results.getPhotos()[0];
             String photoUrl = String.format("https://maps.googleapis.com/maps/api/place/photo?maxwidth=%s&photoreference=%s&key=%s", 400, photos.getPhotoReference(), getResources().getString(R.string.api_key));
             Log.d("photoUrl", photoUrl);
             Picasso
@@ -65,11 +69,12 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             Picasso
                     .get()
-                    .load(R.drawable.ic_error_image)//if image is not found
+                    .load(R.drawable.ic_error_image)
                     .into(imageView);
         }
 
         textViewName.setText(results.getName());
+        textViewAddress.setText(results.getVicinity());
 
         linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
             /**
@@ -79,7 +84,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra(result, results);
+                intent.putExtra("result", results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "map");
@@ -96,7 +101,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
-                intent.putExtra(result, results);
+                intent.putExtra("result", results);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lng", lng);
                 intent.putExtra("type", "distance");
