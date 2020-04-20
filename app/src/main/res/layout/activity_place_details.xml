@@ -24,11 +24,11 @@
                 android:layout_height="189dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="15dp"
                 android:adjustViewBounds="true"
-                android:maxHeight="190dp"
                 android:maxWidth="400dp"
+                android:maxHeight="190dp"
                 android:scaleType="fitCenter" />
 
             <androidx.cardview.widget.CardView
@@ -146,8 +146,8 @@
                 android:id="@+id/linearLayoutShowOnMap"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="#359ab9"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -167,8 +167,8 @@
                 android:id="@+id/linearLayoutShowDistanceOnMap"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="#359ab9"
                 android:gravity="center"
                 android:orientation="horizontal">

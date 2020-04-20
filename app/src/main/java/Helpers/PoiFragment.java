@@ -25,8 +25,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,15 +34,6 @@ import Models.MyPlaces;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
-import Helpers.PlaceRecyclerViewAdapter;
-import Helpers.RtfBuilder;
-import Helpers.GoogleApiService;
-
-import com.example.concordiaguide.R;
-import Helpers.PlacesResult;
-import com.example.concordiaguide.ShowPlacesOnMapActivity;
 
 /**
  * this fragment is loaded upon call from the NearbyPoiActivity.
@@ -153,38 +142,6 @@ public class PoiFragment extends Fragment {
         return view;
     }
 
-
-
-    /**
-     * breaks down location coordinates and maps them to lattitude/longitude variables
-     */
-    private class MyLocationListener implements LocationListener {
-
-        @Override
-        public void onLocationChanged(Location lc) {
-            longitude = lc.getLongitude();
-            latitude = lc.getLatitude();
-
-            lat = lc.getLatitude();
-            lng = lc.getLongitude();
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            // Required for interface implementation. Not necessary for our purposes.
-        }
-    }
-
     /**
      * checks for user's location acquired from the GPS data
      */
@@ -243,7 +200,7 @@ public class PoiFragment extends Fragment {
      * this method helps to build the url that would be passed for HTTP requests
      */
 
-    private String buildUrl(double latitude, double longitude, String API_KEY){
+    private String buildUrl(double latitude, double longitude, String API_KEY) {
 
         StringBuilder urlStr = new StringBuilder("api/place/search/json?");
 
@@ -260,10 +217,10 @@ public class PoiFragment extends Fragment {
 
     /**
      * This method plugs the location data String into the RTFbuilder function in order to parse them
-     *
+     * <p>
      * and show them in a list/recycler view
      */
-    private void getNearByPlaces(){
+    private void getNearByPlaces() {
         String apiKey = getContext().getResources().getString(R.string.api_key);
         String url = buildUrl(lat, lng, apiKey);
         Log.d("finalUrl", url);
@@ -295,6 +252,36 @@ public class PoiFragment extends Fragment {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * breaks down location coordinates and maps them to lattitude/longitude variables
+     */
+    private class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location lc) {
+            longitude = lc.getLongitude();
+            latitude = lc.getLatitude();
+
+            lat = lc.getLatitude();
+            lng = lc.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Required for interface implementation. Not necessary for our purposes.
+        }
     }
 }
 

@@ -15,8 +15,17 @@ import com.google.android.gms.maps.model.LatLng;
 import Helpers.ObjectWrapperForBinder;
 
 public class Shuttle extends Activity {
-    String shuttle_from, shuttle_to;
     final LatLng[] latlng = new LatLng[2];
+    /**
+     * Called from the onClick button 'start' in onCreate.
+     * It will assign the specific GPS location of the desired campus
+     *
+     * @param from the
+     * @param to
+     */
+    final Bundle bundle = new Bundle();
+    String shuttle_from, shuttle_to;
+
     /**
      * Create a new activity that will show the options and directions of the shuttle
      *
@@ -81,11 +90,12 @@ public class Shuttle extends Activity {
         buttonInfo.setOnClickListener(pw -> startActivity(new Intent(getApplicationContext(), ShuttleSchedule.class)));
     }
 
-    /**Called from the onClick button of SGW or Loyola in onCreate.
+    /**
+     * Called from the onClick button of SGW or Loyola in onCreate.
      * It will set the title and the description of the shuttle direction depending on the user's choice.
      *
      * @param title the title of the campus the user wish to go
-     * @param desc the description of the campus the user wish to go
+     * @param desc  the description of the campus the user wish to go
      */
     public void campusText(String title, String desc) {
         TextView campTitle = findViewById(R.id.shuttle_goCampusTitle);
@@ -94,13 +104,6 @@ public class Shuttle extends Activity {
         campDesc.setText(desc);
     }
 
-    /**Called from the onClick button 'start' in onCreate.
-     * It will assign the specific GPS location of the desired campus
-     *
-     * @param from the
-     * @param to
-     */
-    final Bundle bundle = new Bundle();
     public void goToCampus(LatLng from, LatLng to) {
         bundle.putBinder("From", new ObjectWrapperForBinder(from));
         bundle.putBinder("To", new ObjectWrapperForBinder(to));

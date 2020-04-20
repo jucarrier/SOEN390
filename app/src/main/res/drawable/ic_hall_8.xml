@@ -1,5 +1,4 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="1024dp"
     android:height="1024dp"
     android:viewportWidth="1024"
@@ -708,13 +707,13 @@
         android:strokeAlpha="1"
         android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_42_805.01+805.02+805.03_802.01_50"
-      android:fillAlpha="1"
-      android:pathData="M 350, 215 l 50,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_42_805.01+805.02+805.03_802.01_50"
+        android:fillAlpha="1"
+        android:pathData="M 350, 215 l 50,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
     <path
         android:name="edge_3_802.01_807_80"
@@ -756,13 +755,13 @@
         android:strokeAlpha="1"
         android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_43_862+Elevator 1+Elevator 2_898_60"
-      android:fillAlpha="1"
-      android:pathData="M 370, 400 l -60,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_43_862+Elevator 1+Elevator 2_898_60"
+        android:fillAlpha="1"
+        android:pathData="M 370, 400 l -60,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
     <path
         android:name="edge_8_898_860.01+860.03+860.04+860.05+860.06_40"
@@ -852,195 +851,195 @@
         android:strokeAlpha="1"
         android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_19_x3_842_110"
-      android:fillAlpha="1"
-      android:pathData="M 405, 795 l 0,-110"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_19_x3_842_110"
+        android:fillAlpha="1"
+        android:pathData="M 405, 795 l 0,-110"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_20_x3_841_70"
-      android:fillAlpha="1"
-      android:pathData="M 405, 795 l 70,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_20_x3_841_70"
+        android:fillAlpha="1"
+        android:pathData="M 405, 795 l 70,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_21_841_x4_80"
-      android:fillAlpha="1"
-      android:pathData="M 475, 795 l 80,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_21_841_x4_80"
+        android:fillAlpha="1"
+        android:pathData="M 475, 795 l 80,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_22_x4_838+838.01_60"
-      android:fillAlpha="1"
-      android:pathData="M 555, 795 l 0,-60"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_22_x4_838+838.01_60"
+        android:fillAlpha="1"
+        android:pathData="M 555, 795 l 0,-60"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_23_838+838.01_x5_100"
-      android:fillAlpha="1"
-      android:pathData="M 555, 735 l 0,-100"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_23_838+838.01_x5_100"
+        android:fillAlpha="1"
+        android:pathData="M 555, 735 l 0,-100"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_24_x5_840+Stairs_70"
-      android:fillAlpha="1"
-      android:pathData="M 555, 635 l -70,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_24_x5_840+Stairs_70"
+        android:fillAlpha="1"
+        android:pathData="M 555, 635 l -70,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_25_x5_x2_235"
-      android:fillAlpha="1"
-      android:pathData="M 555, 635 l 0,-235"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_25_x5_x2_235"
+        android:fillAlpha="1"
+        android:pathData="M 555, 635 l 0,-235"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_26_x4_837_90"
-      android:fillAlpha="1"
-      android:pathData="M 555, 795 l 90,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_26_x4_837_90"
+        android:fillAlpha="1"
+        android:pathData="M 555, 795 l 90,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_27_837_832.01+832.02+832.03+832.05+832.06_70"
-      android:fillAlpha="1"
-      android:pathData="M 645, 795 l 0,-70"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_27_837_832.01+832.02+832.03+832.05+832.06_70"
+        android:fillAlpha="1"
+        android:pathData="M 645, 795 l 0,-70"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_28_837_835_90"
-      android:fillAlpha="1"
-      android:pathData="M 645, 795 l 90,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_28_837_835_90"
+        android:fillAlpha="1"
+        android:pathData="M 645, 795 l 90,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_29_835_833+831+899.51_105"
-      android:fillAlpha="1"
-      android:pathData="M 735, 795 l 105,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_29_835_833+831+899.51_105"
+        android:fillAlpha="1"
+        android:pathData="M 735, 795 l 105,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_30_833+831+899.51_829_110"
-      android:fillAlpha="1"
-      android:pathData="M 840, 795 l 0,-110"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_30_833+831+899.51_829_110"
+        android:fillAlpha="1"
+        android:pathData="M 840, 795 l 0,-110"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_31_829_822+827_90"
-      android:fillAlpha="1"
-      android:pathData="M 840, 685 l 0,-90"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_31_829_822+827_90"
+        android:fillAlpha="1"
+        android:pathData="M 840, 685 l 0,-90"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_32_822+827_825_90"
-      android:fillAlpha="1"
-      android:pathData="M 840, 595 l 0,-90"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_32_822+827_825_90"
+        android:fillAlpha="1"
+        android:pathData="M 840, 595 l 0,-90"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_33_825_820_50"
-      android:fillAlpha="1"
-      android:pathData="M 840, 505 l -50,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_33_825_820_50"
+        android:fillAlpha="1"
+        android:pathData="M 840, 505 l -50,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_34_825_823_100"
-      android:fillAlpha="1"
-      android:pathData="M 840, 505 l 0,-100"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_34_825_823_100"
+        android:fillAlpha="1"
+        android:pathData="M 840, 505 l 0,-100"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_35_823_820_50"
-      android:fillAlpha="1"
-      android:pathData="M 840, 405 l -50,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_35_823_820_50"
+        android:fillAlpha="1"
+        android:pathData="M 840, 405 l -50,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_36_823_886_50"
-      android:fillAlpha="1"
-      android:pathData="M 840, 405 l 0,-50"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_36_823_886_50"
+        android:fillAlpha="1"
+        android:pathData="M 840, 405 l 0,-50"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_37_886_821_30"
-      android:fillAlpha="1"
-      android:pathData="M 840, 355 l 0,-30"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_37_886_821_30"
+        android:fillAlpha="1"
+        android:pathData="M 840, 355 l 0,-30"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_38_821_815+817+819_110"
-      android:fillAlpha="1"
-      android:pathData="M 840, 325 l 0,-110"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_38_821_815+817+819_110"
+        android:fillAlpha="1"
+        android:pathData="M 840, 325 l 0,-110"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_39_815+817+819_813_110"
-      android:fillAlpha="1"
-      android:pathData="M 840, 215 l -110,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_39_815+817+819_813_110"
+        android:fillAlpha="1"
+        android:pathData="M 840, 215 l -110,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_40_813_811_100"
-      android:fillAlpha="1"
-      android:pathData="M 730, 215 l -100,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_40_813_811_100"
+        android:fillAlpha="1"
+        android:pathData="M 730, 215 l -100,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <path
-      android:name="edge_41_811_x1_75"
-      android:fillAlpha="1"
-      android:pathData="M 630, 215 l -75,0"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#f7d6d6" />
+    <path
+        android:name="edge_41_811_x1_75"
+        android:fillAlpha="1"
+        android:pathData="M 630, 215 l -75,0"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#f7d6d6" />
 
-  <!--<path
-      android:name="temp"
-      android:fillAlpha="1"
-      android:pathData="M 180,215 l 660,0 l 0,580 l -660,0 l 0,-585"
-      android:strokeWidth="10"
-      android:strokeAlpha="1"
-      android:strokeColor="#CBB5F3" />-->
+    <!--<path
+        android:name="temp"
+        android:fillAlpha="1"
+        android:pathData="M 180,215 l 660,0 l 0,580 l -660,0 l 0,-585"
+        android:strokeWidth="10"
+        android:strokeAlpha="1"
+        android:strokeColor="#CBB5F3" />-->
 </vector>

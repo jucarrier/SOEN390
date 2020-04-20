@@ -7,7 +7,7 @@
     <string name="title_activity_campus_navigation">CampusNavigationActivity</string>
     <string name="title_activity_class_schedule">ClassScheduleActivity</string>
     <string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>
-    
+
     <string-array name="nearby_option">
         <item>Select a Point of Interest</item>
         <item>Metro</item>

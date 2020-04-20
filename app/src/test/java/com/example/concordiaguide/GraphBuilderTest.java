@@ -16,7 +16,7 @@ import Models.Edge;
 import Models.Floor;
 import Models.Node;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class GraphBuilderTest {
@@ -51,12 +51,12 @@ public class GraphBuilderTest {
         String room = "807";
         try {
             Node node = graphBuilder.getRoomNode(room);
-            for(String name : node.getRooms()) {
-                if(name.equals(room)) {
+            for (String name : node.getRooms()) {
+                if (name.equals(room)) {
                     flag = true;
                 }
             }
-        } catch(GraphBuilder.RoomNotExistsException e) {
+        } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
         }
         assertTrue(flag);
@@ -67,10 +67,10 @@ public class GraphBuilderTest {
         Boolean flag = false;
         try {
             List<Edge> edgeList = graphBuilder.getShortestPathTo("807", false, GraphBuilder.Direction.DOWN);
-            if(!edgeList.isEmpty()) {
+            if (!edgeList.isEmpty()) {
                 flag = true;
             }
-        } catch(GraphBuilder.RoomNotExistsException e) {
+        } catch (GraphBuilder.RoomNotExistsException e) {
             e.printStackTrace();
         }
         assertTrue(flag);

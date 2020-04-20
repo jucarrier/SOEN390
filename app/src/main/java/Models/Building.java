@@ -24,15 +24,15 @@ public class Building {
     /**
      * Constructor
      *
-     * @param mMap GoogleMap on which the building will be drawn. Can be null
-     * @param name Name of the building
-     * @param address address of the building. Should be findable by Google Maps
+     * @param mMap        GoogleMap on which the building will be drawn. Can be null
+     * @param name        Name of the building
+     * @param address     address of the building. Should be findable by Google Maps
      * @param description information about the building
-     * @param initials How the building is abbreviated at Concordia. Not necessarily its actual initials.
-     *                 (Example: Faubourg initials are FG, not F)
-     * @param floors List of floors in the building
-     * @param lls Latitude/longitude combinations representing the corners of the building. Used
-     *            to represent the perimeter of the building
+     * @param initials    How the building is abbreviated at Concordia. Not necessarily its actual initials.
+     *                    (Example: Faubourg initials are FG, not F)
+     * @param floors      List of floors in the building
+     * @param lls         Latitude/longitude combinations representing the corners of the building. Used
+     *                    to represent the perimeter of the building
      */
     public Building(GoogleMap mMap, String name, String address, String description, String initials, Floor[] floors, LatLng... lls) {
         this.name = name;

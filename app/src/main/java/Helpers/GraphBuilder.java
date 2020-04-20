@@ -20,6 +20,7 @@ public class GraphBuilder {
     //private String not_handicapped_source;  // example: "Stairs"
     private GatewayNodes gatewayNodes;
     private Graph<Node, Edge> floorGraph;
+
     //you can get the parser like so:
     //getResources().getXml(R.drawable.ic_hall_8)           <---- from within an activity, otherwise the getResource() method won't work
     public GraphBuilder(XmlPullParser parser, Floor floor) {
@@ -28,7 +29,6 @@ public class GraphBuilder {
     }
 
     /**
-     *
      * @param sourceRoom
      * @param targetRoom
      * @return return the list of edges from source room to target room
@@ -40,9 +40,9 @@ public class GraphBuilder {
     }
 
     /**
-     * @param targetRoom Room to navigate to
+     * @param targetRoom  Room to navigate to
      * @param handicapped Should the path be handicap accessible
-     * @param direction Direction to head initially
+     * @param direction   Direction to head initially
      * @return the list of edges of the shortest path to the targetRoom with considerations if handicapped
      * @throws RoomNotExistsException Thrown if the targetRoom does not exist
      */
