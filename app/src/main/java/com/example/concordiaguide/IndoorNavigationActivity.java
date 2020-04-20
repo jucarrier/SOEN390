@@ -361,7 +361,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     edges = gb.getShortestPath(sourceRoom, targetRoom);
 
                     if(targetRoom.matches("^\\d+.*")) {
-                        localDestination = sourceBuilding.getInitials() + targetRoom;
+                        localDestination = sourceBuilding.getInitials() + targetFloor.getInitials() + targetRoom;
                         localDestination = localDestination.toUpperCase();
                     } else { localDestination = targetRoom; }
                     colorMap(edges, vector, localDestination);
@@ -459,7 +459,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         //fill room color
         String room;
         if(sourceRoom.matches("^\\d+.*")) {
-            room = sourceBuilding.getInitials() + sourceRoom;
+            room = sourceBuilding.getInitials() + sourceFloor.getInitials() + sourceRoom;
             room = room.toUpperCase();
         } else { room = sourceRoom; }
         edge = vector.findPathByName(room);

@@ -10,6 +10,7 @@ public class Floor {
     private String[] roomNames;
     private GatewayNodes gatewayNodes;
     private boolean isMainFloor;
+    private String initials;
 
     /**
      * @param floorName Name of the floor as it would be described over text or in speech.
@@ -22,13 +23,14 @@ public class Floor {
      *                     stairs, escalators, doors to outside)
      * @param roomNames Names of the rooms that are in the floor
      */
-    public Floor(String floorName, int floorLevel, int floorMap, GatewayNodes gatewayNodes, String[] roomNames, boolean isMainFloor) {
+    public Floor(String floorName, int floorLevel, int floorMap, GatewayNodes gatewayNodes, String[] roomNames, boolean isMainFloor, String initials) {
         this.floorMap = floorMap;
         this.floorName = floorName;
         this.floorLevel = floorLevel;
         this.roomNames = roomNames;
         this.gatewayNodes = gatewayNodes;
         this.isMainFloor = isMainFloor;
+        this.initials = initials;
     }
 
     public String getFloorName() {
@@ -46,4 +48,5 @@ public class Floor {
     public GatewayNodes getGatewayNodes() { return gatewayNodes; }
     public int getFloorLevel() { return floorLevel; }
     public boolean isMainFloor() { return isMainFloor; }
+    public String getInitials() { return initials; }
 }
