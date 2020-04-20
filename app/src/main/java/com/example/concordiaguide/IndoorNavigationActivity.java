@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -264,6 +266,14 @@ public class IndoorNavigationActivity extends AppCompatActivity {
             }
         });
 
+        CheckBox handicappedCheckbox = (CheckBox) findViewById(R.id.is_handicapped);
+        handicappedCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isHandicapped = b;
+            }
+        });
+
         Button goButton = (Button) findViewById(R.id.from_to_button);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +284,15 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 }
 
                 Button fromToButton = (Button) findViewById(R.id.from_to_button);
-                fromToButton.setVisibility(View.GONE);
+                fromToButton.setText("Next");
+                fromToButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "Source: " + sourceRoom);
+                        Log.d(TAG, "Target: " + targetRoom);
+                        showDirections();
+                    }
+                });
 
                 Spinner[] spinners = {(Spinner) findViewById(R.id.campus_spinner_from), (Spinner) findViewById(R.id.building_spinner_from), (Spinner) findViewById(R.id.floor_spinner_from), (Spinner) findViewById(R.id.room_spinner_from),
                         (Spinner) findViewById(R.id.campus_spinner_to), (Spinner) findViewById(R.id.building_spinner_to), (Spinner) findViewById(R.id.floor_spinner_to), (Spinner) findViewById(R.id.room_spinner_to)};
@@ -283,20 +301,20 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     s.setEnabled(false);
                 }
 
-                Button nextButton = (Button) findViewById(R.id.next_button);
-                nextButton.setVisibility(View.VISIBLE);
+                CheckBox cb = (CheckBox) findViewById(R.id.is_handicapped);
+                cb.setEnabled(false);
 
                 showDirections();
             }
         });
 
-        Button nextButton = (Button) findViewById(R.id.next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        Button newButton = (Button) findViewById(R.id.new_button);
+        newButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Source: " + sourceRoom);
-                Log.d(TAG, "Target: " + targetRoom);
-                showDirections();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
         });
 
@@ -312,18 +330,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         imageView.setImageResource(floorMap);
         GraphBuilder gb = new GraphBuilder(getResources().getXml(floorMap), sourceFloor);
         List<Edge> edges = null;
-        Button nextButton = (Button) findViewById(R.id.next_button);
-
-//        if(sourceRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
-//            sourceRoom = sourceRoom.substring(1);
-//        }
-//
-//        if(targetRoom.matches("^[a-zA-Z]\\d+(?:\\.\\d+)?")) {
-//            targetRoom = targetRoom.substring(1);
-//        }
-
-        Log.d(TAG, "Source: " + sourceRoom);
-        Log.d(TAG, "Target: " + targetRoom);
+        Button goButton = (Button) findViewById(R.id.from_to_button);
 
         if(sourceRoom.matches("^[a-zA-Z]\\d.*")) {
             sourceRoom = sourceRoom.substring(1);
@@ -340,9 +347,6 @@ public class IndoorNavigationActivity extends AppCompatActivity {
         } else if(targetRoom.matches("^[a-zA-Z]{3}\\d.*")) {
             targetRoom = targetRoom.substring(3);
         }
-
-        Log.d(TAG, "Source: " + sourceRoom);
-        Log.d(TAG, "Target: " + targetRoom);
 
         try {
             VectorChildFinder vector = new VectorChildFinder(this, floorMap, imageView);
@@ -362,7 +366,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                     } else { localDestination = targetRoom; }
                     colorMap(edges, vector, localDestination);
 
-                    nextButton.setEnabled(false);
+                    goButton.setEnabled(false);
                 }
 
                 //if its on a lower floor
@@ -421,7 +425,7 @@ public class IndoorNavigationActivity extends AppCompatActivity {
                 edges = gb.getShortestPath(sourceRoom, sourceFloor.getGatewayNodes().getOutside());
                 colorMap(edges, vector, sourceFloor.getGatewayNodes().getOutside());
                 if(sourceFloor.isMainFloor()) {
-                    nextButton.setOnClickListener(new View.OnClickListener() {
+                    goButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             final Bundle bundle = new Bundle();
