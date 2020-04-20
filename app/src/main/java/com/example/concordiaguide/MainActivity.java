@@ -62,6 +62,7 @@ import java.util.List;
 
 import Helpers.CampusBuilder;
 import Helpers.DirectionsJSONParser;
+import Helpers.DirectionsParser;
 import Helpers.ObjectWrapperForBinder;
 import Models.Building;
 import Models.Campus;
@@ -736,8 +737,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jsonObject = new JSONObject(strings[0]);
-                //DirectionsParser directionsParser = new DirectionsParser();
-                DirectionsJSONParser directionsParser = new DirectionsJSONParser();
+                DirectionsParser directionsParser = new DirectionsParser();
                 routes = directionsParser.parse(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
