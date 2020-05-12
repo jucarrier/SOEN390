@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -31,7 +32,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -307,6 +310,21 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
             directionsToBuilding(building);
         } catch (Exception e) {
         }*/
+
+        //set event listener for switch button
+        Switch switchButton = (Switch) findViewById(R.id.campus_switch_main);
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean b) {
+
+
+                if (b == false) {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
+                } else {
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 18));
+                }
+            }
+        });
 
         transportationSelectionTab = this.findViewById(R.id.transportationSelectionTab);
 

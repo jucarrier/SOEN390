@@ -184,6 +184,25 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+        <RelativeLayout
+            android:id="@+id/relativeLayoutCampusSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sv_location2"
+            android:layout_alignEnd="@id/sv_location2"
+            android:elevation="20dp">
+
+            <Switch
+                android:id="@+id/campus_switch_main"
+                android:layout_width="140dp"
+                android:layout_height="46dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:checked="false"
+                android:elevation="10dp"
+                android:text="SGW / Loyola" />
+        </RelativeLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/addressCardView"
             android:layout_width="match_parent"
