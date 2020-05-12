@@ -316,8 +316,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
-
-
                 if (b == false) {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
                 } else {
@@ -493,6 +491,7 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         }
     }
 
+
     private String getRequestUrl(LatLng dest) {
         //Value of origin
         String str_org = "origin=" + this.currentLocation.latitude +","+this.currentLocation.longitude;
@@ -635,6 +634,34 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 bundle.putBinder("building", new ObjectWrapperForBinder(polygon.getTag()));
                 //go to popup activity
                 startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
+            }
+        });
+        double lowerLatitudeSGW = 45.491257;
+        double upperLatitudeSGW = 45.498858;
+        double leftLongitudeSGW = -73.583182;
+        double rightLongitudeSGW = -73.573222;
+
+        double lowerLatitudeLoyola = 45.455266;
+        double upperLatitudeLoyola = 45.461893;
+        double leftLongitudeLoyola = -73.645973;
+        double rightLongitudeLoyola = -73.632620;
+
+        Switch switchButton = (Switch) findViewById(R.id.campus_switch_main);
+
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                LatLng currentCameraLocation = mMap.getCameraPosition().target;
+                double latitude = currentCameraLocation.latitude;
+                double longitude = currentCameraLocation.longitude;
+
+                if (((latitude > lowerLatitudeSGW) && (latitude < upperLatitudeSGW)) && ((longitude > leftLongitudeSGW) && (longitude < rightLongitudeSGW))) {
+                    switchButton.setChecked(false);
+                }
+
+                if (((latitude > lowerLatitudeLoyola) && (latitude < upperLatitudeLoyola)) && ((longitude > leftLongitudeLoyola) && (longitude < rightLongitudeLoyola))) {
+                    switchButton.setChecked(true);
+                }
             }
         });
 

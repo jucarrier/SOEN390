@@ -186,10 +186,12 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayoutCampusSwitch"
-            android:layout_width="wrap_content"
+            android:layout_width="142dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/sv_location2"
             android:layout_alignEnd="@id/sv_location2"
+            android:background="#9BFFFFFF"
+            android:backgroundTint="#E6E6E6"
             android:elevation="20dp">
 
             <Switch
@@ -200,7 +202,7 @@
                 android:layout_centerVertical="true"
                 android:checked="false"
                 android:elevation="10dp"
-                android:text="SGW / Loyola" />
+                android:text="SGW | Loyola" />
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
