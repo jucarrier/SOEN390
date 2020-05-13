@@ -85,6 +85,9 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     private TextView textViewAddressHere;  //this is the textView that will display the current building name
     private LocationManager locationManager;    //this is needed to find the user's current location
    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+    //SGW: 45.495306,-73.577439
+    //Loyola: 45.458157,-73.637563
+    //Default: 45.4967712,-73.5789604
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -316,10 +319,21 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
+                String campus;
                 if (b == false) {
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
+                    campus = currentLocationOnCampus();
+                    if (campus.equals("SGW")) {
+                        zoomOnCurrentLocation();
+                    } else {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 15));
+                    }
                 } else {
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 18));
+                    campus = currentLocationOnCampus();
+                    if (campus.equals("Loyola")) {
+                        zoomOnCurrentLocation();
+                    } else {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loyola.center, 15));
+                    }
                 }
             }
         });
@@ -458,6 +472,33 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
         } else {
             super.onBackPressed();
         }
+    }
+
+    public String currentLocationOnCampus() {
+        double lowerLatitudeSGW = 45.491257;
+        double upperLatitudeSGW = 45.498858;
+        double leftLongitudeSGW = -73.583182;
+        double rightLongitudeSGW = -73.573222;
+
+        double lowerLatitudeLoyola = 45.455266;
+        double upperLatitudeLoyola = 45.461893;
+        double leftLongitudeLoyola = -73.645973;
+        double rightLongitudeLoyola = -73.632620;
+
+        double latitude = this.currentLocation.latitude;
+        double longitude = this.currentLocation.longitude;
+
+        if (((latitude > lowerLatitudeSGW) && (latitude < upperLatitudeSGW)) && ((longitude > leftLongitudeSGW) && (longitude < rightLongitudeSGW))) {
+            return "SGW";
+        } else if (((latitude > lowerLatitudeLoyola) && (latitude < upperLatitudeLoyola)) && ((longitude > leftLongitudeLoyola) && (longitude < rightLongitudeLoyola))) {
+            return "Loyola";
+        } else {
+            return null;
+        }
+    }
+
+    public void zoomOnCurrentLocation() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(this.currentLocation, 18));
     }
 
     //@Override
