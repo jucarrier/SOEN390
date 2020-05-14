@@ -88,6 +88,16 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     //SGW: 45.495306,-73.577439
     //Loyola: 45.458157,-73.637563
     //Default: 45.4967712,-73.5789604
+    double lowerLatitudeSGW = 45.491257;
+    double upperLatitudeSGW = 45.498858;
+    double leftLongitudeSGW = -73.583182;
+    double rightLongitudeSGW = -73.573222;
+
+    double lowerLatitudeLoyola = 45.455266;
+    double upperLatitudeLoyola = 45.461893;
+    double leftLongitudeLoyola = -73.645973;
+    double rightLongitudeLoyola = -73.632620;
+
     private GoogleMap mMap;
     private static final int LOCATION_REQUEST = 500;
     ArrayList<LatLng> listPoints;
@@ -475,16 +485,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
     }
 
     public String currentLocationOnCampus() {
-        double lowerLatitudeSGW = 45.491257;
-        double upperLatitudeSGW = 45.498858;
-        double leftLongitudeSGW = -73.583182;
-        double rightLongitudeSGW = -73.573222;
-
-        double lowerLatitudeLoyola = 45.455266;
-        double upperLatitudeLoyola = 45.461893;
-        double leftLongitudeLoyola = -73.645973;
-        double rightLongitudeLoyola = -73.632620;
-
         double latitude = this.currentLocation.latitude;
         double longitude = this.currentLocation.longitude;
 
@@ -677,15 +677,6 @@ public class MainActivity<locationManager> extends AppCompatActivity implements 
                 startActivity(new Intent(MainActivity.this, BuildingInfoPopup.class).putExtras(bundle));
             }
         });
-        double lowerLatitudeSGW = 45.491257;
-        double upperLatitudeSGW = 45.498858;
-        double leftLongitudeSGW = -73.583182;
-        double rightLongitudeSGW = -73.573222;
-
-        double lowerLatitudeLoyola = 45.455266;
-        double upperLatitudeLoyola = 45.461893;
-        double leftLongitudeLoyola = -73.645973;
-        double rightLongitudeLoyola = -73.632620;
 
         Switch switchButton = (Switch) findViewById(R.id.campus_switch_main);
 
