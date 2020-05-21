@@ -26,7 +26,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     private Photos photos;
     private TextView textViewName;
     private TextView textViewAddress;
-    private LinearLayout linearLayoutShowOnMap;
+    private LinearLayout linearLayoutShowOnMap; //show places on map
     private LinearLayout linearLayoutShowDistanceOnMap;
     // variable
     private Results results;
@@ -82,7 +82,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
              * on click of the show on map button, it will redirect to placeOnMapActivity in order to display the desired POI
              */
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent intent = new Intent(PlaceDetailsActivity.this, PlaceOnMapActivity.class);
                 intent.putExtra("result", results);
                 intent.putExtra("lat", lat);

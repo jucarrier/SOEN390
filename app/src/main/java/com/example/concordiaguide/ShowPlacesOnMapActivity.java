@@ -19,13 +19,15 @@ import java.util.List;
 import Helpers.PlacesResult;
 import Models.Results;
 
-public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback
+{
 
     List<Results> results = new ArrayList<Results>();
 
     //when clicked show the list of places on map, this activity puts a marker on all the suggested POI's
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.poi_maps);
 
@@ -37,8 +39,10 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        for (int i = 0; i < results.size(); i++) {
+    public void onMapReady(GoogleMap googleMap)
+    {
+        for (int i = 0; i < results.size(); i++)
+        {
             MarkerOptions markerOptions = new MarkerOptions();
             Results googlePlace = results.get(i);
             double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());

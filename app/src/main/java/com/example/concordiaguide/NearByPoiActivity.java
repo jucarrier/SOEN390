@@ -13,11 +13,13 @@ import Helpers.PoiFragment;
 /**
  * This class allows the user to choose the nearby point of interest from a dropdown menu(spinner view)
  */
-public class NearByPoiActivity extends AppCompatActivity {
+public class NearByPoiActivity extends AppCompatActivity
+{
     public PoiFragment poiFragment;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nearby_poi_activity);
 
@@ -31,7 +33,8 @@ public class NearByPoiActivity extends AppCompatActivity {
      *
      * @param fragment
      */
-    public void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment)
+    {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fmt = fm.beginTransaction();
         fmt.replace(R.id.nearby_poi_layout, fragment);

@@ -6,7 +6,8 @@
     <string name="title_activity_indoor_navigation">IndoorNavigationActivity</string>
     <string name="title_activity_campus_navigation">CampusNavigationActivity</string>
     <string name="title_activity_class_schedule">ClassScheduleActivity</string>
-    <string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>
+    <!--<string name="api_key">AIzaSyAU8ELR1yZq10gz5FzYR-reaueT3AeekrU</string>-->
+    <string name="api_key">AIzaSyDJoIP0A4VFnTMWT5mtxUdqnz7nI_YRKqA</string>
 
     <string-array name="nearby_option">
         <item>Select a Point of Interest</item>

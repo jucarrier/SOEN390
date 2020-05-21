@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -27,19 +28,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
+import com.example.concordiaguide.MainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 
 import Models.MyPlaces;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 /**
  * this fragment is loaded upon call from the NearbyPoiActivity.
  * it sets up the spinner view to display the type of places we want to see
  */
-public class PoiFragment extends Fragment {
+public class PoiFragment extends Fragment
+{
     public static final String TYPE_METRO = "subway_station";
     public static final String TYPE_BANK = "bank";
     public static final String TYPE_PHARMACY = "pharmacy";
@@ -62,9 +69,17 @@ public class PoiFragment extends Fragment {
     private FusedLocationProviderClient flc;
     private Spinner spinner_nearby_choices;
 
+    //Vatika
+    private boolean mapPermissionGranted = false;
+    private GoogleMap googleMap;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    //googleMap.setMyLocationEnabled(true);
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_near_by, container, false);
         //all these references can be found on fragment_near_by.xml
         spinner_nearby_choices = view.findViewById(R.id.spinner_nearby_choices);
@@ -80,9 +95,11 @@ public class PoiFragment extends Fragment {
             public void onClick(View view) {
                 int position = spinner_nearby_choices.getSelectedItemPosition();
                 //if no POI was chosen, show the following toast message
-                if (position == 0) {
+                if (position == 0)
+                {
                     Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
-                } else {
+                } else
+                    {
                     //when a Poi type is chosen and the search button is pressed, it executes getNearbyPlaces function
                     placeType = spinner_nearby_choices.getSelectedItem().toString();
                     switch (placeType) {
@@ -145,7 +162,8 @@ public class PoiFragment extends Fragment {
     /**
      * checks for user's location acquired from the GPS data
      */
-    private void locationService() {
+    private void locationService()
+    {
 
         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -220,8 +238,15 @@ public class PoiFragment extends Fragment {
      * <p>
      * and show them in a list/recycler view
      */
-    private void getNearByPlaces() {
+    private void deviceLocation()
+    {
+        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context: this);
+    }
+    private void getNearByPlaces()
+    {
         String apiKey = getContext().getResources().getString(R.string.api_key);
+
+
         String url = buildUrl(lat, lng, apiKey);
         Log.d("finalUrl", url);
 

@@ -104,11 +104,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param location The location of the user
      */
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location)
+    {
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
             currentLocation = new LatLng(lat, lng);
+
+
         }
         try {
 
@@ -153,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case LOCATION_REQUEST:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
                     mMap.setMyLocationEnabled(true);
                 }
                 break;
@@ -169,11 +173,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         //locate current location
         textViewAddressHere = findViewById(R.id.addressHere);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
@@ -337,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             final float LOCATION_REFRESH_DISTANCE = 5;
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
         }
-    }
+    } //end onCreate
 
 
     /**
@@ -569,7 +575,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param googleMap The map that is ready
      */
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap)
+    {
         mMap = googleMap;
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -654,9 +661,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(45.495782, -73.579320), 18), 1, null);   //zooms to current location in 1 ms, zoom level 18
         }
 
-    }
+    } //END ONMAP
 
-    private static class FindAddressTaskParams {
+    private static class FindAddressTaskParams
+    {
         Geocoder geocoder;
         List<Address> addressList;
         GoogleMap mMap;
@@ -746,7 +754,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
+        protected void onPostExecute(List<List<HashMap<String, String>>> lists)
+        {
             //Get list route and display it into the map
 
             ArrayList points = null;
