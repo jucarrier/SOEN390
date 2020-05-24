@@ -32,7 +32,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
     private Results results;
     private double lat, lng;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
 
@@ -81,6 +82,8 @@ public class PlaceDetailsActivity extends AppCompatActivity {
              * @param view
              * on click of the show on map button, it will redirect to placeOnMapActivity in order to display the desired POI
              */
+
+
             @Override
             public void onClick(View view)
             {
@@ -109,7 +112,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+    } //end onCreate
 /*
     public void onBackPressed() {
         Intent intent2 = new Intent(this, MainActivity.class);

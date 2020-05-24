@@ -22,6 +22,7 @@ import Models.Results;
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
+    private GoogleMap mMap;
     List<Results> results = new ArrayList<Results>();
 
     //when clicked show the list of places on map, this activity puts a marker on all the suggested POI's
@@ -35,12 +36,21 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(this);
 
         results = PlacesResult.results;
-        Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+
+        if(results.size() == 0)
+        {
+            Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
+        //mMap = googleMap;
+
+
         for (int i = 0; i < results.size(); i++)
         {
             MarkerOptions markerOptions = new MarkerOptions();
@@ -59,6 +69,13 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0f));
             googleMap.getUiSettings().setCompassEnabled(true);
         }
+
+        /*if(results.size() == 0)
+        {
+            Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+        }*/
+
+        Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
     }
 }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -69,10 +70,12 @@ public class PoiFragment extends Fragment
     private FusedLocationProviderClient flc;
     private Spinner spinner_nearby_choices;
 
+
     //Vatika
-    private boolean mapPermissionGranted = false;
+    private boolean mPermissionGranted = false;
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
+
 
     //googleMap.setMyLocationEnabled(true);
 
@@ -80,12 +83,14 @@ public class PoiFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+
         View view = inflater.inflate(R.layout.fragment_near_by, container, false);
         //all these references can be found on fragment_near_by.xml
         spinner_nearby_choices = view.findViewById(R.id.spinner_nearby_choices);
         imageViewSearch = view.findViewById(R.id.imageViewSearch);
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
+
 
         locationService();//checks for location of the user
 
@@ -111,11 +116,13 @@ public class PoiFragment extends Fragment
                         case "Bank": {
                             placeType = TYPE_BANK;
                             getNearByPlaces();
+                            //Toast.makeText(getContext(), "Bank selected", Toast.LENGTH_SHORT).show();
                             break;
                         }
                         case "Restaurant": {
                             placeType = TYPE_RESTAURANT;
                             getNearByPlaces();
+
                             break;
                         }
                         case "Pharmacy": {
@@ -146,15 +153,16 @@ public class PoiFragment extends Fragment
             }
         });
 
-        //on press would show  showPlacesOnMap activity -> All places appeared on seach will be shown with a marker on the map
-        linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PlacesResult.results = myPlaces.getResults();
-                Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
-                startActivity(intent);
-            }
-        });
+        //on press would show  showPlacesOnMap activity -> All places appeared on search will be shown with a marker on the map
+        linearLayoutShowOnMap.setOnClickListener(view1 -> //SHOW PLACES ON MAP button
+        {
+            //Toast.makeText(getContext(), "SHOW PLACES ON MAP clicked", Toast.LENGTH_SHORT).show();
+            PlacesResult.results = myPlaces.getResults();
+            Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
+            //Toast.makeText(getContext(), "ShowPlacesOnActivity executed", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
+        }); //error starts here. PlaceResults is of size 0
 
         return view;
     }
@@ -168,9 +176,10 @@ public class PoiFragment extends Fragment
         lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        {
 
-
+            Toast.makeText(getContext(), "GPS is enabled", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "locationService: Fetching data from gps");
 
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -184,7 +193,8 @@ public class PoiFragment extends Fragment
 
             flc = LocationServices.getFusedLocationProviderClient(getContext());
 
-            flc.getLastLocation().addOnSuccessListener(getActivity(), location -> {
+            flc.getLastLocation().addOnSuccessListener(getActivity(), location ->
+            {
 
                 if (location != null) {
 
@@ -205,7 +215,8 @@ public class PoiFragment extends Fragment
                     }
                 }
             });
-        } else {
+        } else
+            {
             Toast.makeText(getContext(), "GPS off", Toast.LENGTH_SHORT).show();
         }
     }
@@ -218,6 +229,7 @@ public class PoiFragment extends Fragment
      * this method helps to build the url that would be passed for HTTP requests
      */
 
+
     private String buildUrl(double latitude, double longitude, String API_KEY) {
 
         StringBuilder urlStr = new StringBuilder("api/place/search/json?");
@@ -226,7 +238,7 @@ public class PoiFragment extends Fragment
         urlStr.append(latitude);
         urlStr.append(",");
         urlStr.append(longitude);
-        urlStr.append("&radius=500"); // places between 5 kilometer
+        urlStr.append("&radius=1000"); // places between 5 kilometer-
         urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
         urlStr.append("&sensor=false&key=" + API_KEY);
 
@@ -240,14 +252,16 @@ public class PoiFragment extends Fragment
      */
     private void deviceLocation()
     {
-        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context: this);
+        //fusedclisnet
     }
-    private void getNearByPlaces()
+    private void getNearByPlaces() //method not running properly
     {
+        //progressBar.setVisibility(View.VISIBLE); //user will know there is some progressing going on to on the UI background
         String apiKey = getContext().getResources().getString(R.string.api_key);
+       //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
-        String url = buildUrl(lat, lng, apiKey);
+        String url = buildUrl(lat, lng, apiKey); //written method, line 224
         Log.d("finalUrl", url);
 
 
@@ -258,7 +272,7 @@ public class PoiFragment extends Fragment
 
         call.enqueue(new Callback<MyPlaces>() {
             @Override
-            public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) {
+            public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) { //no response, method not running
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
 
@@ -277,15 +291,19 @@ public class PoiFragment extends Fragment
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        //Toast.makeText(getContext(), "nearByPlaces() ended", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * breaks down location coordinates and maps them to lattitude/longitude variables
      */
-    private class MyLocationListener implements LocationListener {
+    private class MyLocationListener implements LocationListener
+    {
 
         @Override
-        public void onLocationChanged(Location lc) {
+        public void onLocationChanged(Location lc)
+        {
             longitude = lc.getLongitude();
             latitude = lc.getLatitude();
 

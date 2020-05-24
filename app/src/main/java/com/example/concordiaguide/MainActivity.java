@@ -84,9 +84,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     protected TabLayout transportationSelectionTab;
     //for finding current location
-    //LatLng currentLocation; //to be filled in later by onLocationChanged
+    LatLng currentLocation; //to be filled in later by onLocationChanged
     double lat, lng;
-    LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+    //LatLng currentLocation = new LatLng(45.4967712, -73.5789604); //to be filled in later by onLocationChanged, this is a default location for testing with the emulator
+
     SupportMapFragment mapFragment;
     SearchView searchView;
     ArrayList<LatLng> listPoints;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             lat = location.getLatitude();
             lng = location.getLongitude();
             currentLocation = new LatLng(lat, lng);
+            //currentLocation = new LatLng(45.4967712, -73.5789604);
 
 
         }
@@ -239,7 +241,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
              * @return
              */
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
                 int id = item.getItemId();
                 drawer.closeDrawers();
                 Intent intent = null;
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent = new Intent(getApplicationContext(), ClassScheduleActivity.class);
                         break;
                     case (R.id.find_POI):
-                        intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
+                       intent = new Intent(getApplicationContext(), NearByPoiActivity.class);
                         break;
                     case (R.id.menu_to_sgw):
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sgw.center, 18));
@@ -273,7 +276,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         // No option selected
                         break;
                 }
-                if (intent != null) {
+                if (intent != null)
+                {
                     startActivity(intent);
                 }
                 return false;
@@ -511,7 +515,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         String sensor = "sensor=false";
         //Mode for find direction
         String mode = "mode=driving";
-        String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
+        //String key = "key=AIzaSyBOlSFxzMbOCyNhbhOYBJ2XGoiMtS-OjbY ";
+        String key = "AIzaSyDJoIP0A4VFnTMWT5mtxUdqnz7nI_YRKqA";
         //Build the full param
         String param = strOrg + "&" + strDest + "&" + sensor + "&" + mode + "&" + key;
         //Output format

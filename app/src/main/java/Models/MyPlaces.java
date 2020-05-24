@@ -24,7 +24,7 @@ public class MyPlaces implements Serializable {
 
     public List<Results> getResults() {
         return results;
-    }
+    } //used method in PoiFragment
 
     public void setResults(List<Results> results) {
         this.results = results;

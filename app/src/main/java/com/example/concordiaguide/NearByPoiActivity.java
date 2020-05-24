@@ -1,6 +1,7 @@
 package com.example.concordiaguide;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +21,19 @@ public class NearByPoiActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nearby_poi_activity);
 
         poiFragment = new PoiFragment();
 
         loadFragment(poiFragment);
+
+        /* Toast toast = Toast.makeText(getApplicationContext(),
+                "POI fragment",
+                Toast.LENGTH_SHORT);
+
+        toast.show();*/
     }
 
     /**
