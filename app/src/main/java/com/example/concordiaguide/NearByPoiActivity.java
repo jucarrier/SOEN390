@@ -29,11 +29,6 @@ public class NearByPoiActivity extends AppCompatActivity
 
         loadFragment(poiFragment);
 
-        /* Toast toast = Toast.makeText(getApplicationContext(),
-                "POI fragment",
-                Toast.LENGTH_SHORT);
-
-        toast.show();*/
     }
 
     /**

@@ -35,7 +35,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Models.MyPlaces;
+import Models.Results;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,12 +73,15 @@ public class PoiFragment extends Fragment
     private MyPlaces myPlaces;
     private FusedLocationProviderClient flc;
     private Spinner spinner_nearby_choices;
+    private int numPlaces;
+    ProgressBar progressBar;
 
 
     //Vatika
     private boolean mPermissionGranted = false;
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    List<Results> results = new ArrayList<Results>();
 
 
 
@@ -91,6 +98,7 @@ public class PoiFragment extends Fragment
         imageViewSearch = view.findViewById(R.id.imageViewSearch);
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
+        progressBar = view.findViewById(R.id.progressBar);
 
 
         locationService();//checks for location of the user
@@ -117,7 +125,7 @@ public class PoiFragment extends Fragment
                         case "Bank": {
                             placeType = TYPE_BANK;
                             getNearByPlaces();
-                            //Toast.makeText(getContext(), "Bank selected", Toast.LENGTH_SHORT).show();
+
                             break;
                         }
                         case "Restaurant": {
@@ -155,13 +163,17 @@ public class PoiFragment extends Fragment
         });
 
         //on press would show  showPlacesOnMap activity -> All places appeared on search will be shown with a marker on the map
-        linearLayoutShowOnMap.setOnClickListener(view1 -> //SHOW PLACES ON MAP button
-        {
+        linearLayoutShowOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                PlacesResult.results = myPlaces.getResults();
+                //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
 
-            PlacesResult.results = myPlaces.getResults();
-            //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
+                startActivity(intent);
+            }
+        //SHOW PLACES ON MAP button
         });
 
         return view;
@@ -179,7 +191,6 @@ public class PoiFragment extends Fragment
                 lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
         {
 
-            Toast.makeText(getContext(), "GPS is enabled", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "locationService: Fetching data from gps");
 
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -257,15 +268,15 @@ public class PoiFragment extends Fragment
     private void getNearByPlaces()
     {
 
+        progressBar.setVisibility(View.VISIBLE);
         String apiKey = getContext().getResources().getString(R.string.api_key);
-       //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
 
         String url = buildUrl(lat, lng, apiKey); //written method, line 224
         Log.d("finalUrl", url);
 
 
-        googleApiService = RtfBuilder.builder().create(GoogleApiService.class);
+        googleApiService = RtfBuilder.builder().create(GoogleApiService.class); //used to get service (nearby places) through 3rd party e.g retrofit
 
         Call<MyPlaces> call = googleApiService.getNearByPlaces(url);
 
@@ -274,8 +285,8 @@ public class PoiFragment extends Fragment
             @Override
             public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) //no response, method not running
             {
-
-                Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
+                //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
                 /*if(PlacesResult.results.size() == 0)
                 {
                     Toast.makeText(getContext(), "Point of interest not found within 1 kilometer", Toast.LENGTH_SHORT).show();
@@ -294,13 +305,13 @@ public class PoiFragment extends Fragment
             }
 
             @Override
-            public void onFailure(Call<MyPlaces> call, Throwable t) {
-
+            public void onFailure(Call<MyPlaces> call, Throwable t)
+            {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        //Toast.makeText(getContext(), "nearByPlaces() ended", Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example.concordiaguide;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -22,8 +23,8 @@ import Models.Results;
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
-    private GoogleMap mMap;
-    List<Results> results = new ArrayList<Results>();
+    public static List<Results> results = new ArrayList<>();
+
 
     //when clicked show the list of places on map, this activity puts a marker on all the suggested POI's
     @Override
@@ -36,11 +37,15 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
         mapFragment.getMapAsync(this);
 
         results = PlacesResult.results;
-        //Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+
+
 
         if(results.size() == 0)
         {
-            Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+
+            mapFragment.getView().setVisibility(View.GONE);
+             Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -48,8 +53,6 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-        //mMap = googleMap;
-
 
         for (int i = 0; i < results.size(); i++)
         {
@@ -70,12 +73,8 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             googleMap.getUiSettings().setCompassEnabled(true);
         }
 
-        /*if(results.size() == 0)
-        {
-            Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
-        }*/
 
-        Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
     }
 }
 
