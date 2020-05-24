@@ -157,13 +157,12 @@ public class PoiFragment extends Fragment
         //on press would show  showPlacesOnMap activity -> All places appeared on search will be shown with a marker on the map
         linearLayoutShowOnMap.setOnClickListener(view1 -> //SHOW PLACES ON MAP button
         {
-            //Toast.makeText(getContext(), "SHOW PLACES ON MAP clicked", Toast.LENGTH_SHORT).show();
+
             PlacesResult.results = myPlaces.getResults();
-            Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
-            //Toast.makeText(getContext(), "ShowPlacesOnActivity executed", Toast.LENGTH_SHORT).show();
             startActivity(intent);
-        }); //error starts here. PlaceResults is of size 0
+        });
 
         return view;
     }
@@ -255,7 +254,7 @@ public class PoiFragment extends Fragment
     {
 
     }
-    private void getNearByPlaces() //method not running properly
+    private void getNearByPlaces()
     {
 
         String apiKey = getContext().getResources().getString(R.string.api_key);
@@ -273,7 +272,15 @@ public class PoiFragment extends Fragment
 
         call.enqueue(new Callback<MyPlaces>() {
             @Override
-            public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) { //no response, method not running
+            public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) //no response, method not running
+            {
+
+                Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
+                /*if(PlacesResult.results.size() == 0)
+                {
+                    Toast.makeText(getContext(), "Point of interest not found within 1 kilometer", Toast.LENGTH_SHORT).show();
+
+                }*/
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
 
