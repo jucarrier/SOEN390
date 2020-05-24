@@ -77,6 +77,7 @@ public class PoiFragment extends Fragment
     private FusedLocationProviderClient fusedLocationProviderClient;
 
 
+
     //googleMap.setMyLocationEnabled(true);
 
     @Nullable
@@ -252,11 +253,11 @@ public class PoiFragment extends Fragment
      */
     private void deviceLocation()
     {
-        //fusedclisnet
+
     }
     private void getNearByPlaces() //method not running properly
     {
-        //progressBar.setVisibility(View.VISIBLE); //user will know there is some progressing going on to on the UI background
+
         String apiKey = getContext().getResources().getString(R.string.api_key);
        //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
