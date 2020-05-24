@@ -320,7 +320,8 @@ public class PoiFragment extends Fragment
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
             // Required for interface implementation. Not necessary for our purposes.
         }
 
