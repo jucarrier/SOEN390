@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -68,12 +69,12 @@ public class PoiFragment extends Fragment
     private ImageView imageViewSearch;
     private RecyclerView recyclerViewPlaces;
     private LinearLayout linearLayoutShowOnMap;
+    private TextView textView;
     private String placeType = "";
     private GoogleApiService googleApiService;
     private MyPlaces myPlaces;
     private FusedLocationProviderClient flc;
     private Spinner spinner_nearby_choices;
-    private int numPlaces;
     ProgressBar progressBar;
 
 
@@ -81,8 +82,7 @@ public class PoiFragment extends Fragment
     private boolean mPermissionGranted = false;
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    List<Results> results = new ArrayList<Results>();
-
+    private static List<Results> results = new ArrayList<Results>();
 
 
     //googleMap.setMyLocationEnabled(true);
@@ -99,6 +99,7 @@ public class PoiFragment extends Fragment
         recyclerViewPlaces = view.findViewById(R.id.recyclerViewPlaces);
         linearLayoutShowOnMap = view.findViewById(R.id.linearLayoutShowOnMap);
         progressBar = view.findViewById(R.id.progressBar);
+        textView = view.findViewById(R.id.textView);
 
 
         locationService();//checks for location of the user
@@ -168,8 +169,6 @@ public class PoiFragment extends Fragment
             public void onClick(View v)
             {
                 PlacesResult.results = myPlaces.getResults();
-                //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
-
                 Intent intent = new Intent(getContext(), ShowPlacesOnMapActivity.class);
                 startActivity(intent);
             }
@@ -285,15 +284,18 @@ public class PoiFragment extends Fragment
             @Override
             public void onResponse(Call<MyPlaces> call, Response<MyPlaces> response) //no response, method not running
             {
-                progressBar.setVisibility(View.GONE);
-                //Toast.makeText(getContext(), String.valueOf(PlacesResult.results.size()), Toast.LENGTH_LONG).show();
-                /*if(PlacesResult.results.size() == 0)
-                {
-                    Toast.makeText(getContext(), "Point of interest not found within 1 kilometer", Toast.LENGTH_SHORT).show();
 
-                }*/
+                progressBar.setVisibility(View.GONE);
+
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
+                //Toast.makeText(getActivity(), String.valueOf(myPlaces.getResults().size()), Toast.LENGTH_LONG).show();
+                if(myPlaces.getResults().size() == 0)
+                {
+
+                    textView.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+                }
 
                 PlaceRecyclerViewAdapter adapter = new PlaceRecyclerViewAdapter(getContext(), myPlaces, lat, lng);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());

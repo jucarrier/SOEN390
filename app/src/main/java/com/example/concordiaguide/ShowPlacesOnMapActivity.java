@@ -1,5 +1,7 @@
 package com.example.concordiaguide;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -12,6 +14,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -23,13 +26,14 @@ import Models.Results;
 public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
-    public static List<Results> results = new ArrayList<>();
+    List<Results> results = new ArrayList<>();
 
 
     //when clicked show the list of places on map, this activity puts a marker on all the suggested POI's
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.poi_maps);
 
@@ -39,13 +43,22 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
         results = PlacesResult.results;
         Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
 
-
-
         if(results.size() == 0)
         {
 
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("Selected point of interest not found within 1 km");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
             mapFragment.getView().setVisibility(View.GONE);
-             Toast.makeText(this, "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Point of interest not found within 1 kilometer", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -74,7 +87,11 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
         }
 
 
-        //Toast.makeText(this, String.valueOf(results.size()), Toast.LENGTH_LONG).show();
+    }
+
+    public void onInfoWindowClick(Marker marker)
+    {
+
     }
 }
 
