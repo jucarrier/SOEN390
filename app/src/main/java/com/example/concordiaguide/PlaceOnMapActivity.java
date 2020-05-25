@@ -65,7 +65,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
             lng = bundle.getDouble("lng");
             type = bundle.getString("type");
             location2 = results.getGeometry().getLocation();
-            Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Got Nothing!!", Toast.LENGTH_SHORT).show();
         }

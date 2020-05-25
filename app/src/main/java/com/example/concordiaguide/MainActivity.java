@@ -111,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             lat = location.getLatitude();
             lng = location.getLongitude();
             currentLocation = new LatLng(lat, lng);
-            //currentLocation = new LatLng(45.4967712, -73.5789604);
-
 
         }
         try {

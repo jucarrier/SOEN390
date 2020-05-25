@@ -2,6 +2,10 @@ package com.example.concordiaguide;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -19,11 +23,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import Helpers.PlacesResult;
 import Models.Results;
 
-public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback
+public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener
 {
 
     List<Results> results = new ArrayList<>();
@@ -58,7 +63,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
             alertDialog.show();
 
             mapFragment.getView().setVisibility(View.GONE);
-            // Toast.makeText(this, "Point of interest not found within 1 kilometer", Toast.LENGTH_SHORT).show();
+
         }
 
     }
@@ -67,8 +72,11 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     public void onMapReady(GoogleMap googleMap)
     {
 
+        googleMap.setOnInfoWindowClickListener(this);
         for (int i = 0; i < results.size(); i++)
         {
+
+
             MarkerOptions markerOptions = new MarkerOptions();
             Results googlePlace = results.get(i);
             double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
@@ -89,9 +97,36 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
 
     }
 
+    @Override
     public void onInfoWindowClick(Marker marker)
     {
+        showNavigationAlert(marker.getPosition().latitude, marker.getPosition().longitude);
 
     }
+
+    private void showNavigationAlert(Double lat,Double lng)
+    {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowPlacesOnMapActivity.this);
+        alertDialog.setMessage("Do you want to navigate this address?");
+        alertDialog.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", lat,lng); //opens the actual google map
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+
+    }
+
+
+
 }
 

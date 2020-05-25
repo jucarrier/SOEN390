@@ -60,6 +60,9 @@ public class PoiFragment extends Fragment
     public static final String TYPE_CAFE = "cafe";
     public static final String TYPE_BAR = "bar";
     public static final String TYPE_RESTAURANT = "restaurant";
+    public static final String TYPE_GROCERY = "supermarket";
+    public static final String TYPE_CINEMA = "movie_theater";
+
     private static final String TAG = "locationservice";
     public double latitude, longitude;
     double lat = 0;
@@ -77,15 +80,9 @@ public class PoiFragment extends Fragment
     private Spinner spinner_nearby_choices;
     ProgressBar progressBar;
 
-
-    //Vatika
-    private boolean mPermissionGranted = false;
-    private GoogleMap googleMap;
-    private FusedLocationProviderClient fusedLocationProviderClient;
     private static List<Results> results = new ArrayList<Results>();
 
 
-    //googleMap.setMyLocationEnabled(true);
 
     @Nullable
     @Override
@@ -152,6 +149,16 @@ public class PoiFragment extends Fragment
                         }
                         case "Gym": {
                             placeType = TYPE_GYM;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Grocery store":{
+                            placeType = TYPE_GROCERY;
+                            getNearByPlaces();
+                            break;
+                        }
+                        case "Movie theater":{
+                            placeType = TYPE_CINEMA;
                             getNearByPlaces();
                             break;
                         }
@@ -248,7 +255,7 @@ public class PoiFragment extends Fragment
         urlStr.append(latitude);
         urlStr.append(",");
         urlStr.append(longitude);
-        urlStr.append("&radius=1000"); // places between 5 kilometer-
+        urlStr.append("&radius=5000"); // places between 5 kilometer-
         urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
         urlStr.append("&sensor=false&key=" + API_KEY);
 
@@ -293,9 +300,9 @@ public class PoiFragment extends Fragment
                 if(myPlaces.getResults().size() == 0)
                 {
 
-                    textView.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
                 }
+
 
                 PlaceRecyclerViewAdapter adapter = new PlaceRecyclerViewAdapter(getContext(), myPlaces, lat, lng);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -303,6 +310,7 @@ public class PoiFragment extends Fragment
                 recyclerViewPlaces.setItemAnimator(new DefaultItemAnimator());
                 recyclerViewPlaces.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
                 linearLayoutShowOnMap.setVisibility(View.VISIBLE);
             }
 
@@ -315,10 +323,6 @@ public class PoiFragment extends Fragment
         });
 
     }
-
-    /**
-     * breaks down location coordinates and maps them to lattitude/longitude variables
-     */
     private class MyLocationListener implements LocationListener
     {
 
@@ -348,5 +352,7 @@ public class PoiFragment extends Fragment
             // Required for interface implementation. Not necessary for our purposes.
         }
     }
+
+
 }
 
