@@ -23,12 +23,12 @@
     </string-array>
 
     <string-array name="radius_option">
-        <item>Select the distance radius</item>
-        <item>within 1 km</item>
-        <item>within 2 km</item>
-        <item>within 3 km</item>
-        <item>within 4 km</item>
-        <item>within 5 km</item>
+        <item>Select the distance radius in km</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
 
     </string-array>
 

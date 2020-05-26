@@ -50,11 +50,20 @@
 
                         </Spinner>
 
+                        <Spinner
+                            android:id="@+id/radius_choices"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:entries="@array/radius_option"
+                            android:popupBackground="#fff"
+                            android:spinnerMode="dropdown"
+                            android:textAlignment="center"
+                            android:textColor="#fff">
 
-
-
-
-
+                        </Spinner>
 
 
                     </LinearLayout>
@@ -103,6 +112,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </ProgressBar>
+
+
 
         </RelativeLayout>
     </LinearLayout>

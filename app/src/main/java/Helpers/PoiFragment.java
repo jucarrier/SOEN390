@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,7 +23,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,11 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.concordiaguide.R;
 import com.example.concordiaguide.ShowPlacesOnMapActivity;
-import com.example.concordiaguide.MainActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +42,6 @@ import Models.Results;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * this fragment is loaded upon call from the NearbyPoiActivity.
@@ -78,7 +74,17 @@ public class PoiFragment extends Fragment
     private MyPlaces myPlaces;
     private FusedLocationProviderClient flc;
     private Spinner spinner_nearby_choices;
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
+    private Spinner radius_options_spinner;
+    private double radius_choice;
+    private ArrayAdapter<CharSequence> adapter;
+
+    public static final double oneKm = 1000.0;
+    public static final double twoKm = 2000.0;
+    public static final double threeKm = 3000.0;
+    public static final double fourKm = 4000.0;
+    public static final double fiveKm = 5000.0;
+
 
     private static List<Results> results = new ArrayList<Results>();
 
@@ -98,19 +104,34 @@ public class PoiFragment extends Fragment
         progressBar = view.findViewById(R.id.progressBar);
         textView = view.findViewById(R.id.textView);
 
+        //initialization to add radius options feature
+        radius_options_spinner =view.findViewById(R.id.radius_choices);
+        adapter = ArrayAdapter.createFromResource(getContext(),R.array.radius_option, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        radius_options_spinner.setAdapter(adapter);
+
 
         locationService();//checks for location of the user
 
         //when the search button is pressed on the spinner
-        imageViewSearch.setOnClickListener(new View.OnClickListener() {
+        imageViewSearch.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 int position = spinner_nearby_choices.getSelectedItemPosition();
+                int radius_position = radius_options_spinner.getSelectedItemPosition();
                 //if no POI was chosen, show the following toast message
-                if (position == 0)
+                if (position == 0 && radius_position == 0)
                 {
                     Toast.makeText(getContext(), "Please select valid type", Toast.LENGTH_SHORT).show();
-                } else
+                }
+
+                else if(radius_position == 0)
+                {
+                    Toast.makeText(getContext(), "Please select a distance radius", Toast.LENGTH_SHORT).show();
+                }
+                else
                     {
                     //when a Poi type is chosen and the search button is pressed, it executes getNearbyPlaces function
                     placeType = spinner_nearby_choices.getSelectedItem().toString();
@@ -167,6 +188,54 @@ public class PoiFragment extends Fragment
                         }
                     }
                 }
+            }
+        });
+
+        //On selecting radius choice
+        radius_options_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                position = radius_options_spinner.getSelectedItemPosition();
+
+                switch(position)
+                {
+                   /* case 0:
+                        Toast.makeText(getContext(), "Please select a radius", Toast.LENGTH_SHORT).show();
+                        break;*/
+
+                    case 1:
+                        radius_choice = oneKm;
+                        break;
+
+                    case 2:
+                        radius_choice = twoKm;
+                        break;
+
+                    case 3:
+                        radius_choice = threeKm;
+                        break;
+
+                    case 4:
+                        radius_choice = fourKm;
+                        break;
+
+                    case 5:
+                        radius_choice = fiveKm;
+                        break;
+
+                    default:
+                        break;
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                Toast.makeText(getContext(), "Please select a radius", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -249,13 +318,14 @@ public class PoiFragment extends Fragment
 
     private String buildUrl(double latitude, double longitude, String API_KEY) {
 
+
         StringBuilder urlStr = new StringBuilder("api/place/search/json?");
 
         urlStr.append("&location=");
         urlStr.append(latitude);
         urlStr.append(",");
         urlStr.append(longitude);
-        urlStr.append("&radius=5000"); // places between 5 kilometer-
+        urlStr.append("&radius="+ radius_choice); // takes the radius from switch cases
         urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
         urlStr.append("&sensor=false&key=" + API_KEY);
 
@@ -296,11 +366,11 @@ public class PoiFragment extends Fragment
 
                 Log.d("MyPlaces", response.body().toString());
                 myPlaces = response.body();
-                //Toast.makeText(getActivity(), String.valueOf(myPlaces.getResults().size()), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), String.valueOf(myPlaces.getResults().size()), Toast.LENGTH_LONG).show();
                 if(myPlaces.getResults().size() == 0)
                 {
 
-                    Toast.makeText(getContext(), "No places found within 1 kilometer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "No places found within the chosen distance radius", Toast.LENGTH_SHORT).show();
                 }
 
 
