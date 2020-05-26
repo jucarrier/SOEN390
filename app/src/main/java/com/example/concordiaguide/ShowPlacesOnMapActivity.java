@@ -78,6 +78,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
 
 
             MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.snippet(results.get(i).getName());
             Results googlePlace = results.get(i);
             double lat = Double.parseDouble(googlePlace.getGeometry().getLocation().getLat());
             double lng = Double.parseDouble(googlePlace.getGeometry().getLocation().getLng());
@@ -100,20 +101,27 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        showNavigationAlert(marker.getPosition().latitude, marker.getPosition().longitude);
+        String placeNAme = marker.getSnippet();
+        showAlertNaviagtion(marker.getPosition().latitude, marker.getPosition().longitude,placeNAme);
 
     }
 
-    private void showNavigationAlert(Double lat,Double lng)
-    {
+
+    private void showAlertNaviagtion(Double lat,Double lng,String placeNAme) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowPlacesOnMapActivity.this);
-        alertDialog.setMessage("Do you want to navigate this address?");
-        alertDialog.setPositiveButton("Navigate", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", lat,lng); //opens the actual google map
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        alertDialog.setMessage("Navigate this address?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which)
+            {
+                Uri gmmIntentUri = Uri.parse("geo:" + lat + "," + lng + "?q=" + Uri.encode(placeNAme)); //
+                Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                intent.setPackage("com.google.android.apps.maps");
                 startActivity(intent);
+                if (intent.resolveActivity(getPackageManager()) != null)
+                {
+                    startActivity(intent);
+                }
             }
         });
 

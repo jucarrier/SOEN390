@@ -22,6 +22,16 @@
         <item>Movie theater</item>
     </string-array>
 
+    <string-array name="radius_option">
+        <item>Select the distance radius</item>
+        <item>within 1 km</item>
+        <item>within 2 km</item>
+        <item>within 3 km</item>
+        <item>within 4 km</item>
+        <item>within 5 km</item>
+
+    </string-array>
+
     <string name="H867">H867</string>
     <string name="hall_8">Hall_8</string>
     <string name="floor_view">floor_view</string>
