@@ -79,6 +79,7 @@ public class PoiFragment extends Fragment
     private double radius_choice;
     private ArrayAdapter<CharSequence> adapter;
 
+    private static final double halfKm = 500.0;
     public static final double oneKm = 1000.0;
     public static final double twoKm = 2000.0;
     public static final double threeKm = 3000.0;
@@ -203,24 +204,27 @@ public class PoiFragment extends Fragment
                 {
 
                     case 1:
-                        radius_choice = oneKm;
+                        radius_choice = halfKm;
                         break;
 
                     case 2:
-                        radius_choice = twoKm;
+                        radius_choice = oneKm;
                         break;
 
                     case 3:
-                        radius_choice = threeKm;
+                        radius_choice = twoKm;
                         break;
 
                     case 4:
-                        radius_choice = fourKm;
+                        radius_choice = threeKm;
                         break;
 
                     case 5:
-                        radius_choice = fiveKm;
+                        radius_choice = fourKm;
                         break;
+
+                    case 6:
+                        radius_choice = fiveKm;
 
                     default:
                         break;

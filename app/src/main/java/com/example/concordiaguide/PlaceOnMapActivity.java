@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONObject;
 
@@ -34,6 +35,8 @@ import Helpers.DirectionsJSONParser;
 import Models.Location;
 import Models.Results;
 
+import static android.location.Location.distanceBetween;
+
 /**
  * comes from place details activity. user can choose whether they want to see the location of the POI or the distance between user and the POI
  */
@@ -45,8 +48,10 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private double lat, lng;
     private GoogleMap googleMap;
     private String type;
+    private double distance;
 
     private String parserTask = "ParserTask";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,11 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         this.googleMap.getUiSettings().setZoomControlsEnabled(true);
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos)); // move the camera to the position
         this.googleMap.animateCamera(CameraUpdateFactory.zoomTo(16.5f));
+
+        //calculating distance between user's location and POI
+        distance = SphericalUtil.computeDistanceBetween(currentPosition, pos)/1000;
+        Toast.makeText(this, "Distance: " + Math.round(distance * 100.0) / 100.0 + " km", Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -120,6 +130,7 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
     private void showDistance() {
         LatLng currentPosition = new LatLng(lat, lng); // user location
         LatLng destinationPosition = new LatLng(Double.valueOf(location2.getLat()), Double.valueOf(location2.getLng()));
+
 
         // for destination
         googleMap.addMarker(new MarkerOptions().position(destinationPosition)
@@ -147,13 +158,12 @@ public class PlaceOnMapActivity extends FragmentActivity implements OnMapReadyCa
         // googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         String url = getDirectionsUrl(currentPosition, destinationPosition);
-
         FetchUrl fetchUrl = new FetchUrl();
-
         fetchUrl.execute(url);
         //move map camera
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(currentPosition));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+
     }
 
     /**

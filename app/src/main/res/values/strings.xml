@@ -24,6 +24,7 @@
 
     <string-array name="radius_option">
         <item>Select the distance radius in km</item>
+        <item>0.5</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

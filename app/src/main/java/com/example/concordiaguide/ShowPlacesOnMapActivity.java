@@ -111,7 +111,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
     }
 
     /**
-     * Allows the user to choose navigation mode other than walk if he/she wishes to choose car or public transportation
+     * Allows the user to choose navigation mode other than walking. It leads the user to actual google maps
      * @param lat
      * @param lng
      * @param placeNAme
