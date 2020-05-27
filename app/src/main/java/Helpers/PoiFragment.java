@@ -191,7 +191,7 @@ public class PoiFragment extends Fragment
             }
         });
 
-        //On selecting radius choice
+        //User can select within how much distance he/she want to see nearby point of interests
         radius_options_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -201,9 +201,6 @@ public class PoiFragment extends Fragment
 
                 switch(position)
                 {
-                   /* case 0:
-                        Toast.makeText(getContext(), "Please select a radius", Toast.LENGTH_SHORT).show();
-                        break;*/
 
                     case 1:
                         radius_choice = oneKm;
@@ -325,7 +322,7 @@ public class PoiFragment extends Fragment
         urlStr.append(latitude);
         urlStr.append(",");
         urlStr.append(longitude);
-        urlStr.append("&radius="+ radius_choice); // takes the radius from switch cases
+        urlStr.append("&radius="+ radius_choice); // takes the chosen distance by the user
         urlStr.append("&types=" + placeType.toLowerCase());//takes the type from the switch cases
         urlStr.append("&sensor=false&key=" + API_KEY);
 

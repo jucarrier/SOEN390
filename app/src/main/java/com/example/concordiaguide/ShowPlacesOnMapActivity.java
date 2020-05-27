@@ -53,7 +53,7 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
 
             AlertDialog alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Selected point of interest not found within 1 km");
+            alertDialog.setMessage("Selected point of interest not found within the chosen distance");
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -68,6 +68,10 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
 
     }
 
+    /**
+     * All the nearest point of interests markers are displayed on the map
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
@@ -106,7 +110,12 @@ public class ShowPlacesOnMapActivity extends FragmentActivity implements OnMapRe
 
     }
 
-
+    /**
+     * Allows the user to choose navigation mode other than walk if he/she wishes to choose car or public transportation
+     * @param lat
+     * @param lng
+     * @param placeNAme
+     */
     private void showAlertNaviagtion(Double lat,Double lng,String placeNAme) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShowPlacesOnMapActivity.this);
